@@ -21,10 +21,10 @@ class Student(models.Model):
     entry_year = models.PositiveIntegerField()
     entry_term = models.CharField(max_length=20)
     average = models.DecimalField(max_digits=4, decimal_places=2)
-    college = models.ForeignKey('Faculty', on_delete=models.CASCADE, related_name='students_college')
+    college = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='students_college')
     study_field = models.CharField(max_length=100)
-    passed_courses = models.ManyToManyField('Course', related_name='students_passed')
-    current_courses = models.ManyToManyField('Course', related_name='students_current')
+    passed_courses = models.ManyToManyField('courses.Course', related_name='students_passed')
+    current_courses = models.ManyToManyField('courses.Course', related_name='students_current')
     military_status = models.BooleanField()
     seniority = models.PositiveIntegerField()
 
