@@ -31,3 +31,17 @@ class Student(models.Model):
  
 class ITManager(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+class Professor(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE)
+    study_field = models.ForeignKey('courses.Study', on_delete=models.CASCADE)
+    expertise = models.DateTimeField()
+    rank = models.CharField()
+
+
+class DeputyEducational(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE)
+    study_field = models.ForeignKey('courses.Study', on_delete=models.CASCADE)
