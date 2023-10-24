@@ -1,7 +1,7 @@
 from django.db import models
 
-
 course_type_choices = [('G', 'عمومی'), ('P', 'تخصصی')]
+
 
 class Course(models.Model):
     name = models.CharField(max_length=255)
@@ -14,8 +14,10 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+
 week_days = [('M', 'Monday'), ('T', 'Tuesday'), ('W', 'Wednesday'),
-              ('T', 'Thursday'), ('F', 'Friday'), ('Sat', 'Saturday'), ('Sun', 'Sunday')]
+             ('T', 'Thursday'), ('F', 'Friday'), ('Sat', 'Saturday'), ('Sun', 'Sunday')]
+
 
 class CourseTerm(models.Model):
     course = models.ForeignKey('courses.Course', on_delete=models.CASCADE)
@@ -31,17 +33,19 @@ class CourseTerm(models.Model):
     def __str__(self):
         return f"{self.course.name} --> Professor:{self.professor.first_name}"
 
+
 status_choices = [('pass', 'قبول'), ('failed', 'مردود'), ('idk', 'مشروط')]
+
+
 class StudentCourse(models.Model):
     student = models.ForeignKey('users.Student', on_delete=models.SET_NULL, null=True, blank=True)
     course_term = models.ForeignKey('courses.CourseTerm', on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.CharField(max_length=255, null=True, blank=True, choices=status_choices) 
+    status = models.CharField(max_length=255, null=True, blank=True, choices=status_choices)
     grade = models.FloatField(max_length=255, null=True, blank=True)
-    term = models.ForeignKey('courses.Term',on_delete=models.SET_NULL, null=True, blank=True)
+    term = models.ForeignKey('courses.Term', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.student.first_name} {self.student.last_name} --> {self.course_term.course.name}"
-
 
 
 class Term(models.Model):
@@ -57,7 +61,7 @@ class Term(models.Model):
     end_emergency_drop = models.DateField()
     start_exams = models.DateField()
     end_term = models.DateField()
-    
+
     def __str__(self):
         return f"{self.name} --> {self.start_classes.year}"
 
@@ -68,9 +72,11 @@ class Faculty(models.Model):
     def __str__(self):
         return self.name
 
+
 class StudyField(models.Model):
-    name = models.CharField(max_length=255) # Choice field
-    educations_groupe = models.CharField(max_length=255) # Choice field
+    name = models.CharField(max_length=255)  # Choice field
+    educations_groupe = models.CharField(max_length=255)  # Choice field
     faculty = models.ManyToManyField('courses.Faculty')
     total_units = models.PositiveIntegerField()
-    level = models.CharField(max_length=255, choices=[('کارشناسی', 'کارشناسی'), ('کارشناسی ارشد', 'کارشناسی ارشد'), ('PHD', 'PHD')])
+    level = models.CharField(max_length=255,
+                             choices=[('کارشناسی', 'کارشناسی'), ('کارشناسی ارشد', 'کارشناسی ارشد'), ('PHD', 'PHD')])

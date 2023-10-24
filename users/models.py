@@ -2,16 +2,16 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-<<<<<<< HEAD
+
 
 # Create your models here.
-=======
+
 class User(AbstractUser):
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
     ]
->>>>>>> origin/main
+
 
     personnel_number = models.UUIDField(default=uuid.uuid4)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
