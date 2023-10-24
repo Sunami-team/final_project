@@ -22,7 +22,7 @@ class Student(models.Model):
     entry_term = models.CharField(max_length=20)
     average = models.DecimalField(max_digits=4, decimal_places=2)
     college = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='students_college')
-    study_field = models.CharField(max_length=100)
+    study_field = models.ForeignKey('courses.StydyField', on_delete=models.CASCADE, related_name='students_field')
     passed_courses = models.ManyToManyField('courses.Course', related_name='students_passed')
     current_courses = models.ManyToManyField('courses.Course', related_name='students_current')
     military_status = models.BooleanField()
