@@ -3,7 +3,7 @@ from django.db import models
 # from users.models import *
 
 
-# Create your models here.
+
 class CourseRegistrationRequest(models.Model):
     student = models.ForeignKey('users.Student', on_delete=models.CASCADE)
     requested_courses = models.ManyToManyField('courses.CourseTerm')
