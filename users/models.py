@@ -2,18 +2,23 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
+
+# Create your models here.
+
 class User(AbstractUser):
     GENDER_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),
     ]
 
-    personnel_number = models.UUIDField(default=uuid.uuid4)
+
+    personnel_number = models.UUIDField(default=uuid.uuid4, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
-    mobile = models.CharField(max_length=11)
-    national_id = models.CharField(max_length=10)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    birth_date = models.DateField()
+    mobile = models.CharField(max_length=11, null=True, blank=True)
+    national_id = models.CharField(max_length=10, null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
 
 
 class Student(models.Model):
