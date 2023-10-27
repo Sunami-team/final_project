@@ -21,8 +21,7 @@ class User(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
 
 
-class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Student(User):
     entry_year = models.PositiveIntegerField()
     entry_term = models.CharField(max_length=20)
     average = models.DecimalField(max_digits=4, decimal_places=2, null=True)
@@ -34,12 +33,11 @@ class Student(models.Model):
     seniority = models.PositiveIntegerField()
 
  
-class ITManager(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class ITManager(User):
+    pass
 
 
-class Professor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Professor(User):
     faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='professor_faculty')
     study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='professor_study')
     expertise = models.DateTimeField()
