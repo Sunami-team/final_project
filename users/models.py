@@ -38,15 +38,15 @@ class ITManager(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
-class Professor(models.Model):
+class Professor(User):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='professor_faculty')
     study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='professor_study')
     expertise = models.DateTimeField()
-    rank = models.CharField()
+    rank = models.CharField(max_length=50)
 
 
-class DeputyEducational(models.Model):
+class DeputyEducational(User):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='deputy_educational_faculty')
     study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='deputy_educational_study')
