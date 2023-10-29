@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-
 # Create your models here.
 
 class User(AbstractUser):
@@ -11,7 +10,6 @@ class User(AbstractUser):
         ('M', 'Male'),
         ('F', 'Female'),
     ]
-
 
     personnel_number = models.UUIDField(default=uuid.uuid4, null=True, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
@@ -32,7 +30,7 @@ class Student(User):
     military_status = models.BooleanField()
     seniority = models.PositiveIntegerField()
 
- 
+
 class ITManager(User):
     pass
 
@@ -46,4 +44,5 @@ class Professor(User):
 
 class DeputyEducational(User):
     faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='deputy_educational_faculty')
-    study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='deputy_educational_study')
+    study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE,
+                                    related_name='deputy_educational_study')
