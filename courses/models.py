@@ -1,82 +1,79 @@
+import uuid
 from django.db import models
-
-course_type_choices = [('G', 'عمومی'), ('P', 'تخصصی')]
-
-
-class Course(models.Model):
-    name = models.CharField(max_length=255)
-    faculty = models.ManyToManyField('courses.Faculty')
-    pre_requisites = models.ManyToManyField('courses.Course', related_name='courses_required', null=True, blank=True)
-    co_requisites = models.ManyToManyField('courses.Course', related_name='courses_concurrent', null=True, blank=True)
-    course_unit = models.PositiveIntegerField()
-    course_type = models.CharField(max_length=255, choices=course_type_choices)
-
-    def __str__(self):
-        return self.name
+from django.contrib.auth.models import AbstractUser
 
 
-week_days = [('M', 'Monday'), ('T', 'Tuesday'), ('W', 'Wednesday'),
-             ('T', 'Thursday'), ('F', 'Friday'), ('Sat', 'Saturday'), ('Sun', 'Sunday')]
+# Create your models here.
+
+class User(AbstractUser):
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+    ]
+
+    personal_number = models.UUIDField(default=uuid.uuid4, null=True, blank=True)  #
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    mobile = models.CharField(max_length=11, null=True, blank=True)
+    national_id = models.CharField(max_length=10, null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):  #
+        return f"{self.first_name} {self.last_name} ({self.username})"
 
 
-class CourseTerm(models.Model):
-    course = models.ForeignKey('courses.Course', on_delete=models.CASCADE)
-    class_day = models.CharField(max_length=100, choices=week_days)
-    class_time = models.TimeField()
-    exam_date_time = models.DateTimeField()
-    class_location = models.CharField(max_length=255)
-    exam_location = models.CharField(max_length=255)
-    professor = models.ForeignKey('users.Professor', on_delete=models.DO_NOTHING, blank=True, null=True)
-    capacity = models.PositiveIntegerField()
-    term = models.ForeignKey('courses.Term', on_delete=models.DO_NOTHING, blank=True, null=True)
+class Student(User):
+    entry_year = models.PositiveIntegerField()
+    entry_term = models.CharField(max_length=20)
+    average = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    college = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='students_college')
+    study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='students_field')
+    passed_courses = models.ManyToManyField('courses.Course', related_name='students_passed')
+    current_courses = models.ManyToManyField('courses.Course', related_name='students_current')
+    military_status = models.BooleanField()
+    seniority = models.PositiveIntegerField()
 
-    def __str__(self):
-        return f"{self.course.name} --> Professor:{self.professor.first_name}"
+    def __str__(self):  #
+        return f"Student: {self.first_name} {self.last_name} - {self.study_field}"
 
-
-status_choices = [('pass', 'قبول'), ('failed', 'مردود'), ('idk', 'مشروط')]
-
-
-class StudentCourse(models.Model):
-    student = models.ForeignKey('users.Student', on_delete=models.SET_NULL, null=True, blank=True)
-    course_term = models.ForeignKey('courses.CourseTerm', on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.CharField(max_length=255, null=True, blank=True, choices=status_choices)
-    grade = models.FloatField(max_length=255, null=True, blank=True)
-    term = models.ForeignKey('courses.Term', on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name} --> {self.course_term.course.name}"
+    class Meta:  #
+        verbose_name = "Student"
+        verbose_name_plural = "Students"
 
 
-class Term(models.Model):
-    name = models.CharField(max_length=255, choices=[('Mehr', 'مهر'), ('Bahman', 'بهمن'), ('Summer', 'تابستان')])
-    students = models.ManyToManyField('users.Student')
-    professors = models.ManyToManyField('users.Professor')
-    start_course_selection = models.DateField()
-    end_course_selection = models.DateField()
-    start_classes = models.DateField()
-    end_classes = models.DateField()
-    start_course_correction = models.DateField()
-    end_course_correction = models.DateField()
-    end_emergency_drop = models.DateField()
-    start_exams = models.DateField()
-    end_term = models.DateField()
+class ITManager(User):
+    pass
 
-    def __str__(self):
-        return f"{self.name} --> {self.start_classes.year}"
+    def __str__(self):  #
+        return f"IT Manager: {self.first_name} {self.last_name}"
+
+    class Meta:  #
+        verbose_name = "IT Manager"
+        verbose_name_plural = "IT Managers"
 
 
-class Faculty(models.Model):
-    name = models.CharField(max_length=255)
+class Professor(User):
+    faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='professor_faculty')
+    study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='professor_study')
+    expertise = models.DateTimeField()
+    rank = models.CharField(max_length=50)
 
-    def __str__(self):
-        return self.name
+    def __str__(self):  #
+        return f"Professor {self.first_name} {self.last_name} - {self.study_field}"
+
+    class Meta:  #
+        verbose_name = "Professor"
+        verbose_name_plural = "Professors"
 
 
-class StudyField(models.Model):
-    name = models.CharField(max_length=255)  # Choice field
-    educations_groupe = models.CharField(max_length=255)  # Choice field
-    faculty = models.ManyToManyField('courses.Faculty')
-    total_units = models.PositiveIntegerField()
-    level = models.CharField(max_length=255,
-                             choices=[('کارشناسی', 'کارشناسی'), ('کارشناسی ارشد', 'کارشناسی ارشد'), ('PHD', 'PHD')])
+class DeputyEducational(User):
+    faculty = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='deputy_educational_faculty')
+    study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE,
+                                    related_name='deputy_educational_study')
+
+    def __str__(self):  #
+        return f"Deputy for Education: {self.first_name} {self.last_name} - {self.study_field}"
+
+    class Meta:  #
+        verbose_name = "Deputy Educational"
+        verbose_name_plural = "Deputy Educationals"
