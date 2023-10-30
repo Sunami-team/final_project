@@ -11,7 +11,7 @@ class User(AbstractUser):
         ('F', 'Female'),
     ]
 
-    personal_number = models.UUIDField(default=uuid.uuid4, null=True, blank=True)  #
+    personal_number = models.UUIDField(default=uuid.uuid4)  #
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     mobile = models.CharField(max_length=11, null=True, blank=True)
     national_id = models.CharField(max_length=10, null=True, blank=True)
@@ -28,8 +28,8 @@ class Student(User):
     average = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     college = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='students_college')
     study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='students_field')
-    passed_courses = models.ManyToManyField('courses.Course', related_name='students_passed')
-    current_courses = models.ManyToManyField('courses.Course', related_name='students_current')
+    passed_courses = models.ManyToManyField('courses.Course', related_name='students_passed', blank=True)
+    current_courses = models.ManyToManyField('courses.Course', related_name='students_current', blank=True)
     military_status = models.BooleanField()
     seniority = models.PositiveIntegerField()
 
