@@ -1,3 +1,34 @@
+<<<<<<< HEAD
+from rest_framework import generics
+
+from users.models import DeputyEducational
+from users.serializers import AssistanSerializer
+
+
+class AssistanList(generics.ListAPIView):
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanCreate(generics.CreateAPIView):
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanUpdate(generics.UpdateAPIView):
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanDelete(generics.DestroyAPIView):
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+=======
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.views import ObtainAuthToken
 from .models import User, ChangePasswordToken, Student
@@ -104,3 +135,4 @@ class StudentViewset(viewsets.ModelViewSet):
     search_fields = ['first_name', 'last_name']
     ordering_fields = ['id', 'last_name']
 
+>>>>>>> babcc9a54db6a6ebbfb9d6fc82f7d37bc8aaf20e
