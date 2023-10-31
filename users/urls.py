@@ -2,7 +2,7 @@ from django.urls import path
 from .views import LoginApiView, LogoutApiView, ChangePasswordRequestApiView, ChangePasswordActionApiView, StudentViewset
 
 app_name = 'users'
-<<<<<<< HEAD
+
 urlpatterns = [
     path('login/', LoginApiView.as_view(), name="login"),
     path('logout/', LogoutApiView.as_view(), name="logout"),
