@@ -22,6 +22,15 @@ class User(AbstractUser):
         return f"{self.first_name} {self.last_name} ({self.username})"
 
 
+class ChangePasswordToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        return self.created_at < timezone.now() - timedelta(minutes=5)
+
+
 class Student(User):
     entry_year = models.PositiveIntegerField()
     entry_term = models.CharField(max_length=20)
