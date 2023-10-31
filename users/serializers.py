@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import serializers
-from .models import User, ChangePasswordToken
+from .models import User, ChangePasswordToken, DeputyEducational
 from rest_framework import serializers
 from users.models import Student
 from django.contrib.auth.password_validation import validate_password
@@ -65,3 +65,9 @@ class StudentSerializer(serializers.ModelSerializer):
 
         validated_data.pop('verification_password', None)
         return super().create(validated_data)
+
+
+class AssistanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeputyEducational
+        field = '__all__'

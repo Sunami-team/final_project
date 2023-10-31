@@ -1,6 +1,21 @@
-<<<<<<< HEAD
 from rest_framework import generics
-
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.authtoken.views import ObtainAuthToken
+from .models import User, ChangePasswordToken, Student
+from .serializers import LoginSerializer, ChangePasswordSerializer
+from rest_framework import generics, status, viewsets
+from rest_framework.generics import UpdateAPIView
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsItManager
+import random
+from django.shortcuts import render
+from .serializers import StudentSerializer
+from .pagination import CustomPageNumberPagination
+from rest_framework.filters import OrderingFilter, SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from users.models import DeputyEducational
 from users.serializers import AssistanSerializer
 
@@ -28,24 +43,6 @@ class AssistanUpdate(generics.UpdateAPIView):
 class AssistanDelete(generics.DestroyAPIView):
     queryset = DeputyEducational.objects.all()
     serializer_class = AssistanSerializer
-=======
-from django.contrib.auth import authenticate, login, logout
-from rest_framework.authtoken.views import ObtainAuthToken
-from .models import User, ChangePasswordToken, Student
-from .serializers import LoginSerializer, ChangePasswordSerializer
-from rest_framework import generics, status, viewsets
-from rest_framework.generics import UpdateAPIView
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
-from .permissions import IsItManager
-import random
-from django.shortcuts import render
-from .serializers import StudentSerializer
-from .pagination import CustomPageNumberPagination
-from rest_framework.filters import OrderingFilter, SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 class LoginApiView(generics.GenericAPIView):
@@ -135,4 +132,3 @@ class StudentViewset(viewsets.ModelViewSet):
     search_fields = ['first_name', 'last_name']
     ordering_fields = ['id', 'last_name']
 
->>>>>>> babcc9a54db6a6ebbfb9d6fc82f7d37bc8aaf20e
