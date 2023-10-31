@@ -1,17 +1,26 @@
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.authtoken.views import ObtainAuthToken
-from .models import User, ChangePasswordToken
+from .models import User, ChangePasswordToken, Student
 from .serializers import LoginSerializer, ChangePasswordSerializer
-from rest_framework import generics, status
+from rest_framework import generics, status, viewsets
 from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsItManager
 import random
+from django.shortcuts import render
+from .serializers import StudentSerializer
+from .pagination import CustomPageNumberPagination
+from rest_framework.filters import OrderingFilter, SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class LoginApiView(generics.GenericAPIView):
+    """
+    This API is for login using GenericAPIView
+    """
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -30,6 +39,9 @@ class LoginApiView(generics.GenericAPIView):
 
 
 class LogoutApiView(generics.GenericAPIView):
+    """
+    This API is for logout using GenericAPIView
+    """
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -38,6 +50,9 @@ class LogoutApiView(generics.GenericAPIView):
 
 
 class ChangePasswordRequestApiView(generics.GenericAPIView):
+    """
+    This API is for change password request using GenericAPIView
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
@@ -50,6 +65,9 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
 
 
 class ChangePasswordActionApiView(UpdateAPIView):
+    """
+    This API is for change password action using GenericAPIView
+    """
     permission_classes = [IsAuthenticated]
     serializer_class = ChangePasswordSerializer
 
@@ -69,3 +87,20 @@ class ChangePasswordActionApiView(UpdateAPIView):
         instance.delete()
         
         return Response({'detail': 'Password changed successfully'}, status=status.HTTP_200_OK)
+
+
+class StudentViewset(viewsets.ModelViewSet):
+    """
+    This viewset is for Create, List, Retrieve, Updtate, Delete  --> Student
+    """
+    serializer_class = StudentSerializer
+    queryset = Student.objects.all()
+    permission_classes = [IsItManager]
+    pagination_class = CustomPageNumberPagination
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = {'first_name':['exact', 'in'], 'last_name':['exact', 'in'], 'national_id':['exact'], 'college':['exact'],
+                        'study_field':['exact'], 'entry_year':['exact'], 'military_status':['exact'], 'personal_number':['exact']}
+    search_fields = ['first_name', 'last_name']
+    ordering_fields = ['id', 'last_name']
+
