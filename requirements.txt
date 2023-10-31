@@ -24,3 +24,6 @@ typing_extensions==4.8.0
 tzdata==2023.3
 vine==5.0.0
 wcwidth==0.2.8
+
+# swagger - redoc
+drf-yasg[validation]
