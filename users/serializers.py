@@ -1,7 +1,11 @@
-<<<<<<< HEAD
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import serializers
 from .models import User, ChangePasswordToken
+from rest_framework import serializers
+from users.models import Student
+from django.contrib.auth.password_validation import validate_password
+from django.core import exceptions
+from django.contrib.auth.hashers import make_password
 
 
 class LoginSerializer(serializers.ModelSerializer):
@@ -33,12 +37,6 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChangePasswordToken
         fields = ['id', 'user', 'token', 'created_at', 'new_password']
-=======
-from rest_framework import serializers
-from users.models import Student
-from django.contrib.auth.password_validation import validate_password
-from django.core import exceptions
-from django.contrib.auth.hashers import make_password
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -67,4 +65,3 @@ class StudentSerializer(serializers.ModelSerializer):
 
         validated_data.pop('verification_password', None)
         return super().create(validated_data)
->>>>>>> b541cb0eb1ab4b6c4bd351bdc3cfaa5dfa7d43d3
