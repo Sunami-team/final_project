@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
+    'celery',
+    'celery.result',
     'users',
     'courses',
     'student_requests',
@@ -141,5 +143,24 @@ REST_FRAMEWORK = {
          'rest_framework.authentication.TokenAuthentication',),
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_VERSION': 'v1',
-    'ALLOWED_VERSIONS': ['v1'],
+    'ALLOWED_VERSIONS': ['v1', 'v2'],
 }
+
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+
+
+# import ssl
+
+# context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587 
+
+EMAIL_HOST_USER = 'sinahs1992@gmail.com'
+EMAIL_HOST_PASSWORD = 'kfxvkonnsdkcoxzi'
+EMAIL_USE_TLS = True

@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from courses.models import StudentCourse
 
 # Create your models here.
 
@@ -20,7 +20,21 @@ class User(AbstractUser):
 
     def __str__(self):  #
         return f"{self.first_name} {self.last_name} ({self.username})"
+    
+    @property
+    def is_student(self):
+        personal = self.personal_number
+        return Student.objects.filter(personal_number=personal).exists()
+    
+    @property
+    def is_professor(self):
+        personal = self.personal_number
+        return Professor.objects.filter(personal_number=personal).exists()
 
+    @property
+    def is_deputy_educational(self):
+        personal = self.personal_number
+        return DeputyEducational.objects.filter(personal_number=personal).exists()
 
 class Student(User):
     entry_year = models.PositiveIntegerField()
@@ -29,7 +43,7 @@ class Student(User):
     college = models.ForeignKey('courses.Faculty', on_delete=models.CASCADE, related_name='students_college')
     study_field = models.ForeignKey('courses.StudyField', on_delete=models.CASCADE, related_name='students_field')
     passed_courses = models.ManyToManyField('courses.Course', related_name='students_passed', blank=True)
-    current_courses = models.ManyToManyField('courses.Course', related_name='students_current', blank=True)
+    current_courses = models.ManyToManyField('courses.CourseTerm', related_name='students_current', blank=True)
     military_status = models.BooleanField()
     seniority = models.PositiveIntegerField()
 
@@ -77,3 +91,4 @@ class DeputyEducational(User):
     class Meta:  #
         verbose_name = "Deputy Educational"
         verbose_name_plural = "Deputy Educationals"
+

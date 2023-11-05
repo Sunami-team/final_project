@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import ITManager, User, Student
+from .models import ITManager, User, Student, DeputyEducational, Professor
 from rest_framework.test import APIClient
 from courses.models import Faculty, StudyField
+from datetime import datetime
 
 
 class TestAdminStudentApi(TestCase):
@@ -129,3 +130,181 @@ class TestAdminStudentApi(TestCase):
         self.client.force_authenticate(user=self.it_manager)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+
+class TestStudent(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.fake_collage = Faculty.objects.create(name='alaki-hala')
+        self.fake_study_field = StudyField.objects.create(name='ie-chizi', total_units=140, level='کارشناسی')
+        self.user = User.objects.create(username='ya-adame-alaki', password='sinasina!@#')
+        self.fake_deputy_educational = DeputyEducational.objects.create(username='us_musa', password='sinasina123',
+                                                                        faculty=self.fake_collage, study_field=self.fake_study_field)
+        self.fake_student = Student.objects.create(username='new_student1',
+        password='newpassword!@#',
+        entry_year= 1400,
+        entry_term='Mehr',
+        seniority=2,
+        college=self.fake_collage,
+        study_field=self.fake_study_field,
+        military_status=True
+        )
+        
+        self.fake_student2 = Student.objects.create(username='new_student2',
+        password='newpassword!@#',
+        entry_year= 1400,
+        entry_term='Mehr',
+        seniority=2,
+        college=self.fake_collage,
+        study_field=self.fake_study_field,
+        military_status=True
+        )
+
+
+    # Tests for /students/ GET method ---> access by Educational Deputy 
+    def test_students_list_by_deputy_educational(self):
+        """
+        Successfull access to students list by Educational Deputy
+        """
+        url = reverse('users:educational-Deputy-students-list')
+        self.client.force_authenticate(user=self.fake_deputy_educational)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_students_list_unauthorized(self):
+        """
+        Unauthorized Access to students list without Loggin
+        """
+        url = reverse('users:educational-Deputy-students-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_students_list_forbidden(self):
+        """
+        Forbidden access with another users
+        """
+        url = reverse('users:educational-Deputy-students-list')
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    # Tests for /students/{pk}/ GET method ---> access by Educational Deputy and Student
+    def test_student_detail_by_owner_student(self):
+        """
+        Access to student details by Student
+        """
+        url = reverse('users:educational-Deputy-student-detail', kwargs={'pk':self.fake_student.id})
+        self.client.force_authenticate(user=self.fake_student)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_student_detail_by_not_owner_student(self):
+        """
+        Forbidden to student details by another Student
+        """
+        url = reverse('users:educational-Deputy-student-detail', kwargs={'pk':self.fake_student.id})
+        self.client.force_authenticate(user=self.fake_student2)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_student_detail_by_deputy_educational(self):
+        """
+        Access to student details by Educational Deputy
+        """
+        url = reverse('users:educational-Deputy-student-detail', kwargs={'pk':self.fake_student.id})
+        self.client.force_authenticate(user=self.fake_deputy_educational)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_student_detail_with_no_loggin(self):
+        """
+        Unauthorized Access to students detail without Loggin
+        """
+        url = reverse('users:educational-Deputy-student-detail', kwargs={'pk':self.fake_student.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+
+class TestProfessor(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.fake_collage = Faculty.objects.create(name='alaki-hala')
+        self.fake_study_field = StudyField.objects.create(name='ie-chizi', total_units=140, level='کارشناسی')
+        self.user = User.objects.create(username='ya-adame-alaki', password='sinasina!@#')
+        self.fake_deputy_educational = DeputyEducational.objects.create(username='us_musa', password='sinasina123',
+                                                                        faculty=self.fake_collage, study_field=self.fake_study_field)
+        self.fake_student = Student.objects.create(username='new_student1',
+        password='newpassword!@#',
+        entry_year= 1400,
+        entry_term='Mehr',
+        seniority=2,
+        college=self.fake_collage,
+        study_field=self.fake_study_field,
+        military_status=True
+        )
+        
+        self.fake_professor = Professor.objects.create(
+            username='agh_moalem',
+            password='didichishod123',
+            faculty=self.fake_collage,
+            study_field=self.fake_study_field,
+            expertise=datetime.now(),
+            rank='OstatTamam'
+        )
+                
+        self.fake_professor2 = Professor.objects.create(
+            username='ye_agh_moaleme_dige',
+            password='didichishod123',
+            faculty=self.fake_collage,
+            study_field=self.fake_study_field,
+            expertise=datetime.now(),
+            rank='OstatTamam'
+        )
+
+    # Tests for /professors/ GET method ---> access to Professors List by Educational Deputy
+    def test_access_to_professors_list_by_deputy_educational(self):
+        url = reverse('users:educational-Deputy-professors-list')
+        self.client.force_authenticate(user=self.fake_deputy_educational)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_access_to_professors_list_without_loggin(self):
+        url = reverse('users:educational-Deputy-professors-list')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_access_to_professors_list_with_forbidden_user(self):
+        url = reverse('users:educational-Deputy-professors-list')
+        self.client.force_authenticate(user=self.fake_student)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+    
+    # Tests for /professors/{pk} GET method ---> access to Professor detaile by Educational Deputy and professor
+    def test_access_to_professor_detail_with_deputy_educational(self):
+        url = reverse('users:educational-Deputy-professor-detail', kwargs={'pk':self.fake_professor.id})
+        self.client.force_authenticate(user=self.fake_deputy_educational)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_access_to_professor_detail_without_loggin(self):
+        url = reverse('users:educational-Deputy-professor-detail', kwargs={'pk':self.fake_professor.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_access_to_professor_detail_with_forbidden_user(self):
+        url = reverse('users:educational-Deputy-professor-detail', kwargs={'pk':self.fake_professor.id})
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+    def test_access_to_professor_detail_with_owner_professor(self):
+        url = reverse('users:educational-Deputy-professor-detail', kwargs={'pk':self.fake_professor.id})
+        self.client.force_authenticate(user=self.fake_professor)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+    
+    def test_access_to_professor_detail_with_not_owner_professor(self):
+        url = reverse('users:educational-Deputy-professor-detail', kwargs={'pk':self.fake_professor.id})
+        self.client.force_authenticate(user=self.fake_professor2)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+

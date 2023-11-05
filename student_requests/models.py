@@ -1,5 +1,5 @@
 from django.db import models
-
+from courses.models import CourseTerm
 
 # Create your models here.
 class CourseRegistrationRequest(models.Model):
@@ -62,3 +62,13 @@ class MilitaryServiceRequest(models.Model):
 
     def __str__(self):
         return f"Military Service Request for {self.term} by {self.student} - Issuance Place: {self.issuance_place}"
+    
+
+
+class CorrectionTemporaryRequests(models.Model):
+    student = models.ForeignKey('users.Student', on_delete=models.CASCADE, null=True, blank=True)
+    select_course = models.ForeignKey('courses.CourseTerm', blank=True, on_delete=models.CASCADE, null=True, related_name='add_correction_courses')
+    add_or_remove = models.CharField(max_length=6, choices=[('add', 'add'), ('remove', 'remove')], null=True, blank=True)
+
+    def __str__(self):
+        return self.select_course.course.name

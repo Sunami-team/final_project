@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from users.models import Student
+from users.models import Student, Professor
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from django.contrib.auth.hashers import make_password
@@ -31,3 +31,16 @@ class StudentSerializer(serializers.ModelSerializer):
 
         validated_data.pop('verification_password', None)
         return super().create(validated_data)
+    
+class DeputyEducationalStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ('first_name', 'last_name', 'mobile', 'national_id', 'gender', 'birth_date', 'entry_year',
+                  'college', 'study_field')
+        
+class DeputyEducationalProfessorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Professor
+        fields = ['first_name', 'last_name', 'personal_number', 'national_id', 'faculty',
+                'study_field', 'expertise', 'rank']
+        
