@@ -1,9 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.authtoken.views import ObtainAuthToken
 from .models import User, ChangePasswordToken, Student, DeputyEducational
-from .serializers import LoginSerializer, ChangePasswordSerializer
+from rest_framework import generics
+from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, AssistanSerializer
 from rest_framework import generics, status, viewsets
-from rest_framework.generics import UpdateAPIView
+# from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -11,10 +11,49 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsItManager
 import random
 from django.shortcuts import render
-from .serializers import StudentSerializer
 from .pagination import CustomPageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+
+
+class AssistanList(generics.ListAPIView):
+    """
+    Assistant List API View
+    """
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Assistant Detail API View
+    """
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanCreate(generics.CreateAPIView):
+    """
+    Assistant Create API View
+    """
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanUpdate(generics.UpdateAPIView):
+    """
+    Assistant Update API View
+    """
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
+
+
+class AssistanDelete(generics.DestroyAPIView):
+    """
+    Assistant Delete API View
+    """
+    queryset = DeputyEducational.objects.all()
+    serializer_class = AssistanSerializer
 
 
 class LoginApiView(generics.GenericAPIView):
@@ -64,7 +103,7 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
         return Response({'token': token, 'detail': 'Token generated successfully'}, status=status.HTTP_200_OK)
 
 
-class ChangePasswordActionApiView(UpdateAPIView):
+class ChangePasswordActionApiView(generics.UpdateAPIView):
     """
     This API is for change password action using GenericAPIView
     """
@@ -103,12 +142,3 @@ class StudentViewset(viewsets.ModelViewSet):
                         'study_field':['exact'], 'entry_year':['exact'], 'military_status':['exact'], 'personal_number':['exact']}
     search_fields = ['first_name', 'last_name']
     ordering_fields = ['id', 'last_name']
-
-class AssistanList(generics.ListAPIView):
-    queryset = DeputyEducational.objects.all()
-    serializer_class = AssistanSerializer
-
-
-class AssistanDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = DeputyEducational.objects.all()
-    serializer_class = AssistanSerializer

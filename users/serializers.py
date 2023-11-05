@@ -65,6 +65,8 @@ class StudentSerializer(serializers.ModelSerializer):
 
         validated_data.pop('verification_password', None)
         return super().create(validated_data)
+
+
 class AssistanSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeputyEducational
