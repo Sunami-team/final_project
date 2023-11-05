@@ -1,44 +1,63 @@
 from django.shortcuts import render
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, ListAPIView
 from .permissions import IsItManager
 from rest_framework import viewsets
 from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, ProfessorSerializer, AssistanSerializer
-from rest_framework import generics
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.authtoken.views import ObtainAuthToken
 from .models import User, ChangePasswordToken, Student, DeputyEducational, Professor
 from rest_framework import generics, status, viewsets
+from django.contrib.auth import authenticate, login, logout
+from .models import User, ChangePasswordToken, Student, DeputyEducational
+from rest_framework import generics
+from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, AssistanSerializer
+from rest_framework import generics, status, viewsets
+# from rest_framework.generics import UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 import random
+from django.shortcuts import render
 from .pagination import CustomPageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 
 class AssistanList(generics.ListAPIView):
+    """
+    Assistant List API View
+    """
     queryset = DeputyEducational.objects.all()
     serializer_class = AssistanSerializer
 
 
 class AssistanDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Assistant Detail API View
+    """
     queryset = DeputyEducational.objects.all()
     serializer_class = AssistanSerializer
 
 
 class AssistanCreate(generics.CreateAPIView):
+    """
+    Assistant Create API View
+    """
     queryset = DeputyEducational.objects.all()
     serializer_class = AssistanSerializer
 
 
 class AssistanUpdate(generics.UpdateAPIView):
+    """
+    Assistant Update API View
+    """
     queryset = DeputyEducational.objects.all()
     serializer_class = AssistanSerializer
 
 
 class AssistanDelete(generics.DestroyAPIView):
+    """
+    Assistant Delete API View
+    """
     queryset = DeputyEducational.objects.all()
     serializer_class = AssistanSerializer
 
@@ -90,7 +109,7 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
         return Response({'token': token, 'detail': 'Token generated successfully'}, status=status.HTTP_200_OK)
 
 
-class ChangePasswordActionApiView(UpdateAPIView):
+class ChangePasswordActionApiView(generics.UpdateAPIView):
     """
     This API is for change password action using GenericAPIView
     """
@@ -115,7 +134,6 @@ class ChangePasswordActionApiView(UpdateAPIView):
         return Response({'detail': 'Password changed successfully'}, status=status.HTTP_200_OK)
 
 
-
 class StudentViewset(viewsets.ModelViewSet):
     """
     This viewset is for Create, List, Retrieve, Updtate, Delete  --> Student
@@ -134,7 +152,10 @@ class StudentViewset(viewsets.ModelViewSet):
     ordering_fields = ['id', 'last_name']
 
 
-class ProfessorListView(ListAPIView):
+class ProfessorListView(generics.ListAPIView):
+    """
+    Professor List API View
+    """
     queryset = Professor.objects.all().order_by('id')
     serializer_class = ProfessorSerializer
     permission_classes = [IsItManager]
@@ -169,25 +190,38 @@ class ProfessorListView(ListAPIView):
         return queryset
 
 
-class ProfessorCreateView(CreateAPIView):
+class ProfessorCreateView(generics.CreateAPIView):
+    """
+    Professor Create API View
+    """
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsItManager]
 
 
-class ProfessorRetrieveView(RetrieveAPIView):
+class ProfessorRetrieveView(generics.RetrieveAPIView):
+    """
+    Professor Retrieve API View
+    """
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsItManager]
 
 
-class ProfessorUpdateView(UpdateAPIView):
+class ProfessorUpdateView(generics.UpdateAPIView):
+    """
+    Professor Update API View
+    """
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsItManager]
 
 
-class ProfessorDeleteView(DestroyAPIView):
+class ProfessorDeleteView(generics.DestroyAPIView):
+    """
+    Professor Delete API View
+    """
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [IsItManager]
+    ordering_fields = ['id', 'last_name']
