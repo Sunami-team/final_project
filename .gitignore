@@ -14,3 +14,9 @@ env
 venv
 .idea
 db.sqlite3
+
+/migrations/
+__pycache__/
+config/__pycache__/
+courses/__pycache__/
+student_requests/__pycache__/

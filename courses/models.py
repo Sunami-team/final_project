@@ -6,26 +6,35 @@ course_type_choices = [('G', 'عمومی'), ('P', 'تخصصی')]
 class Course(models.Model):
     name = models.CharField(max_length=255)
     faculty = models.ManyToManyField('courses.Faculty')
-    pre_requisites = models.ManyToManyField('courses.Course', related_name='courses_required', null=True, blank=True)
-    co_requisites = models.ManyToManyField('courses.Course', related_name='courses_concurrent', null=True, blank=True)
-    course_unit = models.PositiveIntegerField()
+    pre_requisites = models.ManyToManyField('courses.Course', related_name='courses_required', blank=True)  #
+    co_requisites = models.ManyToManyField('courses.Course', related_name='courses_concurrent', blank=True)  #
+    course_unit = models.PositiveIntegerField(default=1)  #
     course_type = models.CharField(max_length=255, choices=course_type_choices)
 
     def __str__(self):
         return self.name
 
 
-week_days = [('M', 'Monday'), ('T', 'Tuesday'), ('W', 'Wednesday'),
-             ('T', 'Thursday'), ('F', 'Friday'), ('Sat', 'Saturday'), ('Sun', 'Sunday')]
+# week_days = [('M', 'Monday'), ('T', 'Tuesday'), ('W', 'Wednesday'),
+#              ('T', 'Thursday'), ('F', 'Friday'), ('Sat', 'Saturday'), ('Sun', 'Sunday')]
 
 
 class CourseTerm(models.Model):
+    DAYS_CHOICES = (  #
+        ('Monday', 'دوشنبه'),
+        ('Tuesday', 'سه‌شنبه'),
+        ('Wednesday', 'چهارشنبه'),
+        ('Thursday', 'پنج‌شنبه'),
+        ('Friday', 'جمعه'),
+        ('Saturday', 'شنبه'),
+        ('Sunday', 'یک‌شنبه'),
+    )
     course = models.ForeignKey('courses.Course', on_delete=models.CASCADE)
-    class_day = models.CharField(max_length=100, choices=week_days)
-    class_time = models.TimeField()
+    class_day = models.CharField(max_length=100, choices=DAYS_CHOICES, default='Saturday')  #
+    class_time = models.TimeField(default='12:00:00')  #
     exam_date_time = models.DateTimeField()
-    class_location = models.CharField(max_length=255)
-    exam_location = models.CharField(max_length=255)
+    class_location = models.CharField(max_length=255, blank=True, null=True)
+    exam_location = models.CharField(max_length=255, blank=True, null=True)
     professor = models.ForeignKey('users.Professor', on_delete=models.DO_NOTHING, blank=True, null=True)
     capacity = models.PositiveIntegerField()
     term = models.ForeignKey('courses.Term', on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -75,8 +84,11 @@ class Faculty(models.Model):
 
 class StudyField(models.Model):
     name = models.CharField(max_length=255)  # Choice field
-    educations_groupe = models.CharField(max_length=255)  # Choice field
+    educations_groupe = models.CharField(max_length=255, null=True, blank=True)  # Choice field ##
     faculty = models.ManyToManyField('courses.Faculty')
     total_units = models.PositiveIntegerField()
     level = models.CharField(max_length=255,
                              choices=[('کارشناسی', 'کارشناسی'), ('کارشناسی ارشد', 'کارشناسی ارشد'), ('PHD', 'PHD')])
+
+    def __str__(self):
+        return self.name
