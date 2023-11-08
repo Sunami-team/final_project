@@ -22,10 +22,10 @@ class CourseSelectionCreateView(generics.CreateAPIView):
     serializer_class = CourseSelectionSerializer
 
 
-def create(self, request, *args, **kwargs):
-    # بررسی زمان شروع و پایان انتخاب واحد
-    # بررسی تعداد واحدهای حداکثر و حداقل
-    # بررسی شرایط پیش‌نیازی
-    # بررسی وضعیت دروس
-    # ثبت انتخاب واحد
-    return super().create(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        # بررسی زمان شروع و پایان انتخاب واحد
+        # بررسی تعداد واحدهای حداکثر و حداقل
+        # بررسی شرایط پیش‌نیازی
+        # بررسی وضعیت دروس
+        # ثبت انتخاب واحد
+        return super().create(request, *args, **kwargs)
