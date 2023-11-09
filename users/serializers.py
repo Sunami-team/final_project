@@ -6,6 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from django.contrib.auth.hashers import make_password
 from courses.models import Faculty
+from django.contrib.auth import get_user_model
 
 
 User = get_user_model()

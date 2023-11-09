@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .permissions import IsItManager
 from .serializers import *
 from django.contrib.auth import authenticate, login, logout
-from .models import User, ChangePasswordToken, Student, DeputyEducational, Professor
+from .models import User, ChangePasswordToken, Student, DeputyEducational, Professor, ITManager
 from rest_framework import generics, status, viewsets
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
