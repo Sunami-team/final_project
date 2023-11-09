@@ -15,7 +15,9 @@ venv
 .idea
 db.sqlite3
 
+**/migrations/
 /migrations/
+*.pyc
 __pycache__/
 config/__pycache__/
 courses/__pycache__/

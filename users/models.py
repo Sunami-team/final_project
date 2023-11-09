@@ -11,12 +11,25 @@ class User(AbstractUser):
         ('F', 'Female'),
     ]
 
+    USER_TYPE_CHOICES = [
+        ('student', 'Student'),
+        ('professor', 'Professor'),
+        ('it_manager', 'IT Manager'),
+        ('deputy_educational', 'Deputy Educational'),
+    ]
+
     personal_number = models.UUIDField(default=uuid.uuid4, null=True, blank=True)  #
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     mobile = models.CharField(max_length=11, null=True, blank=True)
     national_id = models.CharField(max_length=10, null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+
+    user_type = models.CharField(
+        max_length=20,
+        choices=USER_TYPE_CHOICES,
+        default='student',
+    )
 
     def __str__(self):  #
         return f"{self.first_name} {self.last_name} ({self.username})"

@@ -1,34 +1,20 @@
 from django.shortcuts import render
 from .permissions import IsItManager
-from rest_framework import viewsets
-from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, ProfessorSerializer, AssistanSerializer
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, ListAPIView, GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .permissions import IsItManager
-from rest_framework import viewsets
-from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, ProfessorSerializer, AssistanSerializer, FacultiesListSerializer
-from rest_framework import generics
+from .serializers import *
 from django.contrib.auth import authenticate, login, logout
 from .models import User, ChangePasswordToken, Student, DeputyEducational, Professor
 from rest_framework import generics, status, viewsets
 from django.contrib.auth import authenticate, login, logout
-from .models import User, ChangePasswordToken, Student, DeputyEducational
-from rest_framework import generics
-from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, AssistanSerializer
-from rest_framework import generics, status, viewsets
-# from rest_framework.generics import UpdateAPIView
-from rest_framework import status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 import random
-from django.shortcuts import render
 from .pagination import CustomPageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from courses.models import Faculty
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
-#from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class AssistanList(generics.ListAPIView):
@@ -69,6 +55,35 @@ class AssistanDelete(generics.DestroyAPIView):
     """
     queryset = DeputyEducational.objects.all()
     serializer_class = AssistanSerializer
+
+
+class RegistrationApiView(generics.CreateAPIView):
+    """
+    This API is for user registration using CreateAPIView
+    """
+    serializer_class = RegistrationSerializer
+
+    def perform_create(self, serializer):
+        user_type = self.request.data.get('user_type')
+        
+        # Create user based on the selected type
+        if user_type == 'student':
+            user = Student.objects.create_user(**serializer.validated_data)
+        elif user_type == 'professor':
+            user = Professor.objects.create_user(**serializer.validated_data)
+        elif user_type == 'it_manager':
+            user = ITManager.objects.create_user(**serializer.validated_data)
+        elif user_type == 'deputy_educational':
+            user = DeputyEducational.objects.create_user(**serializer.validated_data)
+        
+        # You may want to handle any additional user-specific data here
+        
+        token, created = Token.objects.get_or_create(user=user)
+        response_data = {
+            'token': token.key,
+            'user': user.username
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 class LoginApiView(generics.GenericAPIView):
@@ -236,13 +251,13 @@ class ProfessorDeleteView(generics.DestroyAPIView):
     ordering_fields = ['id', 'last_name']
     
   
-class FacultiesListCreate(ListCreateAPIView):
+class FacultiesListCreate(generics.ListCreateAPIView):
     queryset = Faculty.objects.all()
     serializer_class = FacultiesListSerializer
     permission_class = [IsItManager]
     # pagination_class = DefaultPagination
 
 
-class FacultiesInformation(RetrieveUpdateDestroyAPIView):
+class FacultiesInformation(generics.RetrieveUpdateDestroyAPIView):
     queryset = Faculty.objects.all()
     serializer_class = FacultiesListSerializer

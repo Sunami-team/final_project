@@ -7,6 +7,39 @@ from django.core import exceptions
 from django.contrib.auth.hashers import make_password
 from courses.models import Faculty
 
+
+User = get_user_model()
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    user_type = serializers.ChoiceField(choices=User.USER_TYPE_CHOICES)  # Add the user_type field
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email', 'user_type']  # Include the user_type field
+
+    def create(self, validated_data):
+        user = User(
+            username=validated_data['username'],
+            email=validated_data.get('email', ''),  # Optional field
+            user_type=validated_data['user_type'],  # Set the user_type
+        )
+        user.set_password(validated_data['password'])
+        
+        # You can add logic here to handle user-specific fields based on user_type
+        if user.user_type == 'student':
+            user.student_id = validated_data.get('student_id')
+        elif user.user_type == 'professor':
+            user.employee_id = validated_data.get('employee_id')
+        elif user.user_type == 'it_manager':
+            user.it_manager_id = validated_data.get('it_manager_id')
+        elif user.user_type == 'deputy_educational':
+            user.deputy_id = validated_data.get('deputy_id')
+        
+        user.save()
+        return user
+
+
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
