@@ -2,6 +2,11 @@ from django.shortcuts import render
 from .permissions import IsItManager
 from rest_framework import viewsets
 from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, ProfessorSerializer, AssistanSerializer
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, ListAPIView, GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from .permissions import IsItManager
+from rest_framework import viewsets
+from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, ProfessorSerializer, AssistanSerializer, FacultiesListSerializer
+from rest_framework import generics
 from django.contrib.auth import authenticate, login, logout
 from .models import User, ChangePasswordToken, Student, DeputyEducational, Professor
 from rest_framework import generics, status, viewsets
@@ -11,6 +16,7 @@ from rest_framework import generics
 from .serializers import LoginSerializer, ChangePasswordSerializer, StudentSerializer, AssistanSerializer
 from rest_framework import generics, status, viewsets
 # from rest_framework.generics import UpdateAPIView
+from rest_framework import status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -20,6 +26,9 @@ from django.shortcuts import render
 from .pagination import CustomPageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from courses.models import Faculty
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
+#from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class AssistanList(generics.ListAPIView):
@@ -225,3 +234,15 @@ class ProfessorDeleteView(generics.DestroyAPIView):
     serializer_class = ProfessorSerializer
     permission_classes = [IsItManager]
     ordering_fields = ['id', 'last_name']
+    
+  
+class FacultiesListCreate(ListCreateAPIView):
+    queryset = Faculty.objects.all()
+    serializer_class = FacultiesListSerializer
+    permission_class = [IsItManager]
+    # pagination_class = DefaultPagination
+
+
+class FacultiesInformation(RetrieveUpdateDestroyAPIView):
+    queryset = Faculty.objects.all()
+    serializer_class = FacultiesListSerializer
