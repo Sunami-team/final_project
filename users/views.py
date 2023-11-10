@@ -17,6 +17,7 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
+# I add this comment to commit and remove migration files
 
 
 class AssistanList(generics.ListAPIView):
