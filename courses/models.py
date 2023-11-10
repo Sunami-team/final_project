@@ -4,9 +4,6 @@ from django.db import models
 class Faculty(models.Model):
     name = models.CharField(max_length=255)
 
-    def __str__(self):
-        return self.name
-
 
 class Course(models.Model):
     COURSE_TYPE_CHOICES = [
@@ -32,7 +29,6 @@ class CourseRequistes(models.Model):
         Course, on_delete=models.DO_NOTHING, related_name='courses_required')
     co_requisites = models.ForeignKey(
         Course, on_delete=models.DO_NOTHING, related_name='courses_concurrent')
-
 
 class Term(models.Model):
     name = models.CharField(max_length=100)
@@ -103,7 +99,9 @@ class TermStudentProfessor(models.Model):
         'users.Professor', on_delete=models.DO_NOTHING)
 
 
+
 class StudyField(models.Model):
+
     LEVEL_CHOICES = [
         ('Bachelor', 'کارشناسی'),
         ('Master', 'کارشناسی ارشد'),
@@ -114,8 +112,7 @@ class StudyField(models.Model):
     name = models.CharField(max_length=255)
     educations_groupe = models.CharField(max_length=255, blank=True)
     total_units = models.PositiveIntegerField()
-    level = models.CharField(max_length=255,
-                             choices=[])
+    level = models.CharField(max_length=255, choices=LEVEL_CHOICES)
 
     def __str__(self):
         return self.name
