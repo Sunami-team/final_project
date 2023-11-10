@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from .permissions import IsItManager
-from .serializers import RegistrationSerializer, LoginSerializer, ChangePasswordSerializer, StudentSerializer, ProfessorSerializer, AssistanSerializer
+from .serializers import *
 from django.contrib.auth import authenticate, login, logout
-from .models import User, ChangePasswordToken, Student, Professor, ITManager, DeputyEducational
 from rest_framework import generics, status, viewsets
+from .models import User, ChangePasswordToken, Student, DeputyEducational, Professor, ITManager
+from courses.models import Faculty
+from rest_framework import generics, status, viewsets
+from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -13,6 +16,7 @@ from .pagination import CustomPageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
 
 
 class AssistanList(generics.ListAPIView):
@@ -126,10 +130,10 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
     def post(self, request):
         user = request.user
         user_email = user.email
-        print(user_email)
+        print(user_email) # print out the recipient email
         token = random.randint(1000, 10000)
         ChangePasswordToken.objects.create(user=user, token=token)
-        send_email.delay(user_email, token)
+        send_email.delay(user_email, token) # shared task by celery
         return Response({'token': token, 'detail': 'Token generated successfully'}, status=status.HTTP_200_OK)
 
 
@@ -249,3 +253,21 @@ class ProfessorDeleteView(generics.DestroyAPIView):
     serializer_class = ProfessorSerializer
     permission_classes = [IsItManager]
     ordering_fields = ['id', 'last_name']
+    
+  
+class FacultiesListCreate(generics.ListCreateAPIView):
+    """
+    Faculty Create and List API View
+    """
+    queryset = Faculty.objects.all()
+    serializer_class = FacultiesListSerializer
+    permission_class = [IsItManager]
+    # pagination_class = DefaultPagination
+
+
+class FacultiesInformation(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Faculty Retrieve API View
+    """
+    queryset = Faculty.objects.all()
+    serializer_class = FacultiesListSerializer

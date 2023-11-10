@@ -1,11 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
-from .models import User, ChangePasswordToken, DeputyEducational
+from .models import User, Student, ChangePasswordToken, DeputyEducational, Professor
+from courses.models import Faculty
 from rest_framework import serializers
-from .models import Student
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from django.contrib.auth.hashers import make_password
-from .models import Professor
 from django.contrib.auth import get_user_model
 
 
@@ -130,3 +129,9 @@ class AssistanSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeputyEducational
         field = '__all__'
+
+        
+class FacultiesListSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Faculty
+        fields = "__all__"
