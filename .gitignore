@@ -17,4 +17,7 @@ db.sqlite3
 
 __pycache__/
 migrations/
- student_requests/__pycache__/
+student_requests/__pycache__/
+courses/__pycache__/
+config/__pycache__/
+users/__pycache__/
