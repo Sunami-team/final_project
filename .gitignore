@@ -17,3 +17,11 @@ db.sqlite3
 
 __pycache__/
 migrations/
+student_requests/__pycache__/
+courses/__pycache__/
+config/__pycache__/
+users/__pycache__/
+
+courses/migrations/
+student_requests/migrations/
+users/migrations/

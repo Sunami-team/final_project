@@ -139,9 +139,9 @@ REST_FRAMEWORK = {
      'DEFAULT_AUTHENTICATION_CLASSES': (
     #     # 'rest_framework.authentication.SessionAuthentication',
          'rest_framework.authentication.TokenAuthentication',),
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
-    'DEFAULT_VERSION': 'v1',
-    'ALLOWED_VERSIONS': ['v1'],
+    # 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    # 'DEFAULT_VERSION': 'v1',
+    # 'ALLOWED_VERSIONS': ['v1'],
 }
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"

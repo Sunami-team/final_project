@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .permissions import IsItManager
+from .permissions import IsItManager, IsDeputyEducational, IsStudentOrDeputyEducational, IsProfessorOrDeputyEducational
 from .serializers import *
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, status, viewsets
@@ -18,6 +18,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
 # I add this comment to commit and remove migration files
+
 
 
 class AssistanList(generics.ListAPIView):
@@ -272,3 +273,51 @@ class FacultiesInformation(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Faculty.objects.all()
     serializer_class = FacultiesListSerializer
+
+
+# Show Students List , Access By Educational Deputy
+
+class EducationalDeputyStudentsList(generics.ListAPIView):
+    """
+    Deputy Educational Access to students List
+    """
+    serializer_class = StudentSerializer
+    queryset = Student.objects.all()
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsDeputyEducational]
+
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = {'first_name':['exact', 'in'], 'last_name':['exact', 'in'], 'national_id':['exact'], 'college':['exact'],
+                        'study_field':['exact'], 'entry_year':['exact'], 'military_status':['exact'], 'personal_number':['exact']}
+    search_fields = ['first_name', 'last_name']
+    ordering_fields = ['id', 'last_name']
+
+
+class EducationalDeputyStudentDetail(generics.RetrieveAPIView):
+    """
+    Deputy Educational Access to a student Data Detail
+    """
+    serializer_class = StudentSerializer
+    queryset = Student.objects.all()
+    permission_classes = [IsStudentOrDeputyEducational]
+
+
+
+class EducationalDeputyProfessorsList(generics.ListAPIView):
+    serializer_class = DeputyEducationalProfessorSerializer
+    queryset = Professor.objects.all()
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsDeputyEducational]
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['first_name', 'last_name', 'personal_number', 'national_id',
+                        'study_field', 'expertise', 'rank']
+    search_fields = ['first_name', 'last_name']
+    ordering_fields = ['id', 'last_name']
+
+
+class EducationalDeputyProfessorDetail(generics.RetrieveAPIView):
+    serializer_class = DeputyEducationalProfessorSerializer
+    queryset = Professor.objects.all()
+    permission_classes = [IsProfessorOrDeputyEducational]
