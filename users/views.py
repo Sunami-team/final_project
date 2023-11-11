@@ -2,7 +2,9 @@ from django.shortcuts import render
 from .permissions import IsItManager
 from .serializers import *
 from django.contrib.auth import authenticate, login, logout
+from rest_framework import generics, status, viewsets
 from .models import User, ChangePasswordToken, Student, DeputyEducational, Professor, ITManager
+from courses.models import Faculty
 from rest_framework import generics, status, viewsets
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
@@ -13,8 +15,9 @@ import random
 from .pagination import CustomPageNumberPagination
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from courses.models import Faculty
+from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
+# I add this comment to commit and remove migration files
 
 
 class AssistanList(generics.ListAPIView):
@@ -127,9 +130,11 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
 
     def post(self, request):
         user = request.user
+        user_email = user.email
+        print(user_email) # print out the recipient email
         token = random.randint(1000, 10000)
         ChangePasswordToken.objects.create(user=user, token=token)
-
+        send_email.delay(user_email, token) # shared task by celery
         return Response({'token': token, 'detail': 'Token generated successfully'}, status=status.HTTP_200_OK)
 
 
@@ -252,6 +257,9 @@ class ProfessorDeleteView(generics.DestroyAPIView):
     
   
 class FacultiesListCreate(generics.ListCreateAPIView):
+    """
+    Faculty Create and List API View
+    """
     queryset = Faculty.objects.all()
     serializer_class = FacultiesListSerializer
     permission_class = [IsItManager]
@@ -259,5 +267,8 @@ class FacultiesListCreate(generics.ListCreateAPIView):
 
 
 class FacultiesInformation(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Faculty Retrieve API View
+    """
     queryset = Faculty.objects.all()
     serializer_class = FacultiesListSerializer

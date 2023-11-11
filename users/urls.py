@@ -2,6 +2,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # Auth
+    path('register/', views.RegistrationApiView.as_view(), name="register"),
+    path('login/', views.LoginApiView.as_view(), name="login"),
+    path('logout/', views.LogoutApiView.as_view(), name="logout"),
+    path('change-password-request/', views.ChangePasswordRequestApiView.as_view(), name="change-password-request"),
+    path('change-password-action/', views.ChangePasswordActionApiView.as_view(), name="change-password-action"),
+    # Create - List - Retrieve - Update - Delete (Student) BY ITManager
+    path('admin/students/', views.StudentViewset.as_view({'get':'list', 'post': 'create'}), name='student-list'),
+    path('admin/students/<int:pk>/', views.StudentViewset.as_view({'get': 'retrieve', 'delete': 'destroy', 'put': 'update'}), name='student-detail'),
     path('register/', views.RegistrationApiView.as_view(), name="register"),
     path('login/', views.LoginApiView.as_view(), name="login"),
     path('logout/', views.LogoutApiView.as_view(), name="logout"),
