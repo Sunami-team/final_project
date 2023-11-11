@@ -77,10 +77,10 @@ class ITManager(User):
 
 class Professor(User):
     RANK_CHOICES = [
-        ('1', 'مربی')
-        ('2', 'استادیار')
-        ('3', 'دانشیار')
-        ('4', 'استاد')
+        ('1', 'مربی'),
+        ('2', 'استادیار'),
+        ('3', 'دانشیار'),
+        ('4', 'استاد'),
     ]
     college = models.ForeignKey(
         'courses.Faculty', on_delete=models.DO_NOTHING, related_name='professor_faculty')
