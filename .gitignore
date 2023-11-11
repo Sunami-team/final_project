@@ -21,3 +21,7 @@ student_requests/__pycache__/
 courses/__pycache__/
 config/__pycache__/
 users/__pycache__/
+
+courses/migrations/
+config/migrations/
+users/migrations/
