@@ -1,8 +1,11 @@
 from django.urls import path
-from .views import CourseListCreate, CourseRetrieveUpdateDelete, ClassSchedulesList
+from . import views
 
 urlpattern = [
-    path('subjects/', CourseListCreate.as_view(), name="course-list-create"),
-    path('subjects/<int:pk>/', CourseRetrieveUpdateDelete.as_view(), name="course-get-update-delete"),
-    path('student/<slug:student_id>/', ClassSchedulesList.as_view(), name="class-schedule-get"),
+    path('subjects/', views.CourseListCreate.as_view(), name="course-list-create"),
+    path('subjects/<int:pk>/', views.CourseRetrieveUpdateDelete.as_view(), name="course-get-update-delete"),
+    path('student/<int:pk>/class-schedule/', views.ClassScheduleView.as_view(), name="professor-class-schedule"),
+    path('student/me/class-schedule/', views.ClassScheduleView.as_view(), name="student-class-schedule"),
+    path('student/<int:pk>/exam-schedule/', views.ExamSchedulesView.as_view(), name="professor-exam-schedule"),
+    path('student/me/exam-schedule/', views.ExamSchedulesView.as_view(), name="student-exam-schedule"),
 ]
