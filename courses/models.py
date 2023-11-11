@@ -7,7 +7,7 @@ class Faculty(models.Model):
 
 class Course(models.Model):
     COURSE_TYPE_CHOICES = [
-        ('B', 'پایه')
+        ('B', 'پایه'),
         ('G', 'عمومی'),
         ('P', 'تخصصی'),
         ('O', 'اختیاری'),
