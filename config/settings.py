@@ -146,3 +146,10 @@ REST_FRAMEWORK = {
 
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+# MinIO Configuration
+MINIO_ENDPOINT = 'your-minio-endpoint'
+MINIO_ACCESS_KEY = 'your-access-key'
+MINIO_SECRET_KEY = 'your-secret-key'
+MINIO_SECURE = False  # Set to True if using HTTPS
+MINIO_BUCKET_NAME = 'your-bucket-name'
