@@ -1,6 +1,7 @@
 # minio_storage.py
 
 from minio import Minio
+from django.conf import settings
 
 minio_client = Minio(
     endpoint=settings.MINIO_ENDPOINT,

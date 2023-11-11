@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import timezone, timedelta
+from config.minio_storage import minio_client
 
 
 class User(AbstractUser):
@@ -18,8 +19,7 @@ class User(AbstractUser):
     ]
 
     personal_number = models.UUIDField(default=uuid.uuid4)
-    profile_picture = models.ImageField(
-        upload_to='profile_pictures/', null=True, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     mobile = models.CharField(max_length=11, blank=True)
     national_id = models.CharField(max_length=10, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
