@@ -30,6 +30,7 @@ class CourseRequistes(models.Model):
     co_requisites = models.ForeignKey(
         Course, on_delete=models.DO_NOTHING, related_name='courses_concurrent')
 
+
 class Term(models.Model):
     name = models.CharField(max_length=100)
     start_course_selection = models.DateField()
@@ -97,7 +98,6 @@ class TermStudentProfessor(models.Model):
     students = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
     professors = models.ForeignKey(
         'users.Professor', on_delete=models.DO_NOTHING)
-
 
 
 class StudyField(models.Model):
