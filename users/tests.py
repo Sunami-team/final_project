@@ -12,14 +12,17 @@ class TestAdminStudentApi(TestCase):
         self.client = APIClient()
         self.it_manager = ITManager.objects.create(username='mrtaster', password='sinasina!@#')
         self.user = User.objects.create(username='ya-adame-alaki', password='sinasina!@#')
-        self.fake_collage = Faculty.objects.create(name='alaki-hala')
-        self.fake_study_field = StudyField.objects.create(name='ie-chizi', total_units=140, level='کارشناسی')
+        self.fake_college = Faculty.objects.create(name='alaki-hala')
+        self.fake_study_field = StudyField.objects.create(name='ie-chizi',
+                                                            total_units=140,
+                                                            level='کارشناسی',
+                                                            faculty=self.fake_college)
         self.fake_student = Student.objects.create(username='new_student1',
             password='newpassword!@#',
             entry_year= 1400,
             entry_term='Mehr',
             seniority=2,
-            college=self.fake_collage,
+            college=self.fake_college,
             study_field=self.fake_study_field,
             military_status=True
             )
@@ -65,7 +68,7 @@ class TestAdminStudentApi(TestCase):
             'entry_year' : 1400,
             'entry_term' : 'Mehr',
             'seniority' : 2,
-            'college' : self.fake_collage.pk,
+            'college' : self.fake_college.pk,
             'study_field' : self.fake_study_field.pk
         }
         self.client.force_authenticate(user=self.it_manager)
@@ -114,7 +117,7 @@ class TestAdminStudentApi(TestCase):
             'entry_year' : 1402,
             'entry_term' : 'Bahman',
             'seniority' : 1,
-            'college' : self.fake_collage.pk,
+            'college' : self.fake_college.pk,
             'study_field' : self.fake_study_field.pk
         }
         self.client.force_authenticate(user=self.it_manager)
