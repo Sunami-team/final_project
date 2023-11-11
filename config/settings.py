@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,6 +131,11 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'files')
+MEDIA_URL = '/media/'
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -143,3 +149,13 @@ REST_FRAMEWORK = {
     'DEFAULT_VERSION': 'v1',
     'ALLOWED_VERSIONS': ['v1'],
 }
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+
+# MinIO Configuration
+MINIO_ENDPOINT = 'your-minio-endpoint'
+MINIO_ACCESS_KEY = 'your-access-key'
+MINIO_SECRET_KEY = 'your-secret-key'
+MINIO_SECURE = False  # Set to True if using HTTPS
+MINIO_BUCKET_NAME = 'your-bucket-name'
