@@ -82,7 +82,7 @@ class StudentCourse(models.Model):
     ]
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
     course_term = models.ForeignKey(
-        'courses.CourseTerm', on_delete=models.DO_NOTHING)
+        'courses.Course', on_delete=models.DO_NOTHING, related_name='student_course')
     term = models.ForeignKey('courses.Term', on_delete=models.DO_NOTHING)
     course_status = models.CharField(
         max_length=10, blank=True, choices=COURSE_STATUS_CHOICES)
