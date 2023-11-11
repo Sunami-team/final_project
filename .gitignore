@@ -23,5 +23,5 @@ config/__pycache__/
 users/__pycache__/
 
 courses/migrations/
-config/migrations/
+student_requests/migrations/
 users/migrations/
