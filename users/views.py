@@ -311,7 +311,7 @@ class EducationalDeputyProfessorsList(generics.ListAPIView):
     permission_classes = [IsDeputyEducational]
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['first_name', 'last_name', 'personal_number', 'national_id', 'faculty',
+    filterset_fields = ['first_name', 'last_name', 'personal_number', 'national_id',
                         'study_field', 'expertise', 'rank']
     search_fields = ['first_name', 'last_name']
     ordering_fields = ['id', 'last_name']

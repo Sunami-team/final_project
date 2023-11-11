@@ -35,6 +35,20 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.username})"
 
+    @property
+    def is_student(self):
+        personal = self.personal_number
+        return Student.objects.filter(personal_number=personal).exists()
+    
+    @property
+    def is_professor(self):
+        personal = self.personal_number
+        return Professor.objects.filter(personal_number=personal).exists()
+
+    @property
+    def is_deputy_educational(self):
+        personal = self.personal_number
+        return DeputyEducational.objects.filter(personal_number=personal).exists()
 
 class ChangePasswordToken(models.Model):
 
