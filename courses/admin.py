@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Faculty, StudyField
-# Register your models here.
+from .models import *
 
-admin.site.register(Faculty)
-admin.site.register(StudyField)
+
+admin.site.register((Faculty, Course, CourseRequistes, Term, CourseTerm, StudentCourse, TermStudentProfessor, StudyField))
