@@ -1,26 +1,21 @@
-from rest_framework import viewsets
-from rest_framework.generics import RetrieveAPIView
-
-from courses.models import Term
-from courses.serializers import TermSerializer
-
 from rest_framework import generics
-from .serializers import CourseSelectionSerializer
+from rest_framework import viewsets
+from courses.models import Term
+from .serializers import CourseSelectionSerializer, TermSerializer
 
-
+# Create your views here.
 class TermViewSet(viewsets.ModelViewSet):
     queryset = Term.objects.all()
     serializer_class = TermSerializer
 
 
-class TermDetailAPIView(RetrieveAPIView):
+class TermDetailAPIView(generics.RetrieveAPIView):
     queryset = Term.objects.all()
     serializer_class = TermSerializer
 
 
 class CourseSelectionCreateView(generics.CreateAPIView):
     serializer_class = CourseSelectionSerializer
-
 
     def create(self, request, *args, **kwargs):
         # بررسی زمان شروع و پایان انتخاب واحد
