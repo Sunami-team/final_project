@@ -1,16 +1,11 @@
 from django.db.models import Sum
 from django.utils import timezone
-from rest_framework import viewsets
-from rest_framework.generics import RetrieveAPIView
-
-from courses.models import Term, StudentCourse
-from courses.serializers import TermSerializer
-
-from .serializers import CourseSelectionSerializer
-
+from .models import Term, StudentCourse
+from .serializers import CourseSelectionSerializer, TermSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework import viewsets, generics
 
 
 class TermViewSet(viewsets.ModelViewSet):
@@ -18,7 +13,7 @@ class TermViewSet(viewsets.ModelViewSet):
     serializer_class = TermSerializer
 
 
-class TermDetailAPIView(RetrieveAPIView):
+class TermDetailAPIView(generics.RetrieveAPIView):
     queryset = Term.objects.all()
     serializer_class = TermSerializer
 
@@ -102,3 +97,15 @@ class CourseSelectionViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['post'])
     def send_form(self, request, pk=None):
         pass
+
+      
+class CourseSelectionCreateView(generics.CreateAPIView):
+    serializer_class = CourseSelectionSerializer
+
+    def create(self, request, *args, **kwargs):
+        # بررسی زمان شروع و پایان انتخاب واحد
+        # بررسی تعداد واحدهای حداکثر و حداقل
+        # بررسی شرایط پیش‌نیازی
+        # بررسی وضعیت دروس
+        # ثبت انتخاب واحد
+        return super().create(request, *args, **kwargs)
