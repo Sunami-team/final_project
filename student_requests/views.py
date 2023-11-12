@@ -5,6 +5,11 @@ from .serializers import CourseSerializer, CourseTermSerializer, TermDropSeriali
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
 from rest_framework import generics, status, serializers
 from django.shortcuts import get_object_or_404
+from users.tasks import send_email
+from .models import TermDropRequest
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 class CourseListCreate(generics.ListCreateAPIView):
     """
