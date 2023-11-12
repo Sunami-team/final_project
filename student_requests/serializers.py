@@ -6,6 +6,9 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ['name', 'faculty', 'pre_requisites', 'co_requisites', 'course_unit', 'course_type']
+from rest_framework import serializers
+
+from student_requests.models import TermDropRequest
 
 
 class CourseTermSerializer(serializers.ModelSerializer):
@@ -30,3 +33,8 @@ class TermDropSerializer(serializers.ModelSerializer):
         model = TermDropRequest
         fields = ('student_id', 'student_first_name', 'student_last_name', 'term_name', 'result', 'student_comment', 'deputy_educational_comment', 'accept')
         read_only_fields = ('student_id', 'student_first_name', 'student_last_name', 'term_name', 'result', 'student_comment')
+
+class TermRemovalRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TermDropRequest
+        fields = '__all__'
