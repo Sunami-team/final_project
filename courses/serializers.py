@@ -12,3 +12,9 @@ class CourseSelectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentCourse
         fields = '__all__'
+
+
+class StudentCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentCourse
+        fields = ['student', 'grade']
