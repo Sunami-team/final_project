@@ -13,4 +13,7 @@ urlpatterns = [
     # Assistant Remove Term
     path('assistant/remove-term/', views.AssistantRemoveTermList.as_view(), name='remove-term-list'),
     path('assistant/<int:term_id>/remove-term/<int:student_id>/', views.AssistantRemoveTermStudentDetail.as_view(), name='remove-term-detail'),
+    # Assistant approve Grade Reconsideration
+    path('assistant/<int:professor_id>/courses/<int:course_id>/prof-approved/', views.AssistantGradeReconsiderationRequestList.as_view(), name='assistant-change-grade-list'),
+    path('assistant/<int:professor_id>/courses/<int:course_id>/prof-approved/<int:student_id>/', views.AssistantGradeReconsiderationRequestStudentDetail.as_view(), name='assistant-change-grade-list-student-detail'),
 ]

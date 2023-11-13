@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from users.models import User, Student
+from users.models import User, Student, Professor
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer
+from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
 from rest_framework import generics, status, serializers
 from django.shortcuts import get_object_or_404
 from users.tasks import send_email
-from .models import TermDropRequest
+from .models import TermDropRequest, GradeReconsiderationRequest
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -199,3 +199,44 @@ class AssistantRemoveTermStudentDetail(APIView):
                 return Response({'result':'Request Failed', 'message': 'deputy_educational_comment'}, status=status.HTTP_200_OK)
             except:
                 raise serializers.ValidationError('Student Email field is Null')
+
+######################
+# GRADE RECONSIDERTION
+# /assistant/{pk,me}/courses/{c-pk}/prof-approved/ GET
+class AssistantGradeReconsiderationRequestList(APIView): 
+    permission_classes = [IsDeputyEducational]
+    def get(self, request , professor_id, course_id):
+        try:
+            all_requets = GradeReconsiderationRequest.objects.filter(course=course_id, course__professor=professor_id)
+            serializer = AssistantGradeReconsiderationRequestSerializer(all_requets, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except GradeReconsiderationRequest.DoesNotExist:
+            return Response({'errors':'Request Does not exist'}, status=status.HTTP_404_NOT_FOUND)
+    
+class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView):
+    # permission_classes = [IsDeputyEducational]
+    serializer_class = AssistantGradeReconsiderationRequestSerializer
+    def get(self, request , professor_id, course_id, student_id):
+        try:
+            requet_detail = GradeReconsiderationRequest.objects.get(course=course_id, course__professor=professor_id, student=student_id)
+            serializer = AssistantGradeReconsiderationRequestSerializer(requet_detail)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except GradeReconsiderationRequest.DoesNotExist:
+            return Response({'errors':'Request Does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def put(self, request , professor_id, course_id, student_id):
+        requet_detail = GradeReconsiderationRequest.objects.get(course=course_id, course__professor=professor_id, student=student_id)
+        serializer = AssistantGradeReconsiderationRequestSerializer(instance=requet_detail, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        if serializer.validated_data['approve']:
+            try:
+                course_term = CourseTerm.objects.get(id=course_id)
+                student_course = StudentCourse.objects.get(student=student_id, course_term=course_id, term=course_term.term)
+                student_course.course_status = 'pass'
+                student_course.save()
+            except StudentCourse.DoesNotExist:
+                return Response({'details': 'Studet Course Does Not exist'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'details': 'Request Failed'}, status=status.HTTP_200_OK)   
+        return Response({'details': 'Request Accepted'}, status=status.HTTP_200_OK)
