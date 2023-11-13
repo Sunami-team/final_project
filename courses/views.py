@@ -10,6 +10,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Course, Term, StudentCourse, StudyField
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Course, StudentCourse
+
 
 class TermViewSet(viewsets.ModelViewSet):
     queryset = Term.objects.all()
@@ -145,6 +150,50 @@ class CourseSubstitutionCheck(APIView):
             return Response({"error": "Invalid course ID"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class CourseSubstitutionSubmit(APIView):
+    def post(self, request, pk):
+        try:
+            student_id = pk
+            term_id = request.data.get('term')
+            student_courses = StudentCourse.objects.filter(student_id=student_id, term_id=term_id)
+
+            # شرط: اگر اندوینت دوم اجرا شود، تغییرات را اعمال کن.
+            if request.data.get('execute_changes'):
+                for course in student_courses:
+                    # شرط‌های لازم برای اعمال تغییرات را در اینجا بیافزایید.
+                    # مثلاً:
+                    course.course_status = request.data.get(f'course_status_{course.id}')
+                    course.grade = request.data.get(f'grade_{course.id}')
+                    course.save()
+
+                return Response({"message": "Changes applied successfully"}, status=status.HTTP_200_OK)
+            else:
+                # اگر اندوینت اول اجرا شود، تنها خطاها را نشان بده.
+                error_messages = []
+                for course in student_courses:
+                    # شرط‌های لازم برای چک کردن تغییرات را در اینجا بیافزایید.
+                    # مثلاً:
+                    if course.course_status != request.data.get(f'course_status_{course.id}'):
+                        error_messages.append(f"Course status for {course.course_term.course.name} is not valid.")
+
+                    if course.grade != request.data.get(f'grade_{course.id}'):
+                        error_messages.append(f"Grade for {course.course_term.course.name} is not valid.")
+
+                if error_messages:
+                    return Response({"error": error_messages}, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response({"message": "Changes checked successfully"}, status=status.HTTP_200_OK)
+
+        except Course.DoesNotExist:
+            return Response({"error": "Invalid course ID"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CourseSelectionViewSet(viewsets.ViewSet):
     # POST /student/{pk/me}/course-selection/check/
 
