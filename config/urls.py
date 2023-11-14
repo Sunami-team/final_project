@@ -40,6 +40,7 @@ urlpatterns = [
     path('v1/users/', include('users.urls')),
     path('v1/courses/', include('courses.urls')),
     path('v1/student_requests/', include('student_requests.urls')),
+    path('admin/', include(('courses.urls', 'courses'), namespace='v1')),
     # swagger and redoc urls
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
