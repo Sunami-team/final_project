@@ -214,7 +214,7 @@ class AssistantGradeReconsiderationRequestList(APIView):
             return Response({'errors':'Request Does not exist'}, status=status.HTTP_404_NOT_FOUND)
     
 class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView):
-    # permission_classes = [IsDeputyEducational]
+    permission_classes = [IsDeputyEducational]
     serializer_class = AssistantGradeReconsiderationRequestSerializer
     def get(self, request , professor_id, course_id, student_id):
         try:
