@@ -90,7 +90,7 @@ class StudentCourse(models.Model):
         max_digits=4, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name} --> {self.course_term.course.name}"
+        return f"{self.student.first_name} {self.student.last_name} --> {self.course_term.name}"
 
 
 class TermStudentProfessor(models.Model):

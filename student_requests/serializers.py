@@ -1,6 +1,6 @@
 from courses.models import Course, CourseTerm
 from rest_framework import serializers
-from .models import TermDropRequest
+from .models import TermDropRequest, GradeReconsiderationRequest
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,3 +38,16 @@ class TermRemovalRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = TermDropRequest
         fields = '__all__'
+
+
+class AssistantGradeReconsiderationRequestSerializer(serializers.ModelSerializer):
+    student_first_name = serializers.CharField(source='student.first_name', read_only=True)
+    student_last_name = serializers.CharField(source='student.last_name', read_only=True)
+    course_name = serializers.CharField(source='course.course.name', read_only=True)
+    professor_first_name = serializers.CharField(source='course.professor.first_name', read_only=True)
+    professor_last_name = serializers.CharField(source='course.professor.last_name', read_only=True)
+    approve = serializers.BooleanField(write_only=True)
+    class Meta:
+        model = GradeReconsiderationRequest
+        fields = ('student_first_name', 'student_last_name', 'course_name', 'reconsideration_text', 'response_text', 'professor_first_name', 'professor_last_name', 'approve')
+        read_only_fields = ('student_first_name', 'student_last_name', 'course_name', 'reconsideration_text',)
