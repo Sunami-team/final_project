@@ -1,15 +1,18 @@
 from django.shortcuts import render
 from users.models import User, Student, Professor
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer
+from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
 from rest_framework import generics, status, serializers
 from django.shortcuts import get_object_or_404
 from users.tasks import send_email
-from .models import TermDropRequest, GradeReconsiderationRequest
+from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, CourseCorrectionStudentRequest
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.db import transaction
 from rest_framework.views import APIView
+from users.pagination import CustomPageNumberPagination
+
 
 class CourseListCreate(generics.ListCreateAPIView):
     """
@@ -240,3 +243,162 @@ class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView)
         else:
             return Response({'details': 'Request Failed'}, status=status.HTTP_200_OK)   
         return Response({'details': 'Request Accepted'}, status=status.HTTP_200_OK)
+
+
+# Course Studet Correction
+
+# /student/{pk/me}/course-substitution/create/
+class CreateCorrectionRequestByStudent(generics.GenericAPIView):
+    queryset = CourseCorrectionStudentRequest.objects.all()
+    serializer_class = CorrectionRequestSerializer
+    permission_classes = [IsStudent]
+    pagination_class = CustomPageNumberPagination
+
+    def get(self, request, pk):
+        studnet = Student.objects.get(id=pk)
+        return Response({'studnet': f'{studnet.first_name} {studnet.last_name}','details': 'add or remove'}, status=status.HTTP_200_OK)
+    
+    def post(self, request, pk):
+        student = Student.objects.get(pk=pk)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.validated_data['student'] = student
+        for course_to_add in serializer.validated_data['courses_to_add']:
+            if course_to_add in serializer.validated_data['courses_to_drop']:
+                return Response({'detail': 'You can not add and drop a course in same time !'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        return Response({'detail': 'Pre Request Created'}, status=status.HTTP_201_CREATED)
+
+    # /student/{pk/me}/course-substitution/
+
+class DetailCorrectionRequestByStudent(APIView):
+    permission_classes = [IsStudent]
+    pagination_class = CustomPageNumberPagination
+    def get(self, request, pk):
+        correction_requests = CourseCorrectionStudentRequest.objects.filter(student__id=pk)
+        serializer = CorrectionShowSerializer(correction_requests, many=True)
+        studnet = Student.objects.get(pk=pk)
+        return Response({'student':f'{studnet.first_name} {studnet.last_name}', 'details':serializer.data}, status=status.HTTP_200_OK)
+    
+# /student/{pk/me}/course-substitution/check/
+class CorrectionShowErrors(APIView):
+    permission_classes = [IsStudent]
+    def get(self, request, pk, term_id):
+        add_errors = {}
+        drop_errors = {}
+        student = Student.objects.get(id=pk)
+        current_term = Term.objects.get(id=term_id)
+        all_current_courses = StudentCourse.objects.filter(student=student, term=current_term)
+        all_passed_courses = StudentCourse.objects.filter(student=student).exclude(id__in=all_current_courses)   
+        correction_student = CourseCorrectionStudentRequest.objects.get(student=student)
+
+        # تعداد واحد های حذف یا اضافه از ۶ بیشتر نباشد
+        sum_of_unit_add = 0
+        for correction in correction_student.courses_to_add.all():
+            sum_of_unit_add += correction.course.course_unit
+
+        if sum_of_unit_add > 6:
+            add_errors['total'] = ['added courses most be less than 6']
+
+        sum_of_unit_remove = 0
+        for correction in correction_student.courses_to_drop.all():
+            sum_of_unit_remove += correction.course.course_unit
+            
+        if sum_of_unit_remove > 6:
+            drop_errors['total'] = ['added courses most be less than 6']
+
+
+        # ADD
+        for add_course in correction_student.courses_to_add.all():
+            add_errors[add_course.course.name] = []
+            
+            # درس پیشنیاز حتما باید در وضعیت قبول باشد
+            for pre_requisite in add_course.course.courses_required.all():
+                if pre_requisite not in all_passed_courses:
+                    add_errors[add_course.course.name].append(f"You Did not passed {pre_requisite.name}")
+            
+            # درس تکراری یا پاس شده نباید برداشت
+            if add_course.course in all_passed_courses:
+                add_errors[add_course.course.name].append('You Passed This Course')
+            
+            # تکمیل بودن ظرفیت کلاس
+            if add_course.capacity == StudentCourse.objects.filter(course_term=add_course.course).count():
+                add_errors[add_course.course.name].append('Course is Full')
+            
+            # تداخل زمانی کلاس و امتحان
+            for current_course in all_current_courses:
+                if add_course.class_time == current_course.course_term.class_time:
+                    add_errors[add_course.course.name].append('Course Interference time')
+                if add_course.exam_date_time == current_course.course_term.exam_date_time:
+                    add_errors[add_course.course.name].append('Exam Interference time')
+
+            # رشته تحصیلی اشتباه
+            # if add_course.course.study_field != student.study_field:
+            #     add_errors[add_course.course.name].append('Wrong Study field')
+
+        # DROP
+        for drop_course in correction_student.courses_to_drop.all():
+            drop_errors[drop_course.course.name] = []
+            # نمی توان درسی که هم نیاز دارد را حذف کرد
+            for studnet_course in all_current_courses:
+                if studnet_course.course != drop_course.course:
+                    for co_requisite in studnet_course.course_term.course.co_requisites.all():
+                        if co_requisite == drop_course:
+                            drop_errors[drop_course.course.name].append('this Course have Co Requisite')
+        
+        print(add_errors.values())
+        print(drop_errors.values())
+        if not all(add_errors.values()) and not all(drop_errors.values()):
+            correction_student.approval_status = True
+            correction_student.save()
+
+
+        return Response({'add_errors':add_errors, 'drop_errors':drop_errors, 'status':correction_student.approval_status}, status=status.HTTP_200_OK)
+
+
+# /student/{pk/me}/course-substitution/submit/
+class CorrectionSubmit(APIView):
+    permission_classes = [IsStudent]
+    
+    @transaction.atomic
+    def post(self, request, pk):
+        try:
+            with transaction.atomic():
+                
+                student = Student.objects.get(id=pk)
+                correction_student = CourseCorrectionStudentRequest.objects.get(student=student)
+                if correction_student.approval_status:
+                    final_correction = CourseCorrectionStudentSendToAssistant.objects.create(
+                        student=correction_student.student,
+                    )
+                    correction_student = CourseCorrectionStudentRequest.objects.get(student=student)
+                    for add_courses in correction_student.courses_to_add.all():
+                        final_correction.courses_to_add.add(add_courses)
+                    for drop_courses in correction_student.courses_to_drop.all():
+                        final_correction.courses_to_drop.add(drop_courses)
+                    return Response('add to Correction Submit', status=status.HTTP_200_OK)
+                else:
+                    raise serializers.ValidationError('Add and drop Corses does not correct')
+        except Exception as e:
+            return Response('We Have errors', status=status.HTTP_200_OK)
+        
+
+# /student/{pk/me}/course-substitution/send-form/{term_id}
+class CorrectionSendForm(APIView):
+    def get(self, request, pk, term_id):
+        student = Student.objects.get(id=pk)
+        correction_student = CourseCorrectionStudentSendToAssistant.objects.get(student=student)
+        try:
+            selected_term = Term.objects.get(id=term_id)
+        except Term.DoesNotExist:
+            return Response('Term Does NOT exist', status=status.HTTP_404_NOT_FOUND)
+        for add_course in correction_student.courses_to_add.all():
+            StudentCourse.objects.create(
+                student=student,
+                course_term=add_course.course,
+                term=selected_term
+            )
+        if not correction_student.courses_to_add.all():
+            return Response('Corses Corrections is Empty', status=status.HTTP_400_BAD_REQUEST)
+        return Response('Corses Corrections DONE', status=status.HTTP_200_OK)
