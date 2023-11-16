@@ -118,4 +118,3 @@ class MilitaryServiceRequestRetriveSerializer(serializers.ModelSerializer):
         model = MilitaryServiceRequest
         fields = ['student', 'term', 'proof_document', 'issuance_place']
         read_only_fields = ['proof_document']
-        
