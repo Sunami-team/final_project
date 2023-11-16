@@ -2,7 +2,7 @@ from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
 from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, \
     AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, \
-    EmergencyDropRequestSerializer
+    EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
 from rest_framework import generics, status, serializers
 from django.shortcuts import get_object_or_404
@@ -10,17 +10,19 @@ from users.tasks import send_email
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from courses.permissions import IsStudent
-from .models import EmergencyDropRequest, TermDropRequest
+from .models import EmergencyDropRequest, TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, \
+    CourseCorrectionStudentRequest, MilitaryServiceRequest
 from .permissions import IsDeputyEducational, IsStudent
 from rest_framework.exceptions import NotFound
 from .tasks import *
-from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, \
-    CourseCorrectionStudentRequest
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from rest_framework.views import APIView
 from users.pagination import CustomPageNumberPagination
 from django.utils.translation import gettext as _
+from .permissions import IsStudentOwner
+from rest_framework.viewsets import ModelViewSet
+
 
 
 class CourseListCreate(generics.ListCreateAPIView):
@@ -618,3 +620,31 @@ class CorrectionSendForm(APIView):
         if not correction_student.courses_to_add.all():
             return Response(_('Corses Corrections is Empty'), status=status.HTTP_400_BAD_REQUEST)
         return Response(_('Corses Corrections DONE'), status=status.HTTP_200_OK)
+
+    
+
+class MilitaryServiceRequestViewSet(ModelViewSet):
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return MilitaryServiceRequestRetriveSerializer
+        else:
+            return MilitaryServiceRequestSerializer
+
+    permission_classes = [IsAuthenticated, IsStudentOwner]
+
+    def perform_create(self, serializer):
+        serializer.save(student=self.request.user)
+
+    lookup_field = 'student_id'
+
+    def get_queryset(self):
+        student_id = self.kwargs['student_id']
+        return MilitaryServiceRequest.objects.filter(student_id=student_id)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['student_id'] = self.kwargs['student_id']
+        return context
+    
+
