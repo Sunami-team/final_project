@@ -1,7 +1,8 @@
 from courses.models import Course, CourseTerm
 from rest_framework import serializers
-from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentRequest
-
+from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentRequest, MilitaryServiceRequest
+from django.conf import settings
+import os
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
@@ -80,3 +81,40 @@ class CorrectionShowSerializer(serializers.ModelSerializer):
         rep['courses_to_drop'] = CourseTermSerializerForCorrection(instance.courses_to_drop, context={'request':request}, many=True).data
 
         return rep
+    
+
+class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        self.student_id = kwargs.pop('student_id', None)
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = MilitaryServiceRequest
+        fields = ['term', 'proof_document', 'issuance_place']
+        
+
+    def create(self, validated_data):
+        
+        proof_document = self.context['request'].data.get('proof_document')
+
+        file_path = os.path.join('military_docs', proof_document.name)
+        with open(os.path.join(settings.MEDIA_ROOT, file_path), 'wb') as file:
+            file.write(proof_document.read())
+
+        military_service_request = MilitaryServiceRequest.objects.create(
+            student=validated_data['student'],
+            term=validated_data['term'],
+            proof_document=proof_document,
+            issuance_place=validated_data['issuance_place']
+        )
+
+        return military_service_request
+
+
+class MilitaryServiceRequestRetriveSerializer(serializers.ModelSerializer):
+    student = serializers.CharField()
+    term = serializers.CharField()
+    class Meta:
+        model = MilitaryServiceRequest
+        fields = ['student', 'term', 'proof_document', 'issuance_place']
+        read_only_fields = ['proof_document']

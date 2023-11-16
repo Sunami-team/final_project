@@ -22,4 +22,7 @@ urlpatterns = [
     path('student/<int:pk>/course-substitution/<int:term_id>/check/', views.CorrectionShowErrors.as_view(), name='correction-errors-list'),
     path('student/<int:pk>/course-substitution/submit/', views.CorrectionSubmit.as_view(), name='correction-student-submit'),
     path('student/<int:pk>/course-substitution/send-form/<int:term_id>/', views.CorrectionSendForm.as_view(), name='correction-send-form'),
+    # Military Service Student Request
+    path('student/<int:student_id>/studying-evidence/', views.MilitaryServiceRequestViewSet.as_view(
+        {'post': 'create', 'get': 'retrieve', 'delete': 'destroy', 'put': 'update'})) 
 ]

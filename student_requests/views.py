@@ -1,18 +1,21 @@
 from django.shortcuts import render
 from users.models import User, Student, Professor
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer
+from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
 from rest_framework import generics, status, serializers
 from django.shortcuts import get_object_or_404
 from users.tasks import send_email
-from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, CourseCorrectionStudentRequest
+from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, CourseCorrectionStudentRequest, MilitaryServiceRequest
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from rest_framework.views import APIView
 from users.pagination import CustomPageNumberPagination
 from django.utils.translation import gettext as _
+from .permissions import IsStudentOwner
+from rest_framework.viewsets import ModelViewSet
+
 
 class CourseListCreate(generics.ListCreateAPIView):
     """
@@ -398,5 +401,33 @@ class CorrectionSendForm(APIView):
                 term=selected_term
             )
         if not correction_student.courses_to_add.all():
-            return Response(_('Corses Corrections is Empty'), status=status.HTTP_400_BAD_REQUEST)
-        return Response(_('Corses Corrections DONE'), status=status.HTTP_200_OK)
+            return Response('Corses Corrections is Empty', status=status.HTTP_400_BAD_REQUEST)
+        return Response('Corses Corrections DONE', status=status.HTTP_200_OK)
+    
+
+class MilitaryServiceRequestViewSet(ModelViewSet):
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return MilitaryServiceRequestRetriveSerializer
+        else:
+            return MilitaryServiceRequestSerializer
+
+    permission_classes = [IsAuthenticated, IsStudentOwner]
+
+    def perform_create(self, serializer):
+        serializer.save(student=self.request.user)
+
+    lookup_field = 'student_id'
+
+    def get_queryset(self):
+        student_id = self.kwargs['student_id']
+        return MilitaryServiceRequest.objects.filter(student_id=student_id)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['student_id'] = self.kwargs['student_id']
+        return context
+    
+
+        
