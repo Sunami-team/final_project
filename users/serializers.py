@@ -80,7 +80,7 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'username', 'password', 'verification_password', 'profile_picture',
                   'mobile', 'national_id'
             , 'gender', 'birth_date', 'entry_year', 'entry_term', 'college', 'study_field'
-            , 'military_status', 'seniority', 'average', 'passed_courses', 'current_courses']
+            , 'military_status', 'seniority', 'average']
 
     def validate(self, attrs):
         if attrs.get('password') != attrs.get('verification_password'):
@@ -135,3 +135,10 @@ class FacultiesListSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Faculty
         fields = "__all__"
+
+
+class DeputyEducationalProfessorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Professor
+        fields = ['first_name', 'last_name', 'personal_number', 'national_id', 'college',
+                'study_field', 'expertise', 'rank']
