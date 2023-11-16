@@ -15,9 +15,18 @@ urlpatterns = [
     # Assistant Remove Term
     path('assistant/remove-term/', views.AssistantRemoveTermList.as_view(), name='remove-term-list'),
     path('assistant/<int:term_id>/remove-term/<int:student_id>/', views.AssistantRemoveTermStudentDetail.as_view(), name='remove-term-detail'),
-
+    # emergency drop request
     path('student/<int:pk>/courses/<int:c_pk>/emergency-remove/', EmergencyDropRequestView.as_view(), name='emergency-remove_'),
     path('assistant/<str:pk>/emergency-remove/', EmergencyDropRequestListView.as_view(), name='emergency-request-list'),
     path('assistant/<str:pk>/emergency-remove/<int:s_pk>/', EmergencyDropRequestDetailView.as_view(), name='emergency-request-detail'),
     path('assistant/<str:pk>/emergency-remove/<int:s_pk>/approve-reject', EmergencyDropRequestApprovalView.as_view(), name='emergency-request-approve-reject'),
+    # Assistant approve Grade Reconsideration
+    path('assistant/<int:professor_id>/courses/<int:course_id>/prof-approved/', views.AssistantGradeReconsiderationRequestList.as_view(), name='assistant-change-grade-list'),
+    path('assistant/<int:professor_id>/courses/<int:course_id>/prof-approved/<int:student_id>/', views.AssistantGradeReconsiderationRequestStudentDetail.as_view(), name='assistant-change-grade-list-student-detail'),
+    # Courses Correction Student Request
+    path('student/<int:pk>/course-substitution/create/', views.CreateCorrectionRequestByStudent.as_view(), name='correction-request'),
+    path('student/<int:pk>/course-substitution/', views.DetailCorrectionRequestByStudent.as_view(), name='see-correction-request'),
+    path('student/<int:pk>/course-substitution/<int:term_id>/check/', views.CorrectionShowErrors.as_view(), name='correction-errors-list'),
+    path('student/<int:pk>/course-substitution/submit/', views.CorrectionSubmit.as_view(), name='correction-student-submit'),
+    path('student/<int:pk>/course-substitution/send-form/<int:term_id>/', views.CorrectionSendForm.as_view(), name='correction-send-form'),
 ]
