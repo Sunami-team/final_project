@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from rest_framework.views import APIView
 from users.pagination import CustomPageNumberPagination
-
+from django.utils.translation import gettext as _
 
 class CourseListCreate(generics.ListCreateAPIView):
     """
@@ -132,7 +132,7 @@ class TermRemovalRequestViewSet(viewsets.ModelViewSet):
         try:
             term_removal_request = TermDropRequest.objects.get(pk=pk)
         except TermDropRequest.DoesNotExist:
-            return Response({'error': 'درخواست حذف ترم مورد نظر یافت نشد.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({ـ('error'): 'درخواست حذف ترم مورد نظر یافت نشد.'}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = TermRemovalRequestSerializer(term_removal_request, data=request.data, partial=True)
 
@@ -145,7 +145,7 @@ class TermRemovalRequestViewSet(viewsets.ModelViewSet):
         try:
             term_removal_request = TermDropRequest.objects.get(pk=pk)
         except TermDropRequest.DoesNotExist:
-            return Response({'error': 'درخواست حذف ترم مورد نظر یافت نشد.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({_('error'): 'درخواست حذف ترم مورد نظر یافت نشد.'}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = TermRemovalRequestSerializer(term_removal_request)
         return Response(serializer.data)
@@ -154,7 +154,7 @@ class TermRemovalRequestViewSet(viewsets.ModelViewSet):
         try:
             term_removal_request = TermDropRequest.objects.get(pk=pk)
         except TermDropRequest.DoesNotExist:
-            return Response({'error': 'درخواست حذف ترم مورد نظر یافت نشد.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({_('error'): 'درخواست حذف ترم مورد نظر یافت نشد.'}, status=status.HTTP_404_NOT_FOUND)
 
         term_removal_request.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -172,7 +172,7 @@ class AssistantRemoveTermStudentDetail(APIView):
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Student.DoesNotExist:
-            raise serializers.ValidationError('Student Does Not Exist')
+            raise serializers.ValidationError(_('Student Does Not Exist'))
 
     def put(self, request, term_id, student_id):
         student = Student.objects.get(id=student_id)
@@ -193,15 +193,15 @@ class AssistantRemoveTermStudentDetail(APIView):
             StudentCourse.objects.filter(student=student, term=current_term).delete()
             try:
                 send_email.delay(student.email, f'{student.first_name} {student.last_name} ,Your Term Removed')
-                return Response({'result':'Request Accepted', 'message': deputy_educational_comment}, status=status.HTTP_200_OK)
+                return Response({_('result'):_('Request Accepted'), _('message'): deputy_educational_comment}, status=status.HTTP_200_OK)
             except:
-                raise serializers.ValidationError('Student Email field is Null')
+                raise serializers.ValidationError(_('Student Email field is Null'))
         elif not accept:
             try:
                 send_email.delay(student.email, f'{student.first_name} {student.last_name} ,The request to remove Your Term was not accepted')
-                return Response({'result':'Request Failed', 'message': 'deputy_educational_comment'}, status=status.HTTP_200_OK)
+                return Response({_('result'):_('Request Failed'), _('message'): _('deputy_educational_comment')}, status=status.HTTP_200_OK)
             except:
-                raise serializers.ValidationError('Student Email field is Null')
+                raise serializers.ValidationError(_('Student Email field is Null'))
 
 ######################
 # GRADE RECONSIDERTION
@@ -214,7 +214,7 @@ class AssistantGradeReconsiderationRequestList(APIView):
             serializer = AssistantGradeReconsiderationRequestSerializer(all_requets, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except GradeReconsiderationRequest.DoesNotExist:
-            return Response({'errors':'Request Does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({_('errors'):_('Request Does not exist')}, status=status.HTTP_404_NOT_FOUND)
     
 class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView):
     permission_classes = [IsDeputyEducational]
@@ -225,7 +225,7 @@ class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView)
             serializer = AssistantGradeReconsiderationRequestSerializer(requet_detail)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except GradeReconsiderationRequest.DoesNotExist:
-            return Response({'errors':'Request Does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({_('errors'):_('Request Does not exist')}, status=status.HTTP_404_NOT_FOUND)
         
     def put(self, request , professor_id, course_id, student_id):
         requet_detail = GradeReconsiderationRequest.objects.get(course=course_id, course__professor=professor_id, student=student_id)
@@ -239,10 +239,10 @@ class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView)
                 student_course.course_status = 'pass'
                 student_course.save()
             except StudentCourse.DoesNotExist:
-                return Response({'details': 'Studet Course Does Not exist'}, status=status.HTTP_200_OK)
+                return Response({_('details'): _('Studet Course Does Not exist')}, status=status.HTTP_200_OK)
         else:
-            return Response({'details': 'Request Failed'}, status=status.HTTP_200_OK)   
-        return Response({'details': 'Request Accepted'}, status=status.HTTP_200_OK)
+            return Response({_('details'): _('Request Failed')}, status=status.HTTP_200_OK)   
+        return Response({_('details'): _('Request Accepted')}, status=status.HTTP_200_OK)
 
 
 # Course Studet Correction
@@ -256,7 +256,7 @@ class CreateCorrectionRequestByStudent(generics.GenericAPIView):
 
     def get(self, request, pk):
         studnet = Student.objects.get(id=pk)
-        return Response({'studnet': f'{studnet.first_name} {studnet.last_name}','details': 'add or remove'}, status=status.HTTP_200_OK)
+        return Response({_('studnet'): f'{studnet.first_name} {studnet.last_name}',_('details'): _('add or remove')}, status=status.HTTP_200_OK)
     
     def post(self, request, pk):
         student = Student.objects.get(pk=pk)
@@ -265,10 +265,10 @@ class CreateCorrectionRequestByStudent(generics.GenericAPIView):
         serializer.validated_data['student'] = student
         for course_to_add in serializer.validated_data['courses_to_add']:
             if course_to_add in serializer.validated_data['courses_to_drop']:
-                return Response({'detail': 'You can not add and drop a course in same time !'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({_('detail'): _('You can not add and drop a course in same time !')}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer.save()
-        return Response({'detail': 'Pre Request Created'}, status=status.HTTP_201_CREATED)
+        return Response({_('detail'): _('Pre Request Created')}, status=status.HTTP_201_CREATED)
 
     # /student/{pk/me}/course-substitution/
 
@@ -279,7 +279,7 @@ class DetailCorrectionRequestByStudent(APIView):
         correction_requests = CourseCorrectionStudentRequest.objects.filter(student__id=pk)
         serializer = CorrectionShowSerializer(correction_requests, many=True)
         studnet = Student.objects.get(pk=pk)
-        return Response({'student':f'{studnet.first_name} {studnet.last_name}', 'details':serializer.data}, status=status.HTTP_200_OK)
+        return Response({_('student'):f'{studnet.first_name} {studnet.last_name}', _('details'):serializer.data}, status=status.HTTP_200_OK)
     
 # /student/{pk/me}/course-substitution/check/
 class CorrectionShowErrors(APIView):
@@ -346,15 +346,13 @@ class CorrectionShowErrors(APIView):
                     for co_requisite in studnet_course.course_term.course.co_requisites.all():
                         if co_requisite == drop_course:
                             drop_errors[drop_course.course.name].append('this Course have Co Requisite')
-        
-        print(add_errors.values())
-        print(drop_errors.values())
+
         if not all(add_errors.values()) and not all(drop_errors.values()):
             correction_student.approval_status = True
             correction_student.save()
 
 
-        return Response({'add_errors':add_errors, 'drop_errors':drop_errors, 'status':correction_student.approval_status}, status=status.HTTP_200_OK)
+        return Response({_('add_errors'):add_errors, _('drop_errors'):drop_errors, _('status'):correction_student.approval_status}, status=status.HTTP_200_OK)
 
 
 # /student/{pk/me}/course-substitution/submit/
@@ -377,11 +375,11 @@ class CorrectionSubmit(APIView):
                         final_correction.courses_to_add.add(add_courses)
                     for drop_courses in correction_student.courses_to_drop.all():
                         final_correction.courses_to_drop.add(drop_courses)
-                    return Response('add to Correction Submit', status=status.HTTP_200_OK)
+                    return Response(_('add to Correction Submit'), status=status.HTTP_200_OK)
                 else:
-                    raise serializers.ValidationError('Add and drop Corses does not correct')
+                    raise serializers.ValidationError(_('Add and drop Corses does not correct'))
         except Exception as e:
-            return Response('We Have errors', status=status.HTTP_200_OK)
+            return Response(_('We Have errors'), status=status.HTTP_200_OK)
         
 
 # /student/{pk/me}/course-substitution/send-form/{term_id}
@@ -392,7 +390,7 @@ class CorrectionSendForm(APIView):
         try:
             selected_term = Term.objects.get(id=term_id)
         except Term.DoesNotExist:
-            return Response('Term Does NOT exist', status=status.HTTP_404_NOT_FOUND)
+            return Response(_('Term Does NOT exist'), status=status.HTTP_404_NOT_FOUND)
         for add_course in correction_student.courses_to_add.all():
             StudentCourse.objects.create(
                 student=student,
@@ -400,5 +398,5 @@ class CorrectionSendForm(APIView):
                 term=selected_term
             )
         if not correction_student.courses_to_add.all():
-            return Response('Corses Corrections is Empty', status=status.HTTP_400_BAD_REQUEST)
-        return Response('Corses Corrections DONE', status=status.HTTP_200_OK)
+            return Response(_('Corses Corrections is Empty'), status=status.HTTP_400_BAD_REQUEST)
+        return Response(_('Corses Corrections DONE'), status=status.HTTP_200_OK)

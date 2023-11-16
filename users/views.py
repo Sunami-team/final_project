@@ -17,6 +17,8 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from django.utils.translation import gettext as _
+
 # I add this comment to commit and remove migration files
 
 
@@ -119,7 +121,7 @@ class LogoutApiView(generics.GenericAPIView):
 
     def post(self, request):
         Token.objects.get(user=request.user).delete()
-        return Response({"message": "You have been successfully logged out."}, status=status.HTTP_200_OK)
+        return Response({_("message"): _("You have been successfully logged out.")}, status=status.HTTP_200_OK)
 
 
 class ChangePasswordRequestApiView(generics.GenericAPIView):
@@ -136,7 +138,7 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
         token = random.randint(1000, 10000)
         ChangePasswordToken.objects.create(user=user, token=token)
         send_email.delay(user_email, token) # shared task by celery
-        return Response({'token': token, 'detail': 'Token generated successfully'}, status=status.HTTP_200_OK)
+        return Response({_('token'): token, _('detail'): _('Token generated successfully')}, status=status.HTTP_200_OK)
 
 
 class ChangePasswordActionApiView(generics.UpdateAPIView):
@@ -161,7 +163,7 @@ class ChangePasswordActionApiView(generics.UpdateAPIView):
 
         instance.delete()
         
-        return Response({'detail': 'Password changed successfully'}, status=status.HTTP_200_OK)
+        return Response({_('detail'): _('Password changed successfully')}, status=status.HTTP_200_OK)
 
 
 class StudentViewset(viewsets.ModelViewSet):
