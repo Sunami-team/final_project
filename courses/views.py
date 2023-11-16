@@ -1,8 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveAPIView
-
-from courses.models import Term
-from courses.serializers import TermSerializer
+from .models import Term
+from .serializers import TermSerializer
 
 from rest_framework import generics
 from .serializers import CourseSelectionSerializer
@@ -29,3 +28,5 @@ class CourseSelectionCreateView(generics.CreateAPIView):
         # بررسی وضعیت دروس
         # ثبت انتخاب واحد
         return super().create(request, *args, **kwargs)
+
+

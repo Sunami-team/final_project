@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .models import EmergencyDropRequestView, EmergencyDropRequestListView, EmergencyDropRequestDetailView, \
+    EmergencyDropRequestApprovalView
 
 app_name = 'student_requests'
 
@@ -13,4 +15,9 @@ urlpatterns = [
     # Assistant Remove Term
     path('assistant/remove-term/', views.AssistantRemoveTermList.as_view(), name='remove-term-list'),
     path('assistant/<int:term_id>/remove-term/<int:student_id>/', views.AssistantRemoveTermStudentDetail.as_view(), name='remove-term-detail'),
+
+    path('student/<int:pk>/courses/<int:c_pk>/emergency-remove/', EmergencyDropRequestView.as_view(), name='emergency-remove_'),
+    path('assistant/<str:pk>/emergency-remove/', EmergencyDropRequestListView.as_view(), name='emergency-request-list'),
+    path('assistant/<str:pk>/emergency-remove/<int:s_pk>/', EmergencyDropRequestDetailView.as_view(), name='emergency-request-detail'),
+    path('assistant/<str:pk>/emergency-remove/<int:s_pk>/approve-reject', EmergencyDropRequestApprovalView.as_view(), name='emergency-request-approve-reject'),
 ]

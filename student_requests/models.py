@@ -32,10 +32,14 @@ class GradeReconsiderationRequest(models.Model):
 
 
 class EmergencyDropRequest(models.Model):
+    CHOICES = (  #
+        ('pending', 'در انتظار پاسخ'),
+        ('approved', 'قبول'),
+        ('rejected', 'رد'),
+    )
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
-    course = models.ForeignKey(
-        'courses.StudentCourse', on_delete=models.DO_NOTHING)
-    result = models.BooleanField(default=False)
+    course = models.ForeignKey('courses.CourseTerm', on_delete=models.CASCADE)
+    result = models.CharField(default='pending', max_length=100, choices=CHOICES)
     student_comment = models.TextField()
     deputy_educational_comment = models.TextField(blank=True)
 
@@ -66,3 +70,5 @@ class MilitaryServiceRequest(models.Model):
 
     def __str__(self):
         return f"Military Service Request for {self.term} by {self.student} - Issuance Place: {self.issuance_place}"
+
+

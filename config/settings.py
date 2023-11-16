@@ -159,3 +159,10 @@ MINIO_ACCESS_KEY = 'your-access-key'
 MINIO_SECRET_KEY = 'your-secret-key'
 MINIO_SECURE = False  # Set to True if using HTTPS
 MINIO_BUCKET_NAME = 'your-bucket-name'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'dev.fahima@gmail.com'  # Your Gmail address
+EMAIL_HOST_PASSWORD = 'qxbd cuur bjpy ueeq'
