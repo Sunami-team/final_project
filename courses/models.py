@@ -82,7 +82,7 @@ class StudentCourse(models.Model):
     ]
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
     course_term = models.ForeignKey(
-        'courses.CourseTerm', on_delete=models.DO_NOTHING)
+        'courses.Course', on_delete=models.DO_NOTHING, related_name='student_course')
     term = models.ForeignKey('courses.Term', on_delete=models.DO_NOTHING)
     course_status = models.CharField(
         max_length=10, blank=True, choices=COURSE_STATUS_CHOICES)
@@ -90,7 +90,7 @@ class StudentCourse(models.Model):
         max_digits=4, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name} --> {self.course_term.course.name}"
+        return f"{self.student.first_name} {self.student.last_name} --> {self.course_term.name}"
 
 
 class TermStudentProfessor(models.Model):

@@ -32,15 +32,24 @@ class GradeReconsiderationRequest(models.Model):
 
 
 class EmergencyDropRequest(models.Model):
+    CHOICES = (  #
+        ('pending', 'در انتظار پاسخ'),
+        ('approved', 'قبول'),
+        ('rejected', 'رد'),
+    )
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
-    course = models.ForeignKey(
-        'courses.StudentCourse', on_delete=models.DO_NOTHING)
-    result = models.BooleanField(default=False)
+    course = models.ForeignKey('courses.CourseTerm', on_delete=models.CASCADE)
+    result = models.CharField(default='pending', max_length=100, choices=CHOICES)
     student_comment = models.TextField()
     deputy_educational_comment = models.TextField(blank=True)
 
     def __str__(self):
         return f"Emergency Drop for {self.course} by {self.student} - {'Approved' if self.result else 'Pending'}"
+
+class CourseCorrectionStudentSendToAssistant(models.Model):
+    student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
+    courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests_sent_to_assistant', blank=True)
+    courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests_sent_to_assistant', blank=True)
 
 
 class TermDropRequest(models.Model):
@@ -58,6 +67,12 @@ class TermDropRequest(models.Model):
         return f"Term Drop for {self.term} by {self.student} - Result: {self.result}"
 
 
+class CourseCorrectionStudentRequest(models.Model):
+    student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
+    courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests', blank=True)
+    courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests', blank=True)
+    approval_status = models.BooleanField(default=False)
+
 class MilitaryServiceRequest(models.Model):
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
     term = models.ForeignKey('courses.Term', on_delete=models.DO_NOTHING)
@@ -66,3 +81,5 @@ class MilitaryServiceRequest(models.Model):
 
     def __str__(self):
         return f"Military Service Request for {self.term} by {self.student} - Issuance Place: {self.issuance_place}"
+
+
