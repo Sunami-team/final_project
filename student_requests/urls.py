@@ -22,4 +22,11 @@ urlpatterns = [
     path('student/<int:pk>/course-substitution/<int:term_id>/check/', views.CorrectionShowErrors.as_view(), name='correction-errors-list'),
     path('student/<int:pk>/course-substitution/submit/', views.CorrectionSubmit.as_view(), name='correction-student-submit'),
     path('student/<int:pk>/course-substitution/send-form/<int:term_id>/', views.CorrectionSendForm.as_view(), name='correction-send-form'),
+    # professor approve Grade Reconsideration
+    path('professor/<int:professor_id>/courses/<int:course_id>/appeal-requests/',
+         views.GradeReconsiderationRequestViewSet.as_view({'get':'list'}), name='grade-reconsideration-list'),
+    path('professor/<int:professor_id>/courses/<int:course_id>/appeal-requests/<int:student_id>/',
+         views.GradeReconsiderationRequestViewSet.as_view({'get': 'retrieve', 'post': 'create'}), name='grade-reconsideration-detail'),
+    path('professor/<int:professor_id>/courses/<int:course_id>/approve/',
+         views.GradeReconsiderationRequestViewSet.as_view({'post': 'create'}), name='grade-approval'),
 ]
