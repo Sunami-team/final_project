@@ -1,6 +1,6 @@
 from django.db.models import F
 from rest_framework import serializers
-from courses.models import Term, StudentCourse
+from .models import Term, StudentCourse
 
 
 class TermSerializer(serializers.ModelSerializer):

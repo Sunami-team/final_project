@@ -1,3 +1,9 @@
+from rest_framework import viewsets
+from rest_framework.generics import RetrieveAPIView
+from .models import Term
+from .serializers import TermSerializer
+from rest_framework import generics
+from .serializers import CourseSelectionSerializer
 from django.db.models import Sum
 from django.utils import timezone
 from .models import Term, StudentCourse, CourseTerm
@@ -13,6 +19,7 @@ from users.permissions import IsProfessor
 from rest_framework.viewsets import ModelViewSet
 from .permissions import IsItManager
 from django.utils.translation import gettext as _
+
 
 class TermViewSet(viewsets.ModelViewSet):
     queryset = Term.objects.all()

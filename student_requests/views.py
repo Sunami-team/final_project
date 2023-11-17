@@ -1,8 +1,8 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
+from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent, IsProfessor
-from rest_framework import generics, status, serializers
+from rest_framework import generics, status, serializers, viewsets, permissions
 from django.shortcuts import get_object_or_404
 from users.tasks import send_email
 from django.contrib.auth import get_user_model
@@ -116,13 +116,6 @@ class AssistantRemoveTermList(generics.ListAPIView):
     queryset = TermDropRequest.objects.all()
     serializer_class = TermDropSerializer
     permission_classes = [IsDeputyEducational]
-
-
-from rest_framework import viewsets, permissions, status
-
-from .models import TermDropRequest
-from .serializers import TermRemovalRequestSerializer
-from rest_framework.response import Response
 
 
 class TermRemovalRequestViewSet(viewsets.ModelViewSet):
@@ -618,7 +611,6 @@ class CorrectionSendForm(APIView):
         return Response(_('Corses Corrections DONE'), status=status.HTTP_200_OK)
 
     
-
 class MilitaryServiceRequestViewSet(ModelViewSet):
 
     def get_serializer_class(self):
@@ -676,3 +668,4 @@ class GradeReconsiderationRequestViewSet(ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
     
+
