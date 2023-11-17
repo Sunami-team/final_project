@@ -29,4 +29,5 @@ urlpatterns = [
          views.GradeReconsiderationRequestViewSet.as_view({'get': 'retrieve', 'post': 'create'}), name='grade-reconsideration-detail'),
     path('professor/<int:professor_id>/courses/<int:course_id>/approve/',
          views.GradeReconsiderationRequestViewSet.as_view({'post': 'create'}), name='grade-approval'),
+         
 ]
