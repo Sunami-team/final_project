@@ -61,16 +61,16 @@ class ChangePasswordToken(models.Model):
 
 
 class Student(User):
-    entry_year = models.PositiveIntegerField()
+    entry_year = models.PositiveIntegerField(null=True, blank=True)
     entry_term = models.CharField(max_length=20)
     average = models.DecimalField(
         max_digits=4, decimal_places=2, null=True, blank=True)
     college = models.ForeignKey(
-        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='students_college')
+        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='students_college', null=True, blank=True)
     study_field = models.ForeignKey(
-        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='students_field')
-    military_status = models.BooleanField()
-    seniority = models.PositiveIntegerField()
+        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='students_field', null=True, blank=True)
+    military_status = models.BooleanField(null=True, blank=True)
+    seniority = models.PositiveIntegerField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Student"
@@ -97,9 +97,9 @@ class Professor(User):
         ('4', 'استاد'),
     ]
     college = models.ForeignKey(
-        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='professor_faculty')
+        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='professor_faculty', null=True, blank=True)
     study_field = models.ForeignKey(
-        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='professor_study')
+        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='professor_study', null=True, blank=True)
     expertise = models.TextField()
     rank = models.CharField(max_length=1, choices=RANK_CHOICES, default='1')
 
@@ -113,9 +113,9 @@ class Professor(User):
 
 class DeputyEducational(User):
     college = models.ForeignKey(
-        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='deputy_educational_faculty')
+        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='deputy_educational_faculty', null=True, blank=True)
     study_field = models.ForeignKey('courses.StudyField', on_delete=models.DO_NOTHING,
-                                    related_name='deputy_educational_study')
+                                    related_name='deputy_educational_study', null=True, blank=True)
 
     class Meta:
         verbose_name = "Deputy Educational"

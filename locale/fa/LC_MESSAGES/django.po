@@ -1,0 +1,171 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-16 09:45+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: courses/views.py:37 courses/views.py:44 courses/views.py:50
+#: courses/views.py:56 courses/views.py:72 courses/views.py:126
+#: courses/views.py:150 courses/views.py:179 courses/views.py:186
+#: courses/views.py:192 courses/views.py:198 courses/views.py:214
+#: courses/views.py:268 courses/views.py:292 student_requests/views.py:148
+#: student_requests/views.py:157
+msgid "error"
+msgstr "خطا"
+
+#: courses/views.py:87 courses/views.py:147 courses/views.py:229
+#: courses/views.py:289 student_requests/views.py:196
+#: student_requests/views.py:202 users/views.py:124
+msgid "message"
+msgstr "پیغام"
+
+#: courses/views.py:126 courses/views.py:268
+msgid "No file provided"
+msgstr "فایلی در نظر گرفته نشده"
+
+#: courses/views.py:147 courses/views.py:289
+msgid "Grades updated successfully"
+msgstr "نمره ها با موفقیت بروز رسانی شد"
+
+#: student_requests/views.py:175
+msgid "Student Does Not Exist"
+msgstr "دانشجو موجود نیست"
+
+#: student_requests/views.py:196 student_requests/views.py:202
+msgid "result"
+msgstr "نتیجه"
+
+#: student_requests/views.py:196 student_requests/views.py:245
+msgid "Request Accepted"
+msgstr "درخواست پزیرفته شد"
+
+#: student_requests/views.py:198 student_requests/views.py:204
+msgid "Student Email field is Null"
+msgstr "دانشجو ایمیل را وارد نکرده"
+
+#: student_requests/views.py:202 student_requests/views.py:244
+msgid "Request Failed"
+msgstr "درخواست رد شد"
+
+#: student_requests/views.py:202
+msgid "deputy_educational_comment"
+msgstr "پیغام معاون آموزشی"
+
+#: student_requests/views.py:217 student_requests/views.py:228
+#, fuzzy
+#| msgid "error"
+msgid "errors"
+msgstr "خطا"
+
+#: student_requests/views.py:217 student_requests/views.py:228
+msgid "Request Does not exist"
+msgstr "درخواست موجود نیست"
+
+#: student_requests/views.py:242 student_requests/views.py:244
+#: student_requests/views.py:245 student_requests/views.py:259
+#: student_requests/views.py:282
+msgid "details"
+msgstr "جزییات"
+
+#: student_requests/views.py:242
+msgid "Studet Course Does Not exist"
+msgstr "درس مربوط به دانشجو موجود نیست"
+
+#: student_requests/views.py:259
+msgid "studnet"
+msgstr "دانشجو"
+
+#: student_requests/views.py:259
+msgid "add or remove"
+msgstr "حذف یا اضافه"
+
+#: student_requests/views.py:268 student_requests/views.py:271
+#: users/views.py:141 users/views.py:166
+msgid "detail"
+msgstr "جزییات"
+
+#: student_requests/views.py:268
+msgid "You can not add and drop a course in same time !"
+msgstr "همزمان نمی توانید یک درس را حذف و اضافه کنید"
+
+#: student_requests/views.py:271
+msgid "Pre Request Created"
+msgstr "پیش درخواست ساخته شد"
+
+#: student_requests/views.py:282
+msgid "student"
+msgstr "دانش آموز"
+
+#: student_requests/views.py:355
+#, fuzzy
+#| msgid "error"
+msgid "add_errors"
+msgstr "افزونه ی  خطا ها"
+
+#: student_requests/views.py:355
+#, fuzzy
+#| msgid "error"
+msgid "drop_errors"
+msgstr "خطا"
+
+#: student_requests/views.py:355
+msgid "status"
+msgstr "وضعیت"
+
+#: student_requests/views.py:378
+msgid "add to Correction Submit"
+msgstr "حذف و اضافه تایید شد"
+
+#: student_requests/views.py:380
+msgid "Add and drop Corses does not correct"
+msgstr "حذف و اضافه انتخاب شده صحیح نمی باشد"
+
+#: student_requests/views.py:382
+msgid "We Have errors"
+msgstr "خطا مشاهده شد"
+
+#: student_requests/views.py:393
+msgid "Term Does NOT exist"
+msgstr "ترم انتخاب شده صحیح نیست"
+
+#: student_requests/views.py:401
+msgid "Corses Corrections is Empty"
+msgstr "لیست اصلاح دروس خالی است"
+
+#: student_requests/views.py:402
+msgid "Corses Corrections DONE"
+msgstr "اصلاح درس انجام شد"
+
+#: users/views.py:124
+msgid "You have been successfully logged out."
+msgstr "با موفقیت خارج شدید"
+
+#: users/views.py:141
+msgid "token"
+msgstr "توکن"
+
+#: users/views.py:141
+#, fuzzy
+#| msgid "Grades updated successfully"
+msgid "Token generated successfully"
+msgstr "نمره ها با موفقیت بروز رسانی شد"
+
+#: users/views.py:166
+#, fuzzy
+#| msgid "Grades updated successfully"
+msgid "Password changed successfully"
+msgstr "نمره ها با موفقیت بروز رسانی شد"
