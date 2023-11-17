@@ -142,3 +142,19 @@ class DeputyEducationalProfessorSerializer(serializers.ModelSerializer):
         model = Professor
         fields = ['first_name', 'last_name', 'personal_number', 'national_id', 'college',
                 'study_field', 'expertise', 'rank']
+        
+
+class StudentInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['username', 'first_name', 'last_name', 'entry_year', 'entry_term', 'average', 'college', 'study_field',
+                   'military_status', 'seniority']
+        read_only_fields = ['personal_number']
+
+class ProfessorInfoSerializer(serializers.ModelSerializer):
+    college = serializers.StringRelatedField()
+    study_field = serializers.StringRelatedField()
+    class Meta:
+        model = Professor
+        fields = ['username', 'first_name', 'last_name', 'college', 'study_field', 'expertise', 'rank']
+        read_only_fields = ['personal_number']
