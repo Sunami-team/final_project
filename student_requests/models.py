@@ -42,6 +42,11 @@ class EmergencyDropRequest(models.Model):
     def __str__(self):
         return f"Emergency Drop for {self.course} by {self.student} - {'Approved' if self.result else 'Pending'}"
 
+class CourseSelectionStudentSendToAssistant(models.Model):
+    student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
+    courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests_sent_to_assistant', blank=True)
+    courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests_sent_to_assistant', blank=True)
+
 
 class TermDropRequest(models.Model):
     RESULT_CHOICES = [
@@ -57,6 +62,12 @@ class TermDropRequest(models.Model):
     def __str__(self):
         return f"Term Drop for {self.term} by {self.student} - Result: {self.result}"
 
+
+class CourseSelectionStudentRequest(models.Model):
+    student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
+    courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests', blank=True)
+    courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests', blank=True)
+    approval_status = models.BooleanField(default=False)
 
 class MilitaryServiceRequest(models.Model):
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
