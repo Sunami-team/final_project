@@ -1,17 +1,14 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, \
-    AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, \
-    EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
+from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
 from rest_framework import generics, status, serializers
 from django.shortcuts import get_object_or_404
 from users.tasks import send_email
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
-from courses.permissions import IsStudent
-from .models import EmergencyDropRequest, TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, \
-    CourseCorrectionStudentRequest, MilitaryServiceRequest
+from users.permissions import IsStudent
+from .models import EmergencyDropRequest, TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, CourseCorrectionStudentRequest, MilitaryServiceRequest
 from .permissions import IsDeputyEducational, IsStudent
 from rest_framework.exceptions import NotFound
 from .tasks import *
@@ -20,7 +17,6 @@ from django.db import transaction
 from rest_framework.views import APIView
 from users.pagination import CustomPageNumberPagination
 from django.utils.translation import gettext as _
-from .permissions import IsStudentOwner
 from rest_framework.viewsets import ModelViewSet
 
 
@@ -631,7 +627,7 @@ class MilitaryServiceRequestViewSet(ModelViewSet):
         else:
             return MilitaryServiceRequestSerializer
 
-    permission_classes = [IsAuthenticated, IsStudentOwner]
+    permission_classes = [IsAuthenticated, IsStudent]
 
     def perform_create(self, serializer):
         serializer.save(student=self.request.user)

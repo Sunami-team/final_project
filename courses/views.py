@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveAPIView
 from .models import Term
 from .serializers import TermSerializer
-
 from rest_framework import generics
 from .serializers import CourseSelectionSerializer
-
-=======
 from django.db.models import Sum
 from django.utils import timezone
 from .models import Term, StudentCourse, CourseTerm
@@ -23,7 +19,7 @@ from users.permissions import IsProfessor
 from rest_framework.viewsets import ModelViewSet
 from .permissions import IsItManager
 from django.utils.translation import gettext as _
->>>>>>> 3e7701ca558309afb1ccb21e7b17bc41cb3dfc96
+
 
 class TermViewSet(viewsets.ModelViewSet):
     queryset = Term.objects.all()
@@ -128,8 +124,6 @@ class CourseSelectionCreateView(generics.CreateAPIView):
         return super().create(request, *args, **kwargs)
 
 
-<<<<<<< HEAD
-=======
 class PostScoresApiView(APIView):
     def post(self, request, pk, c_pk):
         # Assuming that the uploaded file is in the 'file' field of the request
@@ -303,4 +297,3 @@ class PostScoresApiView(APIView):
 
         except Exception as e:
             return Response({_("error"): str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
->>>>>>> 3e7701ca558309afb1ccb21e7b17bc41cb3dfc96

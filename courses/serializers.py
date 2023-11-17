@@ -1,11 +1,6 @@
 from django.db.models import F
 from rest_framework import serializers
-<<<<<<< HEAD
-
 from .models import Term, StudentCourse
-=======
-from courses.models import Term, StudentCourse
->>>>>>> 3e7701ca558309afb1ccb21e7b17bc41cb3dfc96
 
 
 class TermSerializer(serializers.ModelSerializer):
