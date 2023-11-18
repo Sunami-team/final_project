@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .permissions import IsItManager, IsDeputyEducational, IsStudentOrDeputyEducational, IsProfessorOrDeputyEducational
+from .permissions import IsItManager, IsDeputyEducational, IsStudentOrDeputyEducational, IsProfessorOrDeputyEducational, IsStudent, IsProfessor
 from .serializers import *
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, status, viewsets
@@ -18,6 +18,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from django.utils.translation import gettext as _
+from rest_framework.exceptions import NotFound
 
 # I add this comment to commit and remove migration files
 
@@ -323,3 +324,40 @@ class EducationalDeputyProfessorDetail(generics.RetrieveAPIView):
     serializer_class = DeputyEducationalProfessorSerializer
     queryset = Professor.objects.all()
     permission_classes = [IsProfessorOrDeputyEducational]
+
+
+class StudentInfoViewSet(viewsets.ModelViewSet):
+
+    serializer_class = StudentInfoSerializer
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('pk')  
+
+        if not user_id:
+            raise NotFound('Student ID not provided')  
+
+        try:
+            student = Student.objects.get(id=user_id)
+        except Student.DoesNotExist:
+            raise NotFound('Student not found')  
+
+        return Student.objects.filter(id=student.id)
+
+
+class ProfessorInfoViewSet(viewsets.ModelViewSet):
+    serializer_class = ProfessorInfoSerializer
+    permission_classes = [IsAuthenticated, IsProfessor]
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('pk')  
+
+        if not user_id:
+            raise NotFound('Professor ID not provided')  
+
+        try:
+            professor = Professor.objects.get(id=user_id)
+        except Professor.DoesNotExist:
+            raise NotFound('Professor not found')  
+
+        return Professor.objects.filter(id=professor.id)

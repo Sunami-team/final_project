@@ -35,5 +35,9 @@ urlpatterns = [
     # Educational Deputy can access to Professors list and a Professor data details
     path('educational-deputy/professors/', views.EducationalDeputyProfessorsList.as_view(), name='educational-Deputy-professors-list'),
     path('educational-deputy/professors/<int:pk>/', views.EducationalDeputyProfessorDetail.as_view(), name='educational-Deputy-professor-detail'),
-]   
+    # Update student and professor info
+    path('students/<int:pk>', views.StudentInfoViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name="student-detail"),
+    path('professors/<int:pk>', views.ProfessorInfoViewSet.as_view({'get': 'retrieve', 'put': 'update'}), name="professor-detail"),
+]
+
 
