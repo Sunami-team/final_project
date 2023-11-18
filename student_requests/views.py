@@ -1,6 +1,6 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer
+from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, GradeReconsiderationRequestSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent, IsProfessor
 from rest_framework import generics, status, serializers, viewsets, permissions
 from django.shortcuts import get_object_or_404
@@ -638,7 +638,7 @@ class MilitaryServiceRequestViewSet(ModelViewSet):
 
 class GradeReconsiderationRequestViewSet(ModelViewSet):
     queryset = GradeReconsiderationRequest.objects.all()
-    serializer_class = serializers.GradeReconsiderationRequestSerializer
+    serializer_class = GradeReconsiderationRequestSerializer
     permission_classes = [IsAuthenticated, IsProfessor]
 
     def get_serializer_class(self):
