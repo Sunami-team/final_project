@@ -135,3 +135,21 @@ class MilitaryServiceRequestRetriveSerializer(serializers.ModelSerializer):
         model = MilitaryServiceRequest
         fields = ['student', 'term', 'proof_document', 'issuance_place']
         read_only_fields = ['proof_document']
+
+
+class GradeReconsiderationRequestRetriveSerializer(serializers.ModelSerializer):
+    student = serializers.StringRelatedField()
+    course = serializers.StringRelatedField()
+
+    class Meta:
+        model = GradeReconsiderationRequest
+        fields = ['student', 'course', 'reconsideration_text']
+        read_only_fields = ['student', 'course', 'reconsideration_text']
+
+
+class GradeReconsiderationResponseSerializer(serializers.ModelSerializer):
+    approve = serializers.BooleanField(write_only=True)
+    class Meta:
+        model = GradeReconsiderationRequest
+        fields = ['student', 'course', 'response_text', 'approve']
+        
