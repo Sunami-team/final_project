@@ -1,5 +1,13 @@
+from rest_framework import viewsets
+from rest_framework.generics import RetrieveAPIView
+from .models import Term
+from .serializers import TermSerializer
+from rest_framework import generics
+from .serializers import CourseSelectionSerializer
+from django.db.models import Sum
+from django.utils import timezone
 from .models import Term, StudentCourse, CourseTerm
-from .serializers import CourseSelectionSerializer, TermSerializer, StudentCourseSerializer
+from .serializers import CourseSelectionSerializer, TermSerializer, StudentCourseSerializer, CourseTermSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -9,9 +17,13 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.views import APIView
 from users.permissions import IsProfessor
 from rest_framework.viewsets import ModelViewSet
+from users.permissions import IsItManager, IsDeputyEducational
 from .permissions import IsItManager
 from django.utils.translation import gettext as _
-
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from users.pagination import CustomPageNumberPagination
+from datetime import datetime
 
 class TermViewSet(viewsets.ModelViewSet):
     queryset = Term.objects.all()

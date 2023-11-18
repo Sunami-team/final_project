@@ -165,3 +165,19 @@ class SelectionShowSerializer(serializers.ModelSerializer):
         rep['courses_to_drop'] = CourseTermSerializerForSelection(instance.courses_to_drop, context={'request':request}, many=True).data
 
         return rep
+
+class GradeReconsiderationRequestRetriveSerializer(serializers.ModelSerializer):
+    student = serializers.StringRelatedField()
+    course = serializers.StringRelatedField()
+
+    class Meta:
+        model = GradeReconsiderationRequest
+        fields = ['student', 'course', 'reconsideration_text']
+        read_only_fields = ['student', 'course', 'reconsideration_text']
+
+
+class GradeReconsiderationResponseSerializer(serializers.ModelSerializer):
+    approve = serializers.BooleanField(write_only=True)
+    class Meta:
+        model = GradeReconsiderationRequest
+        fields = ['student', 'course', 'response_text', 'approve']

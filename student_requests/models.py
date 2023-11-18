@@ -3,7 +3,7 @@ from django.db import models
 
 class CourseRegistrationRequest(models.Model):
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
-    # requested_courses = models.ManyToManyField('courses.CourseTerm') #### get from StudentCourse ####
+    requested_courses = models.ManyToManyField('courses.CourseTerm', related_name='course_registration_request') 
     approval_status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -12,8 +12,8 @@ class CourseRegistrationRequest(models.Model):
 
 class CourseCorrectionRequest(models.Model):
     student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
-    # courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests') #### get from StudentCourse ####
-    # courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests') #### get from StudentCourse ####
+    courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests_course_correction') 
+    courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests_course_correction') 
     approval_status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -26,6 +26,7 @@ class GradeReconsiderationRequest(models.Model):
         'courses.CourseTerm', on_delete=models.DO_NOTHING)
     reconsideration_text = models.TextField()
     response_text = models.TextField(blank=True)
+    approve = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Grade Reconsideration for {self.course} by {self.student}"

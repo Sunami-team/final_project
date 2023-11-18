@@ -30,5 +30,11 @@ urlpatterns = [
     path('student/<int:pk>/course-substitution/send-form/<int:term_id>/', views.CorrectionSendForm.as_view(), name='correction-send-form'),
     # Military Service Student Request
     path('student/<int:student_id>/studying-evidence/', views.MilitaryServiceRequestViewSet.as_view(
-        {'post': 'create', 'get': 'retrieve', 'delete': 'destroy', 'put': 'update'})) 
+        {'post': 'create', 'get': 'retrieve', 'delete': 'destroy', 'put': 'update'})),
+    # professor approve Grade Reconsideration
+    path('professor/<int:professor_id>/courses/<int:course_id>/appeal-requests/', views.GradeReconsiderationRequestViewSet.as_view({'get':'list'}), name='grade-reconsideration-list'),
+    path('professor/<int:professor_id>/courses/<int:course_id>/appeal-requests/<int:student_id>/',
+         views.GradeReconsiderationRequestViewSet.as_view({'get': 'retrieve', 'post': 'create'}), name='grade-reconsideration-detail'),
+    path('professor/<int:professor_id>/courses/<int:course_id>/approve/',
+         views.GradeReconsiderationRequestViewSet.as_view({'post': 'create'}), name='grade-approval'),        
 ]

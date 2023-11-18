@@ -1,5 +1,8 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
+from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer
+from users.permissions import IsItManager, IsDeputyEducational, IsStudent, IsProfessor
+from rest_framework import generics, status, serializers, viewsets, permissions
 from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
 from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, SelectionRequestSerializer, \
     SelectionShowSerializer
@@ -8,8 +11,6 @@ from rest_framework import generics, status, serializers
 from django.shortcuts import get_object_or_404
 from users.tasks import send_email
 from django.contrib.auth import get_user_model
-from .models import TermDropRequest, GradeReconsiderationRequest, CourseSelectionStudentSendToAssistant, \
-    CourseSelectionStudentRequest
 from rest_framework.response import Response
 from users.permissions import IsStudent
 from .models import EmergencyDropRequest, TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, CourseCorrectionStudentRequest, MilitaryServiceRequest
@@ -22,9 +23,7 @@ from rest_framework.views import APIView
 from users.pagination import CustomPageNumberPagination
 from django.utils.translation import gettext as _
 from rest_framework.viewsets import ModelViewSet
-
-
-from users.pagination import CustomPageNumberPagination
+from . import serializers
 
 
 class CourseListCreate(generics.ListCreateAPIView):
@@ -122,13 +121,6 @@ class AssistantRemoveTermList(generics.ListAPIView):
     queryset = TermDropRequest.objects.all()
     serializer_class = TermDropSerializer
     permission_classes = [IsDeputyEducational]
-
-
-from rest_framework import viewsets, permissions, status
-
-from .models import TermDropRequest
-from .serializers import TermRemovalRequestSerializer
-from rest_framework.response import Response
 
 
 class TermRemovalRequestViewSet(viewsets.ModelViewSet):
@@ -624,7 +616,6 @@ class CorrectionSendForm(APIView):
         return Response(_('Corses Corrections DONE'), status=status.HTTP_200_OK)
 
 
-
 class MilitaryServiceRequestViewSet(ModelViewSet):
 
     def get_serializer_class(self):
@@ -648,6 +639,39 @@ class MilitaryServiceRequestViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['student_id'] = self.kwargs['student_id']
         return context
+    
+
+class GradeReconsiderationRequestViewSet(ModelViewSet):
+    queryset = GradeReconsiderationRequest.objects.all()
+
+    permission_classes = [IsAuthenticated, IsProfessor]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.GradeReconsiderationRequestRetriveSerializer
+        elif self.request.method == 'POST':
+            return serializers.GradeReconsiderationResponseSerializer
+
+    def get_queryset(self):
+        professor_id = self.kwargs.get('professor_id')
+        course_id = self.kwargs.get('course_id')
+        queryset = super().get_queryset()
+        return queryset.filter(course_id=course_id, course__professor_id=professor_id)
+
+    def retrieve(self, request, *args, **kwargs):
+        student_id = self.kwargs.get('student_id')
+        queryset = self.get_queryset()
+        instance = queryset.get(student_id=student_id)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 
 
