@@ -637,7 +637,7 @@ class MilitaryServiceRequestViewSet(ModelViewSet):
     
 
 class GradeReconsiderationRequestViewSet(ModelViewSet):
-    queryset = GradeReconsiderationRequest.objects.all()
+    queryset = GradeReconsiderationRequest.objects.all() 
 
     permission_classes = [IsAuthenticated, IsProfessor]
 
