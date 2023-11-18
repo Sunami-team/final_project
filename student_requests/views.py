@@ -638,7 +638,7 @@ class MilitaryServiceRequestViewSet(ModelViewSet):
 
 class GradeReconsiderationRequestViewSet(ModelViewSet):
     queryset = GradeReconsiderationRequest.objects.all()
-    serializer_class = AssistantGradeReconsiderationRequestSerializer 
+     
     permission_classes = [IsAuthenticated, IsProfessor]
 
     def get_serializer_class(self):
