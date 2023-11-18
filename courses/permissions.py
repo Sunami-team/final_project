@@ -1,7 +1,6 @@
 from rest_framework import permissions
 from users.models import ITManager
 
-
 class IsItManager(permissions.BasePermission):
     
     def has_permission(self, request, view):
