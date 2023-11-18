@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .permissions import IsItManager, IsDeputyEducational, IsStudentOrDeputyEducational, IsProfessorOrDeputyEducational, IsStudent, IsProfessor
+from .permissions import IsItManager, IsDeputyEducational, IsStudentOrDeputyEducational, IsProfessorOrDeputyEducational
 from .serializers import *
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, status, viewsets
@@ -17,9 +17,6 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
-from django.utils.translation import gettext as _
-from rest_framework.exceptions import NotFound
-
 # I add this comment to commit and remove migration files
 
 
@@ -122,7 +119,7 @@ class LogoutApiView(generics.GenericAPIView):
 
     def post(self, request):
         Token.objects.get(user=request.user).delete()
-        return Response({_("message"): _("You have been successfully logged out.")}, status=status.HTTP_200_OK)
+        return Response({"message": "You have been successfully logged out."}, status=status.HTTP_200_OK)
 
 
 class ChangePasswordRequestApiView(generics.GenericAPIView):
@@ -139,7 +136,7 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
         token = random.randint(1000, 10000)
         ChangePasswordToken.objects.create(user=user, token=token)
         send_email.delay(user_email, token) # shared task by celery
-        return Response({_('token'): token, _('detail'): _('Token generated successfully')}, status=status.HTTP_200_OK)
+        return Response({'token': token, 'detail': 'Token generated successfully'}, status=status.HTTP_200_OK)
 
 
 class ChangePasswordActionApiView(generics.UpdateAPIView):
@@ -164,7 +161,7 @@ class ChangePasswordActionApiView(generics.UpdateAPIView):
 
         instance.delete()
         
-        return Response({_('detail'): _('Password changed successfully')}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Password changed successfully'}, status=status.HTTP_200_OK)
 
 
 class StudentViewset(viewsets.ModelViewSet):
@@ -324,40 +321,3 @@ class EducationalDeputyProfessorDetail(generics.RetrieveAPIView):
     serializer_class = DeputyEducationalProfessorSerializer
     queryset = Professor.objects.all()
     permission_classes = [IsProfessorOrDeputyEducational]
-
-
-class StudentInfoViewSet(viewsets.ModelViewSet):
-
-    serializer_class = StudentInfoSerializer
-    permission_classes = [IsAuthenticated, IsStudent]
-
-    def get_queryset(self):
-        user_id = self.kwargs.get('pk')  
-
-        if not user_id:
-            raise NotFound('Student ID not provided')  
-
-        try:
-            student = Student.objects.get(id=user_id)
-        except Student.DoesNotExist:
-            raise NotFound('Student not found')  
-
-        return Student.objects.filter(id=student.id)
-
-
-class ProfessorInfoViewSet(viewsets.ModelViewSet):
-    serializer_class = ProfessorInfoSerializer
-    permission_classes = [IsAuthenticated, IsProfessor]
-
-    def get_queryset(self):
-        user_id = self.kwargs.get('pk')  
-
-        if not user_id:
-            raise NotFound('Professor ID not provided')  
-
-        try:
-            professor = Professor.objects.get(id=user_id)
-        except Professor.DoesNotExist:
-            raise NotFound('Professor not found')  
-
-        return Professor.objects.filter(id=professor.id)

@@ -48,7 +48,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -120,7 +119,6 @@ AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-# LANGUAGE_CODE = 'fa'
 
 TIME_ZONE = 'UTC'
 
@@ -128,9 +126,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-LOCALE_PATHES = [
-    os.path.join(BASE_DIR,  'locale')
-]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -164,10 +159,3 @@ MINIO_ACCESS_KEY = 'your-access-key'
 MINIO_SECRET_KEY = 'your-secret-key'
 MINIO_SECURE = False  # Set to True if using HTTPS
 MINIO_BUCKET_NAME = 'your-bucket-name'
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dev.fahima@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = 'qxbd cuur bjpy ueeq'
