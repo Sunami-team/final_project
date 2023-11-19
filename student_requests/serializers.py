@@ -1,7 +1,6 @@
 from courses.models import Course, CourseTerm
 from rest_framework import serializers
-from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentRequest, EmergencyDropRequest, \
-    MilitaryServiceRequest
+from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentRequest, EmergencyDropRequest, MilitaryServiceRequest
 from django.conf import settings
 import os
 
@@ -181,3 +180,12 @@ class GradeReconsiderationResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = GradeReconsiderationRequest
         fields = ['student', 'course', 'response_text', 'approve']
+
+        
+class StudentGradeReconsiderationRequestSerializer(serializers.ModelSerializer):
+    # student_first_name = serializers.CharField(source='student.first_name')
+    # student_last_name = serializers.CharField(source='student.last_name')
+    class Meta: 
+        model = GradeReconsiderationRequest
+        fields = ('student','course', 'reconsideration_text', 'response_text', 'approve')
+        read_only_fields = ("response_text",)
