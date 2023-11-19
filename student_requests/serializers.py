@@ -1,5 +1,6 @@
 from courses.models import Course, CourseTerm
 from rest_framework import serializers
+from .models import *
 from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentRequest, EmergencyDropRequest, MilitaryServiceRequest
 from django.conf import settings
 import os

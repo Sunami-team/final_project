@@ -66,11 +66,6 @@ class CourseRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
             return Course.objects.none()
 
 
-class TermViewSet(viewsets.ModelViewSet):
-    queryset = Term.objects.all()
-    serializer_class = TermSerializer
-
-
 class TermDetailAPIView(generics.RetrieveAPIView):
     queryset = Term.objects.all()
     serializer_class = TermSerializer
@@ -108,16 +103,11 @@ class PostScoresApiView(APIView):
         except Exception as e:
             return Response({_("error"): str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 class TermViewSet(ModelViewSet):
     serializer_class = TermSerializer
     queryset = Term.objects.all().prefetch_related(
         'termstudentprofessor_set__students', 'termstudentprofessor_set__professors')
-    permission_classes = [IsItManager]
-
-
-class TermViewSet(viewsets.ModelViewSet):
-    queryset = Term.objects.all()
-    serializer_class = TermSerializer
 
 
 class TermDetailAPIView(generics.RetrieveAPIView):
