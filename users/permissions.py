@@ -65,3 +65,9 @@ class IsProfessorOrDeputyEducational(permissions.BasePermission):
         if isinstance(request.user, User):
             return request.user.id == obj.id or request.user.is_deputy_educational
         return False
+
+
+class IsItManagerOrDeputyEducational(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        return user.user_type == "it_manager" or user.user_type == "deputy_educational"

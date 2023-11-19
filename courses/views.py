@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveAPIView
 from .models import Term
-from .serializers import TermSerializer
+from .serializers import *
 from rest_framework import generics
 from .serializers import CourseSelectionSerializer
 from django.db.models import Sum
@@ -17,13 +17,54 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.views import APIView
 from users.permissions import IsProfessor
 from rest_framework.viewsets import ModelViewSet
-from users.permissions import IsItManager, IsDeputyEducational
+from users.permissions import IsItManager, IsDeputyEducational, IsItManagerOrDeputyEducational
 from .permissions import IsItManager
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from users.pagination import CustomPageNumberPagination
 from datetime import datetime
+
+
+class CourseListCreate(generics.ListCreateAPIView):
+    """
+    Course Create and List API View
+    """
+    serializer_class = CourseSerializer
+    permission_classes = [IsItManagerOrDeputyEducational]
+    
+    def get_queryset(self):
+        user = self.request.user
+        if user.user_type == "it_manager":
+            return Course.objects.all()
+
+        elif user.user_type == "deputy_educational":
+            deputy_educational = get_object_or_404(DeputyEducational, pk=user.pk)
+            return Course.objects.filter(college=deputy_educational.college)
+
+        else:
+            return Course.objects.none()
+    
+
+class CourseRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Course Retrieve, Update, Delete API View
+    """
+    serializer_class = CourseSerializer
+    permission_classes = [IsItManagerOrDeputyEducational]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.user_type == "it_manager":
+            return Course.objects.all()
+
+        elif user.user_type == "deputy_educational":
+            deputy_educational = get_object_or_404(DeputyEducational, pk=user.pk)
+            return Course.objects.filter(college=deputy_educational.college)
+
+        else:
+            return Course.objects.none()
+
 
 class TermViewSet(viewsets.ModelViewSet):
     queryset = Term.objects.all()

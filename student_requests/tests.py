@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from users.models import User, DeputyEducational, Student, Professor
 from courses.models import Faculty, StudyField, Term
 from .models import TermDropRequest, GradeReconsiderationRequest
-from courses.models import Course, CourseTerm
+from courses.models import Course, CourseTerm, Faculty
 from django.urls import reverse
 from datetime import datetime, date
 
@@ -194,4 +194,3 @@ class TestAssistantGradeCorrection(TestCase):
         }
         response = self.client.put(url, data=data)
         self.assertEqual(response.status_code, 200)
-
