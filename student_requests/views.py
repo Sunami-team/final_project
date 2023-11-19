@@ -683,7 +683,7 @@ class GradeReconsiderationRequestView(generics.GenericAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except GradeReconsiderationRequest.DoesNotExist:
-            return Response("Request Does Not Exists!", status=status.HTTP_404_NOT_FOUND)
+            return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
 
 
     def post(self, request, course_id, student_id):
@@ -692,17 +692,17 @@ class GradeReconsiderationRequestView(generics.GenericAPIView):
             try:
                 student_course = StudentCourse.objects.get(student=student_id,course_term=course_id)
             except StudentCourse.DoesNotExist:
-                return Response("Object Does Not Exists!", status=status.HTTP_404_NOT_FOUND)
+                return Response(_("Object Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
             grade = student_course.grade
             if grade:
                 serializer = self.serializer_class(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
-                return Response({"details": "request created successfully"}, status=status.HTTP_201_CREATED)
+                return Response({_("details"): _("request created successfully")}, status=status.HTTP_201_CREATED)
             else:
-                return Response("Grade Does Not Exists!", status=status.HTTP_404_NOT_FOUND) 
+                return Response(_("Grade Does Not Exists!"), status=status.HTTP_404_NOT_FOUND) 
         else:
-             return Response("Your request is filled!!", status=status.HTTP_400_BAD_REQUEST)
+             return Response(_("Your request is filled!!"), status=status.HTTP_400_BAD_REQUEST)
     
 
     def put(self, request, course_id, student_id):
@@ -711,17 +711,17 @@ class GradeReconsiderationRequestView(generics.GenericAPIView):
             serializer = self.serializer_class(instance=data, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"details": "request modified successfully"}, status=status.HTTP_200_OK)
+            return Response({_("details"): _("request modified successfully")}, status=status.HTTP_200_OK)
          except GradeReconsiderationRequest.DoesNotExist:
-             return Response("Request Does Not Exists!", status=status.HTTP_404_NOT_FOUND)    
+             return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)    
 
     def delete(self, request, course_id, student_id):
          
          try:
             data = GradeReconsiderationRequest.objects.get(course__course=course_id, student=student_id)
             data.delete()
-            return Response("Removed Successfully", status=status.HTTP_200_OK)
+            return Response(_("Removed Successfully"), status=status.HTTP_200_OK)
          except GradeReconsiderationRequest.DoesNotExist:
-             return Response("Request Does Not Exists!", status=status.HTTP_404_NOT_FOUND)
+             return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
  
 

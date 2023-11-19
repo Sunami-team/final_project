@@ -318,7 +318,7 @@ class CourseTermList(generics.GenericAPIView):
             serializer = CourseTermSerializer(data, many=True)        
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CourseTerm.DoesNotExist:
-            return Response("Course Does Not Exists!", status=status.HTTP_404_NOT_FOUND)
+            return Response(_("Course Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
 
 
      def post(self, request, term_id):
@@ -334,9 +334,9 @@ class CourseTermList(generics.GenericAPIView):
             serializer = CourseTermSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"details": "Course Term Created!"}, status=status.HTTP_201_CREATED)
+            return Response({_("details"): _("Course Term Created!")}, status=status.HTTP_201_CREATED)
         else:
-            return Response({"details": "Time is Up!!!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({_("details"): _("Time is Up!!!")}, status=status.HTTP_400_BAD_REQUEST)
 
     
 
