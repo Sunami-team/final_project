@@ -267,7 +267,7 @@ class FacultiesListCreate(generics.ListCreateAPIView):
     queryset = Faculty.objects.all()
     serializer_class = FacultiesListSerializer
     permission_class = [IsItManager]
-    # pagination_class = DefaultPagination
+    pagination_class = CustomPageNumberPagination
 
 
 class FacultiesInformation(generics.RetrieveUpdateDestroyAPIView):
@@ -335,7 +335,7 @@ class StudentInfoViewSet(viewsets.ModelViewSet):
         user_id = self.kwargs.get('pk')  
 
         if not user_id:
-            raise NotFound('Student ID not provided')  
+            raise NotFound(_('Student ID not provided'))
 
         try:
             student = Student.objects.get(id=user_id)
@@ -353,11 +353,11 @@ class ProfessorInfoViewSet(viewsets.ModelViewSet):
         user_id = self.kwargs.get('pk')  
 
         if not user_id:
-            raise NotFound('Professor ID not provided')  
+            raise NotFound(_('Professor ID not provided'))
 
         try:
             professor = Professor.objects.get(id=user_id)
         except Professor.DoesNotExist:
-            raise NotFound('Professor not found')  
+            raise NotFound(ـ('Professor not found'))  
 
         return Professor.objects.filter(id=professor.id)
