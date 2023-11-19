@@ -1,7 +1,7 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, StudentGradeReconsiderationRequestSerializer
-from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsStudent
+from .serializers import CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, StudentGradeReconsiderationRequestSerializer
+from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsStudent, IsItManagerOrDeputyEducational
 from rest_framework import generics, status, serializers, viewsets, permissions
 from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
 from .serializers import CourseSerializer, CourseTermSerializer, TermDropSerializer, SelectionRequestSerializer, \
@@ -12,7 +12,6 @@ from django.shortcuts import get_object_or_404
 from users.tasks import send_email
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
-from users.permissions import IsStudent
 from .models import EmergencyDropRequest, TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentSendToAssistant, CourseCorrectionStudentRequest, MilitaryServiceRequest
 from .permissions import IsDeputyEducational, IsStudent
 from rest_framework.exceptions import NotFound
@@ -24,22 +23,6 @@ from users.pagination import CustomPageNumberPagination
 from django.utils.translation import gettext as _
 from rest_framework.viewsets import ModelViewSet
 from . import serializers
-
-
-class CourseListCreate(generics.ListCreateAPIView):
-    """
-    Course Create and List API View
-    """
-    serializer_class = CourseSerializer
-    permission_classes = [IsItManager, IsDeputyEducational]
-
-
-class CourseRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Course Retrieve, Update, Delete API View
-    """
-    serializer_class = CourseSerializer
-    permission_classes = [IsItManager, IsDeputyEducational]
 
 
 class ClassSchedulesView(generics.ListAPIView):
