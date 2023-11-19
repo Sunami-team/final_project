@@ -25,10 +25,6 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from users.pagination import CustomPageNumberPagination
 from datetime import datetime
 
-class TermViewSet(viewsets.ModelViewSet):
-    queryset = Term.objects.all()
-    serializer_class = TermSerializer
-
 
 class TermDetailAPIView(generics.RetrieveAPIView):
     queryset = Term.objects.all()
@@ -73,13 +69,4 @@ class TermViewSet(ModelViewSet):
         'termstudentprofessor_set__students', 'termstudentprofessor_set__professors')
     permission_classes = [IsItManager]
 
-
-class TermViewSet(viewsets.ModelViewSet):
-    queryset = Term.objects.all()
-    serializer_class = TermSerializer
-
-
-class TermDetailAPIView(generics.RetrieveAPIView):
-    queryset = Term.objects.all()
-    serializer_class = TermSerializer
 

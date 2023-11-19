@@ -3,11 +3,6 @@ from rest_framework import serializers
 from .models import Term, StudentCourse, CourseTerm
 
 
-class TermSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Term
-        fields = '__all__'
-
 
 class CourseSelectionSerializer(serializers.ModelSerializer):
     class Meta:
