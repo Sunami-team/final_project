@@ -33,7 +33,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from users.pagination import CustomPageNumberPagination
 from datetime import datetime
-
+from users.models import DeputyEducational
+from django.shortcuts import get_object_or_404
 
 class CourseListCreate(generics.ListCreateAPIView):
     """
