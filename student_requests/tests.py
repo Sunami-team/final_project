@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from users.models import User, DeputyEducational, Student, Professor
 from courses.models import Faculty, StudyField, Term
-from .models import TermDropRequest, GradeReconsiderationRequest
+from student_requests.models import TermDropRequest, GradeReconsiderationRequest
 from courses.models import Course, CourseTerm, Faculty
 from django.urls import reverse
 from datetime import datetime, date

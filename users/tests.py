@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import ITManager, User, Student, DeputyEducational, Professor
+from users.models import ITManager, User, Student, DeputyEducational, Professor
 from rest_framework.test import APIClient
 from courses.models import Faculty, StudyField
 from datetime import datetime
