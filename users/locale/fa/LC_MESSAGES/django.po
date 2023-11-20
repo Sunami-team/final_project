@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-19 12:19+0330\n"
+"POT-Creation-Date: 2023-11-20 17:20+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,34 +18,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: users/views.py:125
+#: users/views.py:141
 msgid "message"
 msgstr "پیغام"
 
-#: users/views.py:125
+#: users/views.py:141
 msgid "You have been successfully logged out."
 msgstr "با موفقیت خارج شدید"
 
-#: users/views.py:142
+#: users/views.py:162
 msgid "token"
 msgstr "توکن"
 
-#: users/views.py:142 users/views.py:167
+#: users/views.py:162 users/views.py:191
 msgid "detail"
 msgstr "جزییات"
 
-#: users/views.py:142
+#: users/views.py:162
 msgid "Token generated successfully"
 msgstr "توکن ساخته شد"
 
-#: users/views.py:167
+#: users/views.py:191
 msgid "Password changed successfully"
 msgstr "رمز عبور تغییر کرد"
 
-#: users/views.py:338
+#: users/views.py:392
 msgid "Student ID not provided"
 msgstr "شماره کاربری دانشجو موجود نیست"
 
-#: users/views.py:356
+#: users/views.py:410
 msgid "Professor ID not provided"
 msgstr "شماره کاربری استاد موجود نیست"

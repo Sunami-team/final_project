@@ -227,7 +227,7 @@ class AssistantRemoveTermStudentDetail(APIView):
         serializer.save()
         accept = serializer.validated_data["accept"]
         deputy_educational_comment = serializer.validated_data[
-            "deputy_educational_comment"
+            _("deputy_educational_comment")
         ]
         if accept:
             if studnet_term_drop.result == "Without Seniority":
@@ -244,8 +244,8 @@ class AssistantRemoveTermStudentDetail(APIView):
 
                 return Response(
                     {
-                        "result": "Request Accepted",
-                        "message": deputy_educational_comment,
+                        _("result"): _("Request Accepted"),
+                        _("message"): deputy_educational_comment,
                     },
                     status=status.HTTP_200_OK,
                 )
@@ -260,13 +260,13 @@ class AssistantRemoveTermStudentDetail(APIView):
                 )
                 return Response(
                     {
-                        "result": "Request Failed",
-                        "message": "deputy_educational_comment",
+                        _("result"): ("Request Failed"),
+                        _("message"): _("deputy_educational_comment"),
                     },
                     status=status.HTTP_200_OK,
                 )
             except:
-                raise serializers.ValidationError("Student Email field is Null")
+                raise serializers.ValidationError(_("Student Email field is Null"))
 
 
 class EmergencyDropRequestView(generics.GenericAPIView):
@@ -300,7 +300,7 @@ class EmergencyDropRequestView(generics.GenericAPIView):
             ).first()
             if existing_request:
                 return Response(
-                    {"error": "Emergency drop request already exists for this course"},
+                    {_("error"): _("Emergency drop request already exists for this course")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -312,7 +312,7 @@ class EmergencyDropRequestView(generics.GenericAPIView):
 
         except (Student.DoesNotExist, CourseTerm.DoesNotExist):
             return Response(
-                {"error": "Invalid student or course ID"},
+                {_("error"): _("Invalid student or course ID")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -327,7 +327,7 @@ class EmergencyDropRequestView(generics.GenericAPIView):
             ).first()
             if not emergency_drop_request:
                 return Response(
-                    {"error": "EmergencyDropRequest not found"},
+                    {_("error"): _("EmergencyDropRequest not found")},
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
@@ -341,7 +341,7 @@ class EmergencyDropRequestView(generics.GenericAPIView):
 
         except (Student.DoesNotExist, CourseTerm.DoesNotExist):
             return Response(
-                {"error": "Invalid student or course ID"},
+                {_("error"): _("Invalid student or course ID")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -356,7 +356,7 @@ class EmergencyDropRequestView(generics.GenericAPIView):
             ).first()
             if not emergency_drop_request:
                 return Response(
-                    {"error": "EmergencyDropRequest not found"},
+                    {_("error"): _("EmergencyDropRequest not found")},
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
@@ -365,7 +365,7 @@ class EmergencyDropRequestView(generics.GenericAPIView):
 
         except (Student.DoesNotExist, CourseTerm.DoesNotExist):
             return Response(
-                {"error": "Invalid student or course ID"},
+                {_("error"): _("Invalid student or course ID")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -410,7 +410,7 @@ class EmergencyDropRequestDetailView(generics.RetrieveAPIView):
             get_object_or_404(DeputyEducational, pk=deputy_id)
         except NotFound:
             # If no DeputyEducational found, raise a NotFound exception
-            raise NotFound("DeputyEducational not found.")
+            raise NotFound(_("DeputyEducational not found."))
 
         # Filter emergency drop requests based on the student ID
         try:
@@ -420,7 +420,7 @@ class EmergencyDropRequestDetailView(generics.RetrieveAPIView):
         except NotFound:
             # If no request found for this student, raise a NotFound exception
             raise NotFound(
-                "Emergency drop request for the specified student not found."
+                _("Emergency drop request for the specified student not found.")
             )
 
         return emergency_request
@@ -448,7 +448,7 @@ class EmergencyDropRequestApprovalView(generics.UpdateAPIView):
             get_object_or_404(DeputyEducational, pk=deputy_id)
         except NotFound:
             # If no DeputyEducational found, raise a NotFound exception
-            raise NotFound("DeputyEducational not found.")
+            raise NotFound(_("DeputyEducational not found."))
 
         # Filter emergency drop requests based on the student ID
         try:
@@ -458,7 +458,7 @@ class EmergencyDropRequestApprovalView(generics.UpdateAPIView):
         except NotFound:
             # If no request found for this student, raise a NotFound exception
             raise NotFound(
-                "Emergency drop request for the specified student not found."
+                _("Emergency drop request for the specified student not found.")
             )
 
         return emergency_request
@@ -570,14 +570,17 @@ class CreateCorrectionRequestByStudent(generics.GenericAPIView):
     pagination_class = CustomPageNumberPagination
 
     def get(self, request, pk):
-        studnet = Student.objects.get(id=pk)
-        return Response(
-            {
-                _("studnet"): f"{studnet.first_name} {studnet.last_name}",
-                _("details"): _("add or remove"),
-            },
-            status=status.HTTP_200_OK,
-        )
+        try:
+            studnet = Student.objects.get(id=pk)
+            return Response(
+                {
+                    _("studnet"): f"{studnet.first_name} {studnet.last_name}",
+                    _("details"): _("add or remove"),
+                },
+                status=status.HTTP_200_OK,
+            )
+        except Student.DoesNotExist:
+            return Response({_('message'): _('student does not exist')}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, pk):
         student = Student.objects.get(pk=pk)
@@ -845,8 +848,8 @@ class CreateSelectionRequestByStudent(generics.GenericAPIView):
         studnet = Student.objects.get(id=pk)
         return Response(
             {
-                "studnet": f"{studnet.first_name} {studnet.last_name}",
-                "details": "add or remove",
+                _("studnet"): f"{studnet.first_name} {studnet.last_name}",
+                _("details"): _("add or remove"),
             },
             status=status.HTTP_200_OK,
         )
@@ -859,13 +862,13 @@ class CreateSelectionRequestByStudent(generics.GenericAPIView):
         for course_to_add in serializer.validated_data["courses_to_add"]:
             if course_to_add in serializer.validated_data["courses_to_drop"]:
                 return Response(
-                    {"detail": "You can not add and drop a course in same time !"},
+                    {_("detail"): _("You can not add and drop a course in same time !")},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
         serializer.save()
         return Response(
-            {"detail": "Pre Request Created"}, status=status.HTTP_201_CREATED
+            {_("detail"): _("Pre Request Created")}, status=status.HTTP_201_CREATED
         )
 
 
@@ -881,8 +884,8 @@ class DetailSelectionRequestByStudent(APIView):
         studnet = Student.objects.get(pk=pk)
         return Response(
             {
-                "student": f"{studnet.first_name} {studnet.last_name}",
-                "details": serializer.data,
+                _("student"): f"{studnet.first_name} {studnet.last_name}",
+                _("details"): serializer.data,
             },
             status=status.HTTP_200_OK,
         )
@@ -973,9 +976,9 @@ class SelectionShowErrors(APIView):
 
         return Response(
             {
-                "add_errors": add_errors,
-                "drop_errors": drop_errors,
-                "status": selection_student.approval_status,
+                _("add_errors"): add_errors,
+                _("drop_errors"): drop_errors,
+                _("status"): selection_student.approval_status,
             },
             status=status.HTTP_200_OK,
         )
@@ -1006,14 +1009,14 @@ class SelectionSubmit(APIView):
                     for drop_courses in selection_student.courses_to_drop.all():
                         final_selection.courses_to_drop.add(drop_courses)
                     return Response(
-                        "add to Selection Submit", status=status.HTTP_200_OK
+                        _("add to Selection Submit"), status=status.HTTP_200_OK
                     )
                 else:
                     raise serializers.ValidationError(
                         "Add and drop Corses does not correct"
                     )
         except Exception as e:
-            return Response("We Have errors", status=status.HTTP_200_OK)
+            return Response(_("We Have errors"), status=status.HTTP_200_OK)
 
 
 class SelectionSendForm(APIView):
@@ -1025,7 +1028,7 @@ class SelectionSendForm(APIView):
         try:
             selected_term = Term.objects.get(id=term_id)
         except Term.DoesNotExist:
-            return Response("Term Does NOT exist", status=status.HTTP_404_NOT_FOUND)
+            return Response(_("Term Does NOT exist"), status=status.HTTP_404_NOT_FOUND)
         for add_course in selection_student.courses_to_add.all():
             StudentCourse.objects.create(
                 student=student, course_term=add_course.course, term=selected_term
@@ -1034,7 +1037,7 @@ class SelectionSendForm(APIView):
             return Response(
                 "Corses Selections is Empty", status=status.HTTP_400_BAD_REQUEST
             )
-        return Response("Corses Selections DONE", status=status.HTTP_200_OK)
+        return Response(_("Corses Selections DONE"), status=status.HTTP_200_OK)
 
 
 class GradeReconsiderationRequestView(generics.GenericAPIView):
