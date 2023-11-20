@@ -3,7 +3,6 @@ from users.models import ITManager
 
 
 class IsItManager(permissions.BasePermission):
-    
     def has_permission(self, request, view):
         return isinstance(request.user, ITManager)
 

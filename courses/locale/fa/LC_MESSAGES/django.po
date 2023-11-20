@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-19 12:19+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: courses/views.py:48 courses/views.py:55 courses/views.py:61
+#: courses/views.py:67 courses/views.py:83 courses/views.py:137
+#: courses/views.py:161 courses/views.py:190 courses/views.py:197
+#: courses/views.py:203 courses/views.py:209 courses/views.py:225
+#: courses/views.py:279 courses/views.py:303
+msgid "error"
+msgstr "خطا"
+
+#: courses/views.py:98 courses/views.py:158 courses/views.py:240
+#: courses/views.py:300
+msgid "message"
+msgstr "پیغام"
+
+#: courses/views.py:137 courses/views.py:279
+msgid "No file provided"
+msgstr "فایلی درنظر گرفته نشده"
+
+#: courses/views.py:158 courses/views.py:300
+msgid "Grades updated successfully"
+msgstr "بروز رسانی درس ها انجام شد"
+
+#: courses/views.py:321
+msgid "Course Does Not Exists!"
+msgstr "دوره مورد نظر وجود ندارد"
+
+#: courses/views.py:337 courses/views.py:339
+msgid "details"
+msgstr "جزییات"
+
+#: courses/views.py:337
+msgid "Course Term Created!"
+msgstr "درس ترمی ساخته شد"
+
+#: courses/views.py:339
+msgid "Time is Up!!!"
+msgstr "زمان مجاز نیست"
