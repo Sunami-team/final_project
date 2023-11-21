@@ -1,0 +1,12 @@
+[flake8]
+exclude =
+    .git,
+    .gitignore,
+    *.pot,
+    *.py[co],
+    __pycache__,
+    venv,
+    .env,
+    __init__.py,
+    */migrations/*,
+    tests.py

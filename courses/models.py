@@ -10,14 +10,15 @@ class Faculty(models.Model):
 
 class Course(models.Model):
     COURSE_TYPE_CHOICES = [
-        ('B', 'پایه'),
-        ('G', 'عمومی'),
-        ('P', 'تخصصی'),
-        ('O', 'اختیاری'),
+        ("B", "پایه"),
+        ("G", "عمومی"),
+        ("P", "تخصصی"),
+        ("O", "اختیاری"),
     ]
 
     college = models.ForeignKey(
-        Faculty, on_delete=models.CASCADE, related_name='courses')
+        Faculty, on_delete=models.CASCADE, related_name="courses"
+    )
     name = models.CharField(max_length=255)
     course_unit = models.PositiveIntegerField(default=3)
     course_type = models.CharField(max_length=1, choices=COURSE_TYPE_CHOICES)
@@ -29,13 +30,17 @@ class Course(models.Model):
 class CourseRequistes(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     pre_requisites = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name='courses_required')
+        Course, on_delete=models.CASCADE, related_name="courses_required"
+    )
     co_requisites = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name='courses_concurrent')
+        Course, on_delete=models.CASCADE, related_name="courses_concurrent"
+    )
 
 
 class Term(models.Model):
-    pre_GPA_term = models.DecimalField(max_digits=4, decimal_places=2, default=0)  # previous grade point average
+    pre_GPA_term = models.DecimalField(
+        max_digits=4, decimal_places=2, default=0
+    )  # previous grade point average
     name = models.CharField(max_length=100)
     start_course_selection = models.DateField()
     end_course_selection = models.DateField()
@@ -53,22 +58,20 @@ class Term(models.Model):
 
 class CourseTerm(models.Model):
     DAYS_CHOICES = [
-        ('Mon', 'دوشنبه'),
-        ('Tue', 'سه‌شنبه'),
-        ('Wed', 'چهارشنبه'),
-        ('Thu', 'پنج‌شنبه'),
-        ('Fri', 'جمعه'),
-        ('Sat', 'شنبه'),
-        ('Sun', 'یک‌شنبه'),
+        ("Mon", "دوشنبه"),
+        ("Tue", "سه‌شنبه"),
+        ("Wed", "چهارشنبه"),
+        ("Thu", "پنج‌شنبه"),
+        ("Fri", "جمعه"),
+        ("Sat", "شنبه"),
+        ("Sun", "یک‌شنبه"),
     ]
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    professor = models.ForeignKey(
-        'users.Professor', on_delete=models.CASCADE)
+    professor = models.ForeignKey("users.Professor", on_delete=models.CASCADE)
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
-    class_day = models.CharField(
-        max_length=3, choices=DAYS_CHOICES, default='Sat')
-    class_time = models.TimeField(default='8:00:00')
+    class_day = models.CharField(max_length=3, choices=DAYS_CHOICES, default="Sat")
+    class_time = models.TimeField(default="8:00:00")
     exam_date_time = models.DateTimeField()
     class_location = models.CharField(max_length=255, blank=True)
     exam_location = models.CharField(max_length=255, blank=True)
@@ -80,20 +83,21 @@ class CourseTerm(models.Model):
 
 class StudentCourse(models.Model):
     COURSE_STATUS_CHOICES = [
-        ('pass', 'قبول'),
-        ('failed', 'مردود'),
-        ('idk', 'مشروط'),
+        ("pass", "قبول"),
+        ("failed", "مردود"),
+        ("idk", "مشروط"),
     ]
-    student = models.ForeignKey('users.Student', on_delete=models.CASCADE)
+    student = models.ForeignKey("users.Student", on_delete=models.CASCADE)
     course_term = models.ForeignKey(
         'courses.Course', on_delete=models.CASCADE, related_name='student_course')
     real_course_term = models.ForeignKey(
         'courses.CourseTerm', on_delete=models.CASCADE, related_name='student_courseterm')
     term = models.ForeignKey('courses.Term', on_delete=models.CASCADE)
+
     course_status = models.CharField(
-        max_length=10, blank=True, choices=COURSE_STATUS_CHOICES)
-    grade = models.DecimalField(
-        max_digits=4, decimal_places=2, null=True, blank=True)
+        max_length=10, blank=True, choices=COURSE_STATUS_CHOICES
+    )
+    grade = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return f"{self.student.first_name} {self.student.last_name} --> {self.course_term.name}"
@@ -101,17 +105,15 @@ class StudentCourse(models.Model):
 
 class TermStudentProfessor(models.Model):
     term = models.ForeignKey(Term, on_delete=models.CASCADE)
-    students = models.ForeignKey('users.Student', on_delete=models.CASCADE)
-    professors = models.ForeignKey(
-        'users.Professor', on_delete=models.CASCADE)
+    students = models.ForeignKey("users.Student", on_delete=models.CASCADE)
+    professors = models.ForeignKey("users.Professor", on_delete=models.CASCADE)
 
 
 class StudyField(models.Model):
-
     LEVEL_CHOICES = [
-        ('Bachelor', 'کارشناسی'),
-        ('Master', 'کارشناسی ارشد'),
-        ('PHD', 'دکتری'),
+        ("Bachelor", "کارشناسی"),
+        ("Master", "کارشناسی ارشد"),
+        ("PHD", "دکتری"),
     ]
 
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
