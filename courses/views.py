@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveAPIView
 from .models import Term
@@ -14,12 +13,10 @@ from .serializers import (
     StudentCourseSerializer,
     CourseTermSerializer,
 )
-=======
 from django.db.models import Sum
 from django.utils import timezone
 from .models import Term, StudentCourse
 from .serializers import CourseSelectionSerializer, TermSerializer, StudentCourseSerializer
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -35,7 +32,6 @@ from users.permissions import (
     IsItManagerOrDeputyEducational,
 )
 from .permissions import IsItManager
-<<<<<<< HEAD
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -43,6 +39,7 @@ from users.pagination import CustomPageNumberPagination
 from datetime import datetime
 from users.models import DeputyEducational
 from django.shortcuts import get_object_or_404
+
 
 class CourseListCreate(generics.ListCreateAPIView):
     """
@@ -84,8 +81,6 @@ class CourseRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
 
         else:
             return Course.objects.none()
-=======
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 
 class TermViewSet(viewsets.ModelViewSet):
@@ -190,58 +185,6 @@ class CourseSelectionCreateView(generics.CreateAPIView):
         # ثبت انتخاب واحد
         return super().create(request, *args, **kwargs)
 
-
-class PostScoresApiView(APIView):
-    def post(self, request, pk, c_pk):
-        # Assuming that the uploaded file is in the 'file' field of the request
-        file = request.FILES.get("file")
-
-        if not file:
-<<<<<<< HEAD
-            return Response(
-                {_("error"): _("No file provided")}, status=status.HTTP_400_BAD_REQUEST
-            )
-=======
-            return Response({"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
-
-        try:
-            # Read the Excel file into a DataFrame
-            df = pd.read_excel(file)
-
-            # Get the course term using the provided professor and course IDs
-            course_term = CourseTerm.objects.get(professor=pk, course=c_pk)
-
-            # Loop through the rows in the DataFrame and update the grades
-            for index, row in df.iterrows():
-                student_name = row["student"]
-                grade = row["grade"]
-
-                # Assuming you have a proper way to match students by name
-                student = StudentCourse.objects.get(
-                    student__full_name=student_name, course_term=course_term
-                )
-
-                # Update the grade for the student
-                student.grade = grade
-                student.save()
-
-<<<<<<< HEAD
-            return Response(
-                {_("message"): _("Grades updated successfully")},
-                status=status.HTTP_200_OK,
-            )
-
-        except Exception as e:
-            return Response(
-                {_("error"): str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-=======
-            return Response({"message": "Grades updated successfully"}, status=status.HTTP_200_OK)
-
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 class TermViewSet(ModelViewSet):
     serializer_class = TermSerializer
@@ -365,11 +308,11 @@ class PostScoresApiView(APIView):
 
             # Loop through the rows in the DataFrame and update the grades
             for index, row in df.iterrows():
-                student_name = row['student']
+                personal_number = row['student']
                 grade = row['grade']
 
                 # Assuming you have a proper way to match students by name
-                student = StudentCourse.objects.get(student__full_name=student_name, course_term=course_term)
+                student = StudentCourse.objects.get(student__personal_number=personal_number, real_course_term=course_term)
 
                 # Update the grade for the student
                 student.grade = grade
@@ -378,7 +321,7 @@ class PostScoresApiView(APIView):
             return Response({"message": "Grades updated successfully"}, status=status.HTTP_200_OK)
 
         except Exception as e:
-<<<<<<< HEAD
+
             return Response({_("error"): str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -424,6 +367,3 @@ class CourseTermDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CourseTermSerializer
     permission_classes = permission_classes = [IsItManager, IsDeputyEducational]
     pagination_class = CustomPageNumberPagination
-=======
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10

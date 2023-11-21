@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-<<<<<<< HEAD
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
@@ -55,15 +54,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-=======
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -129,12 +119,8 @@ AUTH_USER_MODEL = "users.User"
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-<<<<<<< HEAD
 LANGUAGE_CODE = "en-us"
 # LANGUAGE_CODE = 'fa'
-=======
-LANGUAGE_CODE = 'en-us'
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 TIME_ZONE = "UTC"
 
@@ -142,12 +128,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-<<<<<<< HEAD
+
 # LOCALE_PATHES = [
 #     os.path.join(BASE_DIR,  'locale')
 # ]
-=======
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -183,7 +168,6 @@ MINIO_ENDPOINT = "your-minio-endpoint"
 MINIO_ACCESS_KEY = "your-access-key"
 MINIO_SECRET_KEY = "your-secret-key"
 MINIO_SECURE = False  # Set to True if using HTTPS
-<<<<<<< HEAD
 MINIO_BUCKET_NAME = "your-bucket-name"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -192,6 +176,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "dev.fahima@gmail.com"  # Your Gmail address
 EMAIL_HOST_PASSWORD = "qxbd cuur bjpy ueeq"
-=======
-MINIO_BUCKET_NAME = 'your-bucket-name'
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10

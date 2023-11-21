@@ -2,15 +2,11 @@ from django.db import models
 
 
 class CourseRegistrationRequest(models.Model):
-<<<<<<< HEAD
     student = models.ForeignKey("users.Student", on_delete=models.CASCADE)
     requested_courses = models.ManyToManyField(
         "courses.CourseTerm", related_name="course_registration_request"
     )
-=======
-    student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
     # requested_courses = models.ManyToManyField('courses.CourseTerm') #### get from StudentCourse ####
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     approval_status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -18,7 +14,6 @@ class CourseRegistrationRequest(models.Model):
 
 
 class CourseCorrectionRequest(models.Model):
-<<<<<<< HEAD
     student = models.ForeignKey("users.Student", on_delete=models.CASCADE)
     courses_to_drop = models.ManyToManyField(
         "courses.CourseTerm", related_name="drop_requests_course_correction"
@@ -26,11 +21,8 @@ class CourseCorrectionRequest(models.Model):
     courses_to_add = models.ManyToManyField(
         "courses.CourseTerm", related_name="add_requests_course_correction"
     )
-=======
-    student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
     # courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests') #### get from StudentCourse ####
     # courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests') #### get from StudentCourse ####
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     approval_status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -48,7 +40,6 @@ class GradeReconsiderationRequest(models.Model):
 
 
 class EmergencyDropRequest(models.Model):
-<<<<<<< HEAD
     CHOICES = (  #
         ("pending", "در انتظار پاسخ"),
         ("approved", "قبول"),
@@ -57,12 +48,9 @@ class EmergencyDropRequest(models.Model):
     student = models.ForeignKey("users.Student", on_delete=models.CASCADE)
     course = models.ForeignKey("courses.CourseTerm", on_delete=models.CASCADE)
     result = models.CharField(default="pending", max_length=100, choices=CHOICES)
-=======
-    student = models.ForeignKey('users.Student', on_delete=models.DO_NOTHING)
-    course = models.ForeignKey(
-        'courses.StudentCourse', on_delete=models.DO_NOTHING)
+    # course = models.ForeignKey(
+    #     'courses.StudentCourse', on_delete=models.DO_NOTHING)
     result = models.BooleanField(default=False)
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     student_comment = models.TextField()
     deputy_educational_comment = models.TextField(blank=True)
 

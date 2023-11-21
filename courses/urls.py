@@ -20,5 +20,6 @@ urlpatterns = [
         ),
         name="term-detail",
     ),
-    # path('courses/<int:pk>/', views.CourseTermDetail.as_view(), name="course_term_detail"), #TODO: Amin Hosseini
+    path('courses/<int:term_id>/term/', views.CourseTermList.as_view(), name="course_term"),
+    path('courses/<int:pk>/', views.CourseTermDetail.as_view(), name="course_term_detail"), 
 ]

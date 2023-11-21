@@ -166,7 +166,6 @@ class FacultiesListSerializer(serializers.ModelSerializer):
 class DeputyEducationalProfessorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Professor
-<<<<<<< HEAD
         fields = [
             "first_name",
             "last_name",
@@ -213,7 +212,3 @@ class ProfessorInfoSerializer(serializers.ModelSerializer):
             "rank",
         ]
         read_only_fields = ["personal_number"]
-=======
-        fields = ['first_name', 'last_name', 'personal_number', 'national_id', 'college',
-                'study_field', 'expertise', 'rank']
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10

@@ -1,6 +1,5 @@
 from courses.models import Course, StudentCourse, CourseTerm
 from rest_framework import serializers
-<<<<<<< HEAD
 from .models import *
 from .models import (
     TermDropRequest,
@@ -58,18 +57,6 @@ class ExamScheduleSerializer(serializers.ModelSerializer):
 
     def get_exam_date_time(self, obj):
         return obj.real_course_term.exam_date_time
-=======
-from .models import TermDropRequest, GradeReconsiderationRequest, CourseCorrectionStudentRequest, MilitaryServiceRequest
-from django.conf import settings
-import os
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ['name', 'faculty', 'pre_requisites', 'co_requisites', 'course_unit', 'course_type']
-from rest_framework import serializers
-
-from student_requests.models import TermDropRequest
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
     def get_exam_location(self, obj):
         return obj.real_course_term.exam_location
@@ -85,10 +72,7 @@ class CourseTermSerializer(serializers.ModelSerializer):
             "exam_date_time",
             "exam_location",
         ]
-<<<<<<< HEAD
 """
-=======
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 class TermDropSerializer(serializers.ModelSerializer):
     student_first_name = serializers.CharField(
@@ -102,7 +86,6 @@ class TermDropSerializer(serializers.ModelSerializer):
     accept = serializers.BooleanField(default=False, write_only=True)
     class Meta:
         model = TermDropRequest
-<<<<<<< HEAD
         fields = (
             "student_id",
             "student_first_name",
@@ -122,10 +105,6 @@ class TermDropSerializer(serializers.ModelSerializer):
             "student_comment",
         )
 
-=======
-        fields = ('student_id', 'student_first_name', 'student_last_name', 'term_name', 'result', 'student_comment', 'deputy_educational_comment', 'accept')
-        read_only_fields = ('student_id', 'student_first_name', 'student_last_name', 'term_name', 'result', 'student_comment')
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 class TermRemovalRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -133,15 +112,12 @@ class TermRemovalRequestSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-<<<<<<< HEAD
 class EmergencyDropRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmergencyDropRequest
         fields = "__all__"
 
 
-=======
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 class AssistantGradeReconsiderationRequestSerializer(serializers.ModelSerializer):
     student_first_name = serializers.CharField(
         source="student.first_name", read_only=True
@@ -159,7 +135,6 @@ class AssistantGradeReconsiderationRequestSerializer(serializers.ModelSerializer
     approve = serializers.BooleanField(write_only=True)
     class Meta:
         model = GradeReconsiderationRequest
-<<<<<<< HEAD
         fields = (
             "student_first_name",
             "student_last_name",
@@ -176,10 +151,6 @@ class AssistantGradeReconsiderationRequestSerializer(serializers.ModelSerializer
             "course_name",
             "reconsideration_text",
         )
-=======
-        fields = ('student_first_name', 'student_last_name', 'course_name', 'reconsideration_text', 'response_text', 'professor_first_name', 'professor_last_name', 'approve')
-        read_only_fields = ('student_first_name', 'student_last_name', 'course_name', 'reconsideration_text',)
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 
 class CorrectionRequestSerializer(serializers.ModelSerializer):
@@ -188,28 +159,18 @@ class CorrectionRequestSerializer(serializers.ModelSerializer):
         exclude = ["student", "approval_status"]
 
 class CourseTermSerializerForCorrection(serializers.ModelSerializer):
-<<<<<<< HEAD
     course_id = serializers.CharField(source="course.id")
     course_name = serializers.CharField(source="course.name")
 
-=======
-    course_id = serializers.CharField(source='course.id')
-    course_name = serializers.CharField(source='course.name')
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     class Meta:
         model = CourseTerm
         fields = ["course_id", "course_name"]
 
 
 class CorrectionShowSerializer(serializers.ModelSerializer):
-<<<<<<< HEAD
     student_first_name = serializers.CharField(source="student.first_name")
     student_last_name = serializers.CharField(source="student.last_name")
 
-=======
-    student_first_name = serializers.CharField(source='student.first_name')
-    student_last_name = serializers.CharField(source='student.last_name')
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     class Meta:
         model = CourseCorrectionStudentRequest
         fields = [
@@ -222,17 +183,12 @@ class CorrectionShowSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         request = self.context.get("request")
         rep = super().to_representation(instance)
-<<<<<<< HEAD
         rep["courses_to_add"] = CourseTermSerializerForCorrection(
             instance.courses_to_add, context={"request": request}, many=True
         ).data
         rep["courses_to_drop"] = CourseTermSerializerForCorrection(
             instance.courses_to_drop, context={"request": request}, many=True
         ).data
-=======
-        rep['courses_to_add'] = CourseTermSerializerForCorrection(instance.courses_to_add, context={'request':request}, many=True).data
-        rep['courses_to_drop'] = CourseTermSerializerForCorrection(instance.courses_to_drop, context={'request':request}, many=True).data
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
         return rep
     
@@ -244,19 +200,10 @@ class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MilitaryServiceRequest
-<<<<<<< HEAD
         fields = ["term", "proof_document", "issuance_place"]
 
     def create(self, validated_data):
         proof_document = self.context["request"].data.get("proof_document")
-=======
-        fields = ['term', 'proof_document', 'issuance_place']
-        
-
-    def create(self, validated_data):
-        
-        proof_document = self.context['request'].data.get('proof_document')
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
         file_path = os.path.join("military_docs", proof_document.name)
         with open(os.path.join(settings.MEDIA_ROOT, file_path), "wb") as file:
@@ -277,7 +224,6 @@ class MilitaryServiceRequestRetriveSerializer(serializers.ModelSerializer):
     term = serializers.CharField()
     class Meta:
         model = MilitaryServiceRequest
-<<<<<<< HEAD
         fields = ["student", "term", "proof_document", "issuance_place"]
         read_only_fields = ["proof_document"]
 
@@ -360,7 +306,3 @@ class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
     class meta:
         model = MilitaryServiceRequest
         fields = "__all__"
-=======
-        fields = ['student', 'term', 'proof_document', 'issuance_place']
-        read_only_fields = ['proof_document']
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10

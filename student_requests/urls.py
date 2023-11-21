@@ -1,10 +1,7 @@
 from django.urls import path
 from . import views
-<<<<<<< HEAD
 
 # from .models import EmergencyDropRequestView, EmergencyDropRequestListView, EmergencyDropRequestDetailView, EmergencyDropRequestApprovalView
-=======
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 app_name = "student_requests"
 
@@ -14,7 +11,6 @@ urlpatterns = [
     path('student/me/exam-schedule/', views.ExamScheduleViewSet.as_view({'get':'list'}), name="exam-schedule"),
 
     # Assistant Remove Term
-<<<<<<< HEAD
     path(
         "assistant/remove-term/",
         views.AssistantRemoveTermList.as_view(),
@@ -46,10 +42,6 @@ urlpatterns = [
         views.EmergencyDropRequestApprovalView.as_view(),
         name="emergency-request-approve-reject",
     ),
-=======
-    path('assistant/remove-term/', views.AssistantRemoveTermList.as_view(), name='remove-term-list'),
-    path('assistant/<int:term_id>/remove-term/<int:student_id>/', views.AssistantRemoveTermStudentDetail.as_view(), name='remove-term-detail'),
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     # Assistant approve Grade Reconsideration
     path(
         "assistant/<int:professor_id>/courses/<int:course_id>/prof-approved/",
@@ -88,7 +80,6 @@ urlpatterns = [
         name="correction-send-form",
     ),
     # Military Service Student Request
-<<<<<<< HEAD
     path(
         "student/<int:student_id>/studying-evidence/",
         views.MilitaryServiceRequestViewSet.as_view(
@@ -118,11 +109,6 @@ urlpatterns = [
         views.GradeReconsiderationRequestView.as_view(),
         name="student-reconsideration",
     ),
-    path('assistant/<str:pk_or_me>/studying-evidence/', views.StudentRequestList.as_view()),
-    path('assistant/<str:pk_or_me>/studying-evidence/<int:s_pk>/', views.StudentRequestDetail.as_view()),
+    # path('assistant/<str:pk_or_me>/studying-evidence/', views.StudentRequestList.as_view()),
+    # path('assistant/<str:pk_or_me>/studying-evidence/<int:s_pk>/', views.StudentRequestDetail.as_view()),
 ]
-=======
-    path('student/<int:student_id>/studying-evidence/', views.MilitaryServiceRequestViewSet.as_view(
-        {'post': 'create', 'get': 'retrieve', 'delete': 'destroy', 'put': 'update'})) 
-]
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10

@@ -1,6 +1,5 @@
 from django.db.models import F
 from rest_framework import serializers
-<<<<<<< HEAD
 from .models import Course, Term, StudentCourse, CourseTerm
 
 
@@ -8,9 +7,6 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ["college", "name", "course_unit", "course_type"]
-=======
-from courses.models import Term, StudentCourse
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 
 class TermSerializer(serializers.ModelSerializer):

@@ -96,7 +96,6 @@ urlpatterns = [
         name="educational-Deputy-student-detail",
     ),
     # Educational Deputy can access to Professors list and a Professor data details
-<<<<<<< HEAD
     path(
         "educational-deputy/professors/",
         views.EducationalDeputyProfessorsList.as_view(),
@@ -119,9 +118,3 @@ urlpatterns = [
         name="professor-detail",
     ),
 ]
-=======
-    path('educational-deputy/professors/', views.EducationalDeputyProfessorsList.as_view(), name='educational-Deputy-professors-list'),
-    path('educational-deputy/professors/<int:pk>/', views.EducationalDeputyProfessorDetail.as_view(), name='educational-Deputy-professor-detail'),
-]   
-
->>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
