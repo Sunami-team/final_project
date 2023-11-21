@@ -304,3 +304,9 @@ class StudentGradeReconsiderationRequestSerializer(serializers.ModelSerializer):
             "approve",
         )
         read_only_fields = ("response_text",)
+
+
+class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
+    class meta:
+        model = MilitaryServiceRequest
+        fields = "__all__"
