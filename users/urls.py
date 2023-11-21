@@ -35,5 +35,8 @@ urlpatterns = [
     # Educational Deputy can access to Professors list and a Professor data details
     path('educational-deputy/professors/', views.EducationalDeputyProfessorsList.as_view(), name='educational-Deputy-professors-list'),
     path('educational-deputy/professors/<int:pk>/', views.EducationalDeputyProfessorDetail.as_view(), name='educational-Deputy-professor-detail'),
+    # Create - List - Retrieve - Update - Delete (Term) BY ITManager
+    path('admin/term/', views.TermViewSet.as_view({'get': 'list', 'post': 'create'}), name='term-list'), 
+    path('admin/term/<int:pk>/', views.TermViewSet.as_view({'get': 'retrieve', 'delete': 'destroy', 'put': 'update'}), name='term-detail'), 
 ]   
 

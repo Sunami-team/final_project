@@ -18,7 +18,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
 # I add this comment to commit and remove migration files
-
+from rest_framework.viewsets import ModelViewSet
 
 
 class AssistanList(generics.ListAPIView):
@@ -321,3 +321,10 @@ class EducationalDeputyProfessorDetail(generics.RetrieveAPIView):
     serializer_class = DeputyEducationalProfessorSerializer
     queryset = Professor.objects.all()
     permission_classes = [IsProfessorOrDeputyEducational]
+
+
+class TermViewSet(ModelViewSet):
+    serializer_class = TermSerializer
+    queryset = Term.objects.all().prefetch_related(
+        'termstudentprofessor_set__students', 'termstudentprofessor_set__professors')
+    permission_classes = [IsItManager]
