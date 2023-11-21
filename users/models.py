@@ -90,6 +90,9 @@ class Student(User):
         return f"{self.id}"
         # return f"{self.first_name} {self.last_name}"
 
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}" if self.first_name and self.last_name else "No Name Provided."
 
 class ITManager(User):
     class Meta:
