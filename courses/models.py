@@ -38,9 +38,12 @@ class CourseRequistes(models.Model):
 
 
 class Term(models.Model):
+<<<<<<< HEAD
     pre_GPA_term = models.DecimalField(
         max_digits=4, decimal_places=2, default=0
     )  # previous grade point average
+=======
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     name = models.CharField(max_length=100)
     start_course_selection = models.DateField()
     end_course_selection = models.DateField()

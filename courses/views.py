@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveAPIView
 from .models import Term
@@ -13,6 +14,12 @@ from .serializers import (
     StudentCourseSerializer,
     CourseTermSerializer,
 )
+=======
+from django.db.models import Sum
+from django.utils import timezone
+from .models import Term, StudentCourse
+from .serializers import CourseSelectionSerializer, TermSerializer, StudentCourseSerializer
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -28,6 +35,7 @@ from users.permissions import (
     IsItManagerOrDeputyEducational,
 )
 from .permissions import IsItManager
+<<<<<<< HEAD
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -76,6 +84,8 @@ class CourseRetrieveUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
 
         else:
             return Course.objects.none()
+=======
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 
 class TermViewSet(viewsets.ModelViewSet):
@@ -98,26 +108,26 @@ class StudentViewSet(viewsets.ModelViewSet):
         term_name = request.data.get('term_name', 0)
         term = Term.objects.get(name=term_name)  # ترم جاری را بر اساس منطق برنامه شما باید انتخاب کنید
         if not (term.start_course_selection <= timezone.now() <= term.end_course_selection):
-            return Response({_('error'): 'زمان انتخاب واحد به پایان رسیده است.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'زمان انتخاب واحد به پایان رسیده است.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # بررسی تعداد واحدهای حداکثر و حداقل
         min_credit_units = 12  # حداقل تعداد واحدهای مجاز
         max_credit_units = 20  # حداکثر تعداد واحدهای مجاز
         selected_units = request.data.get('units', 0)
         if not (min_credit_units <= selected_units <= max_credit_units):
-            return Response({_('error'): 'تعداد واحدهای انتخاب شده نامعتبر است.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'تعداد واحدهای انتخاب شده نامعتبر است.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # بررسی شرایط پیش‌نیازی
         prerequisites = request.data.get('prerequisites', [])
         for prerequisite_id in prerequisites:
             if not student.passed_courses.filter(id=prerequisite_id).exists():
-                return Response({_('error'): 'شما شرایط پیش‌نیاز را برآورده نکرده‌اید.'},
+                return Response({'error': 'شما شرایط پیش‌نیاز را برآورده نکرده‌اید.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
         # بررسی وضعیت دروس
         ongoing_courses = student.current_courses.filter(term=term)
         if len(ongoing_courses) > 0:
-            return Response({_('error'): 'شما قبلاً دروسی را در این ترم انتخاب کرده‌اید.'},
+            return Response({'error': 'شما قبلاً دروسی را در این ترم انتخاب کرده‌اید.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
@@ -133,7 +143,7 @@ class StudentViewSet(viewsets.ModelViewSet):
             if student_units > max_credit_units:
                 # اگر تعداد واحدهای دانشجو بیشتر از حداکثر مجاز است، انتخاب واحد لغو می‌شود
                 course_selection.delete()
-                return Response({_('error'): 'تعداد واحدهای انتخاب شده بیشتر از حداکثر مجاز است.'},
+                return Response({'error': 'تعداد واحدهای انتخاب شده بیشتر از حداکثر مجاز است.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
             return Response(CourseSelectionSerializer(course_selection).data, status=status.HTTP_201_CREATED)
@@ -148,7 +158,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         if course_selection:
             serializer = CourseSelectionSerializer(course_selection)
             return Response(serializer.data)
-        return Response({_('message'): 'دانشجو هنوز فرم انتخاب واحد ایجاد نکرده است.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'دانشجو هنوز فرم انتخاب واحد ایجاد نکرده است.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CourseSelectionViewSet(viewsets.ViewSet):
@@ -187,9 +197,13 @@ class PostScoresApiView(APIView):
         file = request.FILES.get("file")
 
         if not file:
+<<<<<<< HEAD
             return Response(
                 {_("error"): _("No file provided")}, status=status.HTTP_400_BAD_REQUEST
             )
+=======
+            return Response({"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST)
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
         try:
             # Read the Excel file into a DataFrame
@@ -212,6 +226,7 @@ class PostScoresApiView(APIView):
                 student.grade = grade
                 student.save()
 
+<<<<<<< HEAD
             return Response(
                 {_("message"): _("Grades updated successfully")},
                 status=status.HTTP_200_OK,
@@ -221,6 +236,12 @@ class PostScoresApiView(APIView):
             return Response(
                 {_("error"): str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+=======
+            return Response({"message": "Grades updated successfully"}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 class TermViewSet(ModelViewSet):
     serializer_class = TermSerializer
@@ -244,26 +265,26 @@ class StudentViewSet(viewsets.ModelViewSet):
         term_name = request.data.get('term_name', 0)
         term = Term.objects.get(name=term_name)  # ترم جاری را بر اساس منطق برنامه شما باید انتخاب کنید
         if not (term.start_course_selection <= timezone.now() <= term.end_course_selection):
-            return Response({_('error'): 'زمان انتخاب واحد به پایان رسیده است.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'زمان انتخاب واحد به پایان رسیده است.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # بررسی تعداد واحدهای حداکثر و حداقل
         min_credit_units = 12  # حداقل تعداد واحدهای مجاز
         max_credit_units = 20  # حداکثر تعداد واحدهای مجاز
         selected_units = request.data.get('units', 0)
         if not (min_credit_units <= selected_units <= max_credit_units):
-            return Response({_('error'): 'تعداد واحدهای انتخاب شده نامعتبر است.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'تعداد واحدهای انتخاب شده نامعتبر است.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # بررسی شرایط پیش‌نیازی
         prerequisites = request.data.get('prerequisites', [])
         for prerequisite_id in prerequisites:
             if not student.passed_courses.filter(id=prerequisite_id).exists():
-                return Response({_('error'): 'شما شرایط پیش‌نیاز را برآورده نکرده‌اید.'},
+                return Response({'error': 'شما شرایط پیش‌نیاز را برآورده نکرده‌اید.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
         # بررسی وضعیت دروس
         ongoing_courses = student.current_courses.filter(term=term)
         if len(ongoing_courses) > 0:
-            return Response({_('error'): 'شما قبلاً دروسی را در این ترم انتخاب کرده‌اید.'},
+            return Response({'error': 'شما قبلاً دروسی را در این ترم انتخاب کرده‌اید.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
@@ -279,7 +300,7 @@ class StudentViewSet(viewsets.ModelViewSet):
             if student_units > max_credit_units:
                 # اگر تعداد واحدهای دانشجو بیشتر از حداکثر مجاز است، انتخاب واحد لغو می‌شود
                 course_selection.delete()
-                return Response({_('error'): 'تعداد واحدهای انتخاب شده بیشتر از حداکثر مجاز است.'},
+                return Response({'error': 'تعداد واحدهای انتخاب شده بیشتر از حداکثر مجاز است.'},
                                 status=status.HTTP_400_BAD_REQUEST)
 
             return Response(CourseSelectionSerializer(course_selection).data, status=status.HTTP_201_CREATED)
@@ -294,7 +315,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         if course_selection:
             serializer = CourseSelectionSerializer(course_selection)
             return Response(serializer.data)
-        return Response({_('message'): 'دانشجو هنوز فرم انتخاب واحد ایجاد نکرده است.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'message': 'دانشجو هنوز فرم انتخاب واحد ایجاد نکرده است.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CourseSelectionViewSet(viewsets.ViewSet):
@@ -333,7 +354,7 @@ class PostScoresApiView(APIView):
         file = request.FILES.get('file')
 
         if not file:
-            return Response({_("error"): _("No file provided")}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             # Read the Excel file into a DataFrame
@@ -354,9 +375,10 @@ class PostScoresApiView(APIView):
                 student.grade = grade
                 student.save()
 
-            return Response({_("message"): _("Grades updated successfully")}, status=status.HTTP_200_OK)
+            return Response({"message": "Grades updated successfully"}, status=status.HTTP_200_OK)
 
         except Exception as e:
+<<<<<<< HEAD
             return Response({_("error"): str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -402,3 +424,6 @@ class CourseTermDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CourseTermSerializer
     permission_classes = permission_classes = [IsItManager, IsDeputyEducational]
     pagination_class = CustomPageNumberPagination
+=======
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10

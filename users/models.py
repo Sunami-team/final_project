@@ -62,10 +62,11 @@ class ChangePasswordToken(models.Model):
 
 
 class Student(User):
-    entry_year = models.PositiveIntegerField(null=True, blank=True)
+    entry_year = models.PositiveIntegerField()
     entry_term = models.CharField(max_length=20)
     average = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     college = models.ForeignKey(
+<<<<<<< HEAD
         "courses.Faculty",
         on_delete=models.DO_NOTHING,
         related_name="students_college",
@@ -81,6 +82,13 @@ class Student(User):
     )
     military_status = models.BooleanField(null=True, blank=True)
     seniority = models.PositiveIntegerField(null=True, blank=True)
+=======
+        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='students_college')
+    study_field = models.ForeignKey(
+        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='students_field')
+    military_status = models.BooleanField()
+    seniority = models.PositiveIntegerField()
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
     class Meta:
         verbose_name = "Student"
@@ -109,6 +117,7 @@ class Professor(User):
         ("4", "استاد"),
     ]
     college = models.ForeignKey(
+<<<<<<< HEAD
         "courses.Faculty",
         on_delete=models.DO_NOTHING,
         related_name="professor_faculty",
@@ -122,6 +131,11 @@ class Professor(User):
         null=True,
         blank=True,
     )
+=======
+        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='professor_faculty')
+    study_field = models.ForeignKey(
+        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='professor_study')
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
     expertise = models.TextField()
     rank = models.CharField(max_length=1, choices=RANK_CHOICES, default="1")
 
@@ -136,6 +150,7 @@ class Professor(User):
 
 class DeputyEducational(User):
     college = models.ForeignKey(
+<<<<<<< HEAD
         "courses.Faculty",
         on_delete=models.DO_NOTHING,
         related_name="deputy_educational_faculty",
@@ -149,6 +164,11 @@ class DeputyEducational(User):
         null=True,
         blank=True,
     )
+=======
+        'courses.Faculty', on_delete=models.DO_NOTHING, related_name='deputy_educational_faculty')
+    study_field = models.ForeignKey('courses.StudyField', on_delete=models.DO_NOTHING,
+                                    related_name='deputy_educational_study')
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
     class Meta:
         verbose_name = "Deputy Educational"

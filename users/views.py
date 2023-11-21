@@ -1,4 +1,5 @@
 from django.shortcuts import render
+<<<<<<< HEAD
 from .permissions import (
     IsItManager,
     IsDeputyEducational,
@@ -7,6 +8,9 @@ from .permissions import (
     IsStudent,
     IsProfessor,
 )
+=======
+from .permissions import IsItManager, IsDeputyEducational, IsStudentOrDeputyEducational, IsProfessorOrDeputyEducational
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 from .serializers import *
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, status, viewsets
@@ -31,9 +35,6 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
-from django.utils.translation import gettext as _
-from rest_framework.exceptions import NotFound
-
 # I add this comment to commit and remove migration files
 
 
@@ -137,10 +138,14 @@ class LogoutApiView(generics.GenericAPIView):
 
     def post(self, request):
         Token.objects.get(user=request.user).delete()
+<<<<<<< HEAD
         return Response(
             {_("message"): _("You have been successfully logged out.")},
             status=status.HTTP_200_OK,
         )
+=======
+        return Response({"message": "You have been successfully logged out."}, status=status.HTTP_200_OK)
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 
 class ChangePasswordRequestApiView(generics.GenericAPIView):
@@ -157,11 +162,16 @@ class ChangePasswordRequestApiView(generics.GenericAPIView):
         print(user_email)  # print out the recipient email
         token = random.randint(1000, 10000)
         ChangePasswordToken.objects.create(user=user, token=token)
+<<<<<<< HEAD
         send_email.delay(user_email, token)  # shared task by celery
         return Response(
             {_("token"): token, _("detail"): _("Token generated successfully")},
             status=status.HTTP_200_OK,
         )
+=======
+        send_email.delay(user_email, token) # shared task by celery
+        return Response({'token': token, 'detail': 'Token generated successfully'}, status=status.HTTP_200_OK)
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 
 class ChangePasswordActionApiView(generics.UpdateAPIView):
@@ -186,10 +196,15 @@ class ChangePasswordActionApiView(generics.UpdateAPIView):
         user.save()
 
         instance.delete()
+<<<<<<< HEAD
 
         return Response(
             {_("detail"): _("Password changed successfully")}, status=status.HTTP_200_OK
         )
+=======
+        
+        return Response({'detail': 'Password changed successfully'}, status=status.HTTP_200_OK)
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
 
 
 class StudentViewset(viewsets.ModelViewSet):
@@ -379,6 +394,7 @@ class EducationalDeputyProfessorDetail(generics.RetrieveAPIView):
     serializer_class = DeputyEducationalProfessorSerializer
     queryset = Professor.objects.all()
     permission_classes = [IsProfessorOrDeputyEducational]
+<<<<<<< HEAD
 
 
 class StudentInfoViewSet(viewsets.ModelViewSet):
@@ -415,3 +431,5 @@ class ProfessorInfoViewSet(viewsets.ModelViewSet):
             raise NotFound(ـ("Professor not found"))
 
         return Professor.objects.filter(id=professor.id)
+=======
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10

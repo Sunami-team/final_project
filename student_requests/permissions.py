@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from users.models import Student, DeputyEducational
 from rest_framework import permissions
 
@@ -23,3 +24,14 @@ class IsStudent(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # This checks if the user is the same as the student linked to the EmergencyDropRequest
         return obj.student == request.user
+=======
+from rest_framework.permissions import BasePermission
+
+class IsStudentOwner(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_student
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_student and obj.student_id == request.user.id
+    
+>>>>>>> 10683f4de1e691ed278dcd59f535895643f08f10
