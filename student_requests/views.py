@@ -1,10 +1,10 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, StudentGradeReconsiderationRequestSerializer
+from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, StudentGradeReconsiderationRequestSerializer, ClassScheduleSerializer, ExamScheduleSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsStudent, IsItManagerOrDeputyEducational
 from rest_framework import generics, status, serializers, viewsets, permissions
-from .serializers import CourseTermSerializer, TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
-from .serializers import CourseTermSerializer, TermDropSerializer, SelectionRequestSerializer, \
+from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
+from .serializers import TermDropSerializer, SelectionRequestSerializer, \
     SelectionShowSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
 from rest_framework import generics, status, serializers
@@ -25,77 +25,30 @@ from rest_framework.viewsets import ModelViewSet
 from . import serializers
 
 
-class ClassSchedulesView(generics.ListAPIView):
+class ClassScheduleViewSet(viewsets.ViewSet):
     """
-    Class Schedule List API View
+    The Class Schedule API View
     """
-    serializer_class = CourseTermSerializer
-    permission_classes = [IsAuthenticated]
+    serializer_class = ClassScheduleSerializer
 
-    def get_queryset(self):
-        user = self.request.user
-
-        param = self.kwargs.get('pk')
-
-        if param and param.isdigit():
-            professor = get_object_or_404(User, pk=param, user_type='professor')
-            return CourseTerm.objects.filter(professor=professor)
-
-        elif param == 'me':
-            return CourseTerm.objects.filter(course__in=user.current_courses.all())
-
-        return CourseTerm.objects.none()
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-
-        serialized_data = self.serializer_class(queryset, many=True, context={'request': request}).data
-        custom_response = [
-            {
-                'course': item['course'],
-                'class_day': item['class_day'],
-                'class_time': item['class_time'],
-                'class_location': item['class_location'],
-            }
-            for item in serialized_data
-        ]
-        return self.get_paginated_response(custom_response)
+    def list(self, request, student_id=None):
+        student_id = request.user.id
+        student_courses = StudentCourse.objects.filter(student_id=student_id)
+        serializer = ClassScheduleSerializer(student_courses, many=True)
+        return Response(serializer.data)
 
 
-class ExamSchedulesView(generics.ListAPIView):
+class ExamScheduleViewSet(viewsets.ViewSet):
     """
-    Exam Schedule List API View
+    The Exam Schedule API View
     """
-    serializer_class = CourseTermSerializer
-    permission_classes = [IsAuthenticated]
+    serializer_class = ExamScheduleSerializer
 
-    def get_queryset(self):
-        user = self.request.user
-
-        param = self.kwargs.get('pk')
-
-        if param and param.isdigit():
-            professor = get_object_or_404(User, pk=param, user_type='professor')
-            return CourseTerm.objects.filter(professor=professor)
-
-        elif param == 'me':
-            return CourseTerm.objects.filter(course__in=user.current_courses.all())
-
-        return CourseTerm.objects.none()
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-
-        serialized_data = self.serializer_class(queryset, many=True, context={'request': request}).data
-        custom_response = [
-            {
-                'course': item['course'],
-                'exam_date_time': item['exam_date_time'],
-                'exam_location': item['exam_location'],
-            }
-            for item in serialized_data
-        ]
-        return self.get_paginated_response(custom_response)
+    def list(self, request, student_id=None):
+        student_id = request.user.id
+        student_courses = StudentCourse.objects.filter(student_id=student_id)
+        serializer = ExamScheduleSerializer(student_courses, many=True)
+        return Response(serializer.data)
 
 
 # Assistant Access Remove Term

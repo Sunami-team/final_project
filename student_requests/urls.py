@@ -5,10 +5,8 @@ from . import views
 app_name = 'student_requests'
 
 urlpatterns = [
-    path('student/<int:pk>/class-schedule/', views.ClassSchedulesView.as_view(), name="professor-class-schedule"),
-    path('student/me/class-schedule/', views.ClassSchedulesView.as_view(), name="student-class-schedule"),
-    path('student/<int:pk>/exam-schedule/', views.ExamSchedulesView.as_view(), name="professor-exam-schedule"),
-    path('student/me/exam-schedule/', views.ExamSchedulesView.as_view(), name="student-exam-schedule"),
+    path('student/me/class-schedule/', views.ClassScheduleViewSet.as_view({'get':'list'}), name="class-schedule"),
+    path('student/me/exam-schedule/', views.ExamScheduleViewSet.as_view({'get':'list'}), name="exam-schedule"),
     # Assistant Remove Term
     path('assistant/remove-term/', views.AssistantRemoveTermList.as_view(), name='remove-term-list'),
     path('assistant/<int:term_id>/remove-term/<int:student_id>/', views.AssistantRemoveTermStudentDetail.as_view(), name='remove-term-detail'),
