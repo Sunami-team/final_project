@@ -87,7 +87,8 @@ class Student(User):
         verbose_name_plural = "Students"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.id}"
+        # return f"{self.first_name} {self.last_name}"
 
 
 class ITManager(User):
@@ -96,7 +97,8 @@ class ITManager(User):
         verbose_name_plural = "IT Managers"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.id}"
+        # return f"{self.first_name} {self.last_name}"
 
 
 class Professor(User):
@@ -153,4 +155,5 @@ class DeputyEducational(User):
         verbose_name_plural = "Deputy Educationals"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.id}"
+        # return f"{self.first_name} {self.last_name}"

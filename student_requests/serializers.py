@@ -1,4 +1,4 @@
-from courses.models import Course, CourseTerm
+from courses.models import Course, StudentCourse, CourseTerm
 from rest_framework import serializers
 from .models import *
 from .models import (
@@ -12,6 +12,56 @@ from django.conf import settings
 import os
 
 
+class ClassScheduleSerializer(serializers.ModelSerializer):
+    course_name = serializers.SerializerMethodField()
+    professor_name = serializers.SerializerMethodField()
+    class_day = serializers.SerializerMethodField()
+    class_time = serializers.SerializerMethodField()
+    class_location = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StudentCourse
+        fields = ('course_name', 'professor_name', 'class_day', 'class_time', 'class_location')
+
+    def get_course_name(self, obj):
+        return obj.real_course_term.course.name
+
+    def get_professor_name(self, obj):
+        return f"{obj.real_course_term.professor.first_name} {obj.real_course_term.professor.last_name}"
+
+    def get_class_day(self, obj):
+        return obj.real_course_term.class_day
+
+    def get_class_time(self, obj):
+        return obj.real_course_term.class_time
+
+    def get_class_location(self, obj):
+        return obj.real_course_term.class_location
+
+
+class ExamScheduleSerializer(serializers.ModelSerializer):
+    course_name = serializers.SerializerMethodField()
+    professor_name = serializers.SerializerMethodField()
+    exam_date_time = serializers.SerializerMethodField()
+    exam_location = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StudentCourse
+        fields = ('course_name', 'professor_name', 'exam_date_time', 'exam_location')
+
+    def get_course_name(self, obj):
+        return obj.real_course_term.course.name
+
+    def get_professor_name(self, obj):
+        return f"{obj.real_course_term.professor.first_name} {obj.real_course_term.professor.last_name}"
+
+    def get_exam_date_time(self, obj):
+        return obj.real_course_term.exam_date_time
+
+    def get_exam_location(self, obj):
+        return obj.real_course_term.exam_location
+
+"""
 class CourseTermSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseTerm
@@ -22,7 +72,7 @@ class CourseTermSerializer(serializers.ModelSerializer):
             "exam_date_time",
             "exam_location",
         ]
-
+"""
 
 class TermDropSerializer(serializers.ModelSerializer):
     student_first_name = serializers.CharField(

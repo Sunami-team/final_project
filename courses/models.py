@@ -4,6 +4,9 @@ from django.db import models
 class Faculty(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
 
 class Course(models.Model):
     COURSE_TYPE_CHOICES = [
@@ -86,9 +89,11 @@ class StudentCourse(models.Model):
     ]
     student = models.ForeignKey("users.Student", on_delete=models.CASCADE)
     course_term = models.ForeignKey(
-        "courses.Course", on_delete=models.CASCADE, related_name="student_course"
-    )
-    term = models.ForeignKey("courses.Term", on_delete=models.CASCADE)
+        'courses.Course', on_delete=models.CASCADE, related_name='student_course')
+    real_course_term = models.ForeignKey(
+        'courses.CourseTerm', on_delete=models.CASCADE, related_name='student_courseterm')
+    term = models.ForeignKey('courses.Term', on_delete=models.CASCADE)
+
     course_status = models.CharField(
         max_length=10, blank=True, choices=COURSE_STATUS_CHOICES
     )

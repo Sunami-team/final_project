@@ -1,5 +1,11 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
+from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, StudentGradeReconsiderationRequestSerializer, ClassScheduleSerializer, ExamScheduleSerializer
+from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsStudent, IsItManagerOrDeputyEducational
+from rest_framework import generics, status, serializers, viewsets, permissions
+from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
+from .serializers import TermDropSerializer, SelectionRequestSerializer, \
+    SelectionShowSerializer
 from .serializers import (
     CourseTermSerializer,
     TermDropSerializer,
@@ -21,7 +27,7 @@ from users.permissions import (
 )
 from rest_framework import generics, status, serializers, viewsets, permissions
 from .serializers import (
-    CourseTermSerializer,
+   
     TermDropSerializer,
     AssistantGradeReconsiderationRequestSerializer,
     CorrectionRequestSerializer,
@@ -31,7 +37,7 @@ from .serializers import (
     MilitaryServiceRequestRetriveSerializer,
 )
 from .serializers import (
-    CourseTermSerializer,
+ 
     TermDropSerializer,
     SelectionRequestSerializer,
     SelectionShowSerializer,
@@ -55,10 +61,17 @@ from rest_framework.viewsets import ModelViewSet
 from . import serializers
 
 
-class ClassSchedulesView(generics.ListAPIView):
+class ClassScheduleViewSet(viewsets.ViewSet):
     """
-    Class Schedule List API View
+    The Class Schedule API View
     """
+    serializer_class = ClassScheduleSerializer
+
+    def list(self, request, student_id=None):
+        student_id = request.user.id
+        student_courses = StudentCourse.objects.filter(student_id=student_id)
+        serializer = ClassScheduleSerializer(student_courses, many=True)
+        return Response(serializer.data)
 
     serializer_class = CourseTermSerializer
     permission_classes = [IsAuthenticated]
@@ -95,10 +108,17 @@ class ClassSchedulesView(generics.ListAPIView):
         return self.get_paginated_response(custom_response)
 
 
-class ExamSchedulesView(generics.ListAPIView):
+class ExamScheduleViewSet(viewsets.ViewSet):
     """
-    Exam Schedule List API View
+    The Exam Schedule API View
     """
+    serializer_class = ExamScheduleSerializer
+
+    def list(self, request, student_id=None):
+        student_id = request.user.id
+        student_courses = StudentCourse.objects.filter(student_id=student_id)
+        serializer = ExamScheduleSerializer(student_courses, many=True)
+        return Response(serializer.data)
 
     serializer_class = CourseTermSerializer
     permission_classes = [IsAuthenticated]
