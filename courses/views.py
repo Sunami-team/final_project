@@ -208,11 +208,6 @@ class TermViewSet(ModelViewSet):
     permission_classes = [IsItManager]
 
 
-class TermViewSet(viewsets.ModelViewSet):
-    queryset = Term.objects.all()
-    serializer_class = TermSerializer
-
-
 class TermDetailAPIView(generics.RetrieveAPIView):
     queryset = Term.objects.all()
     serializer_class = TermSerializer
