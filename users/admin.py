@@ -6,4 +6,3 @@ admin.site.register(Professor)
 admin.site.register(Student)
 admin.site.register(ITManager)
 admin.site.register(DeputyEducational)
-

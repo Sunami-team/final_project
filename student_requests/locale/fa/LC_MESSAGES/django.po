@@ -1,0 +1,210 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-20 18:39+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: student_requests/views.py:181 student_requests/views.py:193
+#: student_requests/views.py:303 student_requests/views.py:315
+#: student_requests/views.py:330 student_requests/views.py:344
+#: student_requests/views.py:359 student_requests/views.py:368
+msgid "error"
+msgstr "خطا"
+
+#: student_requests/views.py:215
+msgid "Student Does Not Exist"
+msgstr "دانشجو موجود نیست"
+
+#: student_requests/views.py:230 student_requests/views.py:264
+msgid "deputy_educational_comment"
+msgstr ""
+
+#: student_requests/views.py:247 student_requests/views.py:263
+msgid "result"
+msgstr ""
+
+#: student_requests/views.py:247 student_requests/views.py:558
+msgid "Request Accepted"
+msgstr "درخواست پذیرفته شد"
+
+#: student_requests/views.py:248 student_requests/views.py:264
+#: student_requests/views.py:583
+msgid "message"
+msgstr "پیغام"
+
+#: student_requests/views.py:254 student_requests/views.py:269
+msgid "Student Email field is Null"
+msgstr "دانشجو ایمیل ندارد"
+
+#: student_requests/views.py:303
+msgid "Emergency drop request already exists for this course"
+msgstr ""
+
+#: student_requests/views.py:315 student_requests/views.py:344
+#: student_requests/views.py:368
+msgid "Invalid student or course ID"
+msgstr ""
+
+#: student_requests/views.py:330 student_requests/views.py:359
+msgid "EmergencyDropRequest not found"
+msgstr ""
+
+#: student_requests/views.py:413 student_requests/views.py:451
+msgid "DeputyEducational not found."
+msgstr ""
+
+#: student_requests/views.py:423 student_requests/views.py:461
+msgid "Emergency drop request for the specified student not found."
+msgstr ""
+
+#: student_requests/views.py:509 student_requests/views.py:527
+msgid "errors"
+msgstr "خطا ها"
+
+#: student_requests/views.py:509 student_requests/views.py:527
+msgid "Request Does not exist"
+msgstr "درخواست موجود نیست"
+
+#: student_requests/views.py:550 student_requests/views.py:555
+#: student_requests/views.py:558 student_requests/views.py:578
+#: student_requests/views.py:622 student_requests/views.py:852
+#: student_requests/views.py:888 student_requests/views.py:1082
+#: student_requests/views.py:1103
+msgid "details"
+msgstr "جزییات"
+
+#: student_requests/views.py:550
+msgid "Studet Course Does Not exist"
+msgstr "درس مربوطه موجود نیست"
+
+#: student_requests/views.py:555
+msgid "Request Failed"
+msgstr "درخواست رد شد"
+
+#: student_requests/views.py:577 student_requests/views.py:851
+msgid "studnet"
+msgstr "دانشجو"
+
+#: student_requests/views.py:578 student_requests/views.py:852
+msgid "add or remove"
+msgstr "حذف و اضافه"
+
+#: student_requests/views.py:583
+#, fuzzy
+#| msgid "Student Does Not Exist"
+msgid "student does not exist"
+msgstr "دانشجو موجود نیست"
+
+#: student_requests/views.py:594 student_requests/views.py:603
+#: student_requests/views.py:865 student_requests/views.py:871
+msgid "detail"
+msgstr "جزییات"
+
+#: student_requests/views.py:595 student_requests/views.py:865
+msgid "You can not add and drop a course in same time !"
+msgstr "یک درس را نمی شود هم حذف کرد هم اضافه کرد"
+
+#: student_requests/views.py:603 student_requests/views.py:871
+msgid "Pre Request Created"
+msgstr "پیش درخواست ساخته شد"
+
+#: student_requests/views.py:621 student_requests/views.py:887
+msgid "student"
+msgstr "دانشجو"
+
+#: student_requests/views.py:718 student_requests/views.py:979
+msgid "add_errors"
+msgstr "خطا های اضافه کرد درس"
+
+#: student_requests/views.py:719 student_requests/views.py:980
+msgid "drop_errors"
+msgstr "خطا های حذف کردن درس"
+
+#: student_requests/views.py:720 student_requests/views.py:981
+msgid "status"
+msgstr "وضعیت"
+
+#: student_requests/views.py:752
+msgid "add to Correction Submit"
+msgstr "اضافه کردن درس انجام شد"
+
+#: student_requests/views.py:756
+msgid "Add and drop Corses does not correct"
+msgstr "حذف و اضافه صحیح انجام نشده"
+
+#: student_requests/views.py:759 student_requests/views.py:1019
+msgid "We Have errors"
+msgstr "خطا رخ داده است"
+
+#: student_requests/views.py:772 student_requests/views.py:1031
+msgid "Term Does NOT exist"
+msgstr "ترم مورد نظر وجود ندارد"
+
+#: student_requests/views.py:779
+msgid "Corses Corrections is Empty"
+msgstr "ترمیم ترم خالی است"
+
+#: student_requests/views.py:781
+msgid "Corses Corrections DONE"
+msgstr "ترمیم ترم انجام شد"
+
+#: student_requests/views.py:1012
+#, fuzzy
+#| msgid "add to Correction Submit"
+msgid "add to Selection Submit"
+msgstr "اضافه کردن درس انجام شد"
+
+#: student_requests/views.py:1040
+#, fuzzy
+#| msgid "Corses Corrections DONE"
+msgid "Corses Selections DONE"
+msgstr "ترمیم ترم انجام شد"
+
+#: student_requests/views.py:1060 student_requests/views.py:1108
+#: student_requests/views.py:1120
+#, fuzzy
+#| msgid "Request Does not exist"
+msgid "Request Does Not Exists!"
+msgstr "درخواست موجود نیست"
+
+#: student_requests/views.py:1074
+#, fuzzy
+#| msgid "Student Does Not Exist"
+msgid "Object Does Not Exists!"
+msgstr "دانشجو موجود نیست"
+
+#: student_requests/views.py:1082
+msgid "request created successfully"
+msgstr "درخواست ساخته شد"
+
+#: student_requests/views.py:1087
+#, fuzzy
+#| msgid "Student Does Not Exist"
+msgid "Grade Does Not Exists!"
+msgstr "دانشجو موجود نیست"
+
+#: student_requests/views.py:1091
+msgid "Your request is filled!!"
+msgstr "درخواست شما رد شد"
+
+#: student_requests/views.py:1103
+msgid "request modified successfully"
+msgstr "درخواست با موفقیت حذف شد"
+
+#: student_requests/views.py:1117
+msgid "Removed Successfully"
+msgstr "با موفقیت حذف شد"
