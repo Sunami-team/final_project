@@ -344,11 +344,11 @@ class PostScoresApiView(APIView):
 
             # Loop through the rows in the DataFrame and update the grades
             for index, row in df.iterrows():
-                student_name = row['student']
+                personal_number = row['student']
                 grade = row['grade']
 
                 # Assuming you have a proper way to match students by name
-                student = StudentCourse.objects.get(student__full_name=student_name, course_term=course_term)
+                student = StudentCourse.objects.get(student__personal_number=personal_number, real_course_term=course_term)
 
                 # Update the grade for the student
                 student.grade = grade
