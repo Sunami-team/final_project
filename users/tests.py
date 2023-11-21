@@ -12,10 +12,10 @@ class TestAdminStudentApi(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.it_manager = ITManager.objects.create(
-            username="mrtaster", password="sinasina!@#"
+            username="mrtasterkhe", password="sinasina!@#", user_type='it_manager'
         )
         self.user = User.objects.create(
-            username="ya-adame-alaki", password="sinasina!@#"
+            username="ya-adame-alaki", password="sinasina!@#", user_type='user'
         )
         self.fake_college = Faculty.objects.create(name="alaki-hala")
         self.fake_study_field = StudyField.objects.create(
@@ -33,6 +33,7 @@ class TestAdminStudentApi(TestCase):
             college=self.fake_college,
             study_field=self.fake_study_field,
             military_status=True,
+            user_type='student'
         )
 
     def test_unauthorized_list_sudent_response_401(self):
@@ -154,6 +155,7 @@ class TestStudent(TestCase):
             password="sinasina123",
             study_field=self.fake_study_field,
             college=self.fake_collage,
+            user_type='deputy_educational',
         )
         self.fake_student = Student.objects.create(
             username="new_student1",
@@ -164,6 +166,7 @@ class TestStudent(TestCase):
             college=self.fake_collage,
             study_field=self.fake_study_field,
             military_status=True,
+            user_type='student'
         )
 
         self.fake_student2 = Student.objects.create(
@@ -175,6 +178,7 @@ class TestStudent(TestCase):
             college=self.fake_collage,
             study_field=self.fake_study_field,
             military_status=True,
+            user_type='student'
         )
 
     # Tests for /students/ GET method ---> access by Educational Deputy
@@ -288,8 +292,8 @@ class TestProfessor(TestCase):
             password="didichishod123",
             college=self.fake_collage,
             study_field=self.fake_study_field,
-            expertise=datetime.now(),
-            rank="OstatTamam",
+            expertise='dummy things',
+            rank='2',
         )
 
         self.fake_professor2 = Professor.objects.create(
@@ -297,8 +301,8 @@ class TestProfessor(TestCase):
             password="didichishod123",
             college=self.fake_collage,
             study_field=self.fake_study_field,
-            expertise=datetime.now(),
-            rank="OstatTamam",
+            expertise='dummy things',
+            rank='2',
         )
 
     # Tests for /professors/ GET method ---> access to Professors List by Educational Deputy
