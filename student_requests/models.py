@@ -8,6 +8,7 @@ class CourseRegistrationRequest(models.Model):
     )
     # requested_courses = models.ManyToManyField('courses.CourseTerm') #### get from StudentCourse ####
     approval_status = models.BooleanField(default=False)
+    adviser_professor = models.ForeignKey("users.professor",null=True,blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Registration Request by {self.student} - {'Approved' if self.approval_status else 'Pending'}"

@@ -21,6 +21,7 @@ et-xmlfile==1.1.0
 inflection==0.5.1
 kombu==5.3.2
 minio==7.2.0
+newpy==1.1.16
 numpy==1.26.2
 openpyxl==3.1.2
 packaging==23.2
