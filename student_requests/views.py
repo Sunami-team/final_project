@@ -874,17 +874,18 @@ class MilitaryServiceRequestApproval(generics.UpdateAPIView):
     serializer_class = MilitaryServiceRequestApprovalSerializer
     permission_classes = [IsDeputyEducational]
     queryset = MilitaryServiceRequest.objects.all()
+    allowed_methods = ['GET', 'PUT', 'PATCH'] 
 
     def get_queryset(self):
-        # deputy_id = self.kwargs.get('d_pk')
+        deputy_id = self.kwargs.get('d_pk')
         student_id = self.kwargs.get('pk')
+        student = Student
         queryset = super().get_queryset()
-        return queryset.filter(student_id=student_id)
+        return queryset.filter(student__id=student_id, deputy_educational__id=deputy_id)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        # old_status = instance.status
 
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
@@ -898,16 +899,6 @@ class MilitaryServiceRequestApproval(generics.UpdateAPIView):
             text = f"Dear {instance.student.full_name}, Your request was approved."
         else:
             text = f"Dear {instance.student.full_name}, Your request was rejected."
-        print(text)
         create_and_send_pdf.delay(email, text)
 
         return Response(serializer.data)
-
-
-class MilitaryServiceRequestUpdate(generics.APIView):
-    serializer_class = MilitaryServiceRequestApprovalSerializer
-    permission_classes = [IsDeputyEducational]
-    queryset = MilitaryServiceRequest.objects.all()
-
-    def get(self, request, d_pk, pk):
-        pass

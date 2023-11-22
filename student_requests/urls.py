@@ -120,7 +120,7 @@ urlpatterns = [
         name="military-service-request-detail"
     ),
     path(
-        'assistant/studying-evidence/<int:pk>/',
+        'assistant/<int:d_pk>/studying-evidence/<int:pk>/',
         views.MilitaryServiceRequestApproval.as_view(),
         name="military-service-request-approval"
     ),
