@@ -829,7 +829,7 @@ class StudentRequestList(generics.ListAPIView):
     serializer_class = MilitaryServiceRequestSerializer
 
     def get_queryset(self):
-        user_id = self.kwargs.get('pk')
+        user_id = self.kwargs.get('pk_or_me')
         User = get_user_model()
 
         if user_id == 'me':
@@ -852,7 +852,7 @@ class StudentRequestDetail(generics.RetrieveAPIView):
     serializer_class = MilitaryServiceRequestSerializer
 
     def get_object(self):
-        deputy_id = self.kwargs.get('pk')
+        deputy_id = self.kwargs.get('pk_or_me')
         student_id = self.kwargs.get('s_pk')
 
         # If 'me' is specified, use the current user's ID
