@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .permissions import (
+from users.permissions import (
     IsItManager,
     IsDeputyEducational,
     IsStudentOrDeputyEducational,
