@@ -9,7 +9,7 @@ from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsS
 from rest_framework import generics, status, serializers, viewsets, permissions
 from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, \
     CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, \
-    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
+    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, MilitaryServiceRequestApprovalSerializer
 from .serializers import TermDropSerializer, SelectionRequestSerializer, \
     SelectionShowSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
@@ -900,9 +900,9 @@ class MilitaryServiceRequestApproval(generics.UpdateAPIView):
     def get_queryset(self):
         deputy_id = self.kwargs.get('d_pk')
         student_id = self.kwargs.get('pk')
-        student = Student
+        student = Student.objects.get(id=student_id)
         queryset = super().get_queryset()
-        return queryset.filter(student__id=student_id, deputy_educational__id=deputy_id)
+        return queryset.filter(student=student)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
