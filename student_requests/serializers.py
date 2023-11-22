@@ -8,6 +8,7 @@ from .models import (
     EmergencyDropRequest,
     MilitaryServiceRequest,
 )
+from courses.serializers import CourseTermSerializer
 from django.conf import settings
 import os
 
@@ -317,5 +318,11 @@ class StudentSelectionFormSerializer(serializers.ModelSerializer):
             read_only_fields = ["student", "requested_courses", "adviser_professor", "approval_status"]
 
 
+class CourseCorrectionRequestSerializer(serializers.ModelSerializer):
+    courses_to_drop = CourseTermSerializer(many=True)
+    courses_to_add = CourseTermSerializer(many=True)
 
+    class Meta:
+        model = CourseCorrectionRequest
+        fields = ['student', 'courses_to_drop', 'courses_to_add']
 
