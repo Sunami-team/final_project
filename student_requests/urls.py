@@ -111,4 +111,6 @@ urlpatterns = [
     ),
     path('assistant/<str:pk_or_me>/studying-evidence/', views.StudentRequestList.as_view()),
     path('assistant/<str:pk_or_me>/studying-evidence/<int:s_pk>/', views.StudentRequestDetail.as_view()),
+    path('professor/<int:professor_id>/students-selection-forms/', views.StudentSelectionForm.as_view()),
+    path('professor/<int:professor_id>/students-selection-forms/<int:student_id>/term/<int:term_id>', views.StudentSelectionFormDetailAndApproveRejection.as_view()),
 ]
