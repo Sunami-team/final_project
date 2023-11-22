@@ -109,6 +109,21 @@ urlpatterns = [
         views.GradeReconsiderationRequestView.as_view(),
         name="student-reconsideration",
     ),
+    path(
+        'assistant/<str:pk_or_me>/studying-evidence/',
+        views.StudentRequestList.as_view(),
+        name="military-service-request-list"
+    ),
+    path(
+        'assistant/<str:pk_or_me>/studying-evidence/<int:s_pk>/',
+        views.StudentRequestDetail.as_view(),
+        name="military-service-request-detail"
+    ),
+    path(
+        'assistant/<int:d_pk>/studying-evidence/<int:pk>/',
+        views.MilitaryServiceRequestApproval.as_view(),
+        name="military-service-request-approval"
+    ),
     path('assistant/<str:pk_or_me>/studying-evidence/', views.StudentRequestList.as_view()),
     path('assistant/<str:pk_or_me>/studying-evidence/<int:s_pk>/', views.StudentRequestDetail.as_view()),
     path('professor/<int:professor_id>/students-selection-forms/', views.StudentSelectionForm.as_view()),
