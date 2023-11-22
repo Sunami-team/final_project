@@ -695,3 +695,89 @@ C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\student_requests\views
 Watching for file changes with StatReloader
 Method Not Allowed: /v1/student_requests/assistant/5/studying-evidence/2/
 "PATCH /v1/student_requests/assistant/5/studying-evidence/2/ HTTP/1.1" 405 42
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Internal Server Error: /v1/student_requests/student/2/studying-evidence/
+Traceback (most recent call last):
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\viewsets.py", line 125, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\mixins.py", line 54, in retrieve
+    instance = self.get_object()
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\generics.py", line 96, in get_object
+    obj = get_object_or_404(queryset, **filter_kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\generics.py", line 19, in get_object_or_404
+    return _get_object_or_404(queryset, *filter_args, **filter_kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\shortcuts.py", line 85, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\db\models\query.py", line 640, in get
+    raise self.model.MultipleObjectsReturned(
+student_requests.models.MilitaryServiceRequest.MultipleObjectsReturned: get() returned more than one MilitaryServiceRequest -- it returned 2!
+"GET /v1/student_requests/student/2/studying-evidence/ HTTP/1.1" 500 118120
+Internal Server Error: /v1/student_requests/assistant/5/studying-evidence/2/
+Traceback (most recent call last):
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\generics.py", line 208, in get
+    return self.retrieve(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\mixins.py", line 54, in retrieve
+    instance = self.get_object()
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\student_requests\views.py", line 874, in get_object
+    request = get_object_or_404(MilitaryServiceRequest, student_id=student_id)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\shortcuts.py", line 85, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\db\models\query.py", line 640, in get
+    raise self.model.MultipleObjectsReturned(
+student_requests.models.MilitaryServiceRequest.MultipleObjectsReturned: get() returned more than one MilitaryServiceRequest -- it returned 2!
+"GET /v1/student_requests/assistant/5/studying-evidence/2/ HTTP/1.1" 500 116943
+"GET /v1/student_requests/assistant/5/studying-evidence/ HTTP/1.1" 200 301
+Watching for file changes with StatReloader
+"GET /my-admin/ HTTP/1.1" 200 18291
+"GET /my-admin/ HTTP/1.1" 200 18291
+Watching for file changes with StatReloader
+"GET /my-admin/ HTTP/1.1" 302 0
+"GET /my-admin/login/?next=/my-admin/ HTTP/1.1" 200 4290
+"GET /static/admin/css/base.css HTTP/1.1" 200 21207
+"GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+"GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+"GET /static/admin/css/login.css HTTP/1.1" 200 958
+"GET /static/admin/css/responsive.css HTTP/1.1" 200 18533
+"GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+"GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+"GET /my-admin/login/?next=/my-admin/ HTTP/1.1" 200 4290
+"POST /my-admin/login/?next=/my-admin/ HTTP/1.1" 302 0
+"GET /my-admin/ HTTP/1.1" 200 18291
+"GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+"GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+"GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+"GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+Watching for file changes with StatReloader
+Not Found: /my-admin/static
+"GET /my-admin/static HTTP/1.1" 404 7291
