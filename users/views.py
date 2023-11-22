@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .permissions import (
+from users.permissions import (
     IsItManager,
     IsDeputyEducational,
     IsStudentOrDeputyEducational,
@@ -31,6 +31,9 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .tasks import send_email
 from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from django.utils.translation import gettext as _
+from rest_framework.exceptions import NotFound
+from rest_framework.viewsets import ModelViewSet
 # I add this comment to commit and remove migration files
 
 
@@ -412,3 +415,10 @@ class ProfessorInfoViewSet(viewsets.ModelViewSet):
             raise NotFound(ـ("Professor not found"))
 
         return Professor.objects.filter(id=professor.id)
+
+      
+ class TermViewSet(ModelViewSet):
+    serializer_class = TermSerializer
+    queryset = Term.objects.all().prefetch_related(
+        'termstudentprofessor_set__students', 'termstudentprofessor_set__professors')
+    permission_classes = [IsItManager]

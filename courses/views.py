@@ -173,7 +173,7 @@ class CourseSelectionViewSet(viewsets.ViewSet):
     def send_form(self, request, pk=None):
         pass
 
-      
+
 class CourseSelectionCreateView(generics.CreateAPIView):
     serializer_class = CourseSelectionSerializer
 
@@ -278,7 +278,7 @@ class CourseSelectionViewSet(viewsets.ViewSet):
     def send_form(self, request, pk=None):
         pass
 
-      
+
 class CourseSelectionCreateView(generics.CreateAPIView):
     serializer_class = CourseSelectionSerializer
 
@@ -337,7 +337,7 @@ class CourseTermList(generics.GenericAPIView):
      def get(self, request, term_id):
         try:
             data = CourseTerm.objects.all()
-            serializer = CourseTermSerializer(data, many=True)        
+            serializer = CourseTermSerializer(data, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CourseTerm.DoesNotExist:
             return Response("Course Does Not Exists!", status=status.HTTP_404_NOT_FOUND)
@@ -360,7 +360,7 @@ class CourseTermList(generics.GenericAPIView):
         else:
             return Response({"details": "Time is Up!!!"}, status=status.HTTP_400_BAD_REQUEST)
 
-    
+
 
 class CourseTermDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = CourseTerm.objects.all()

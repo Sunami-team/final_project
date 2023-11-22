@@ -28,6 +28,7 @@ class TestDropTerm(TestCase):
             password="sinasina123",
             college=self.fake_collage,
             study_field=self.fake_study_field,
+            user_type='deputy_educational'
         )
         self.fake_student = Student.objects.create(
             username="new_student1",
@@ -41,6 +42,7 @@ class TestDropTerm(TestCase):
             email="sinahs1992@gmail.com",
             first_name="sina",
             last_name="hosseini",
+            user_type="student",
         )
 
         self.fake_professor = Professor.objects.create(
@@ -50,6 +52,7 @@ class TestDropTerm(TestCase):
             study_field=self.fake_study_field,
             expertise=datetime.now(),
             rank="OstatTamam",
+            user_type='professor'
         )
 
         self.fake_term = Term.objects.create(
@@ -92,7 +95,7 @@ class TestDropTerm(TestCase):
             "student_requests:remove-term-detail",
             kwargs={"student_id": self.fake_student.pk, "term_id": self.fake_term.pk},
         )
-        print("THIS IS URL :", url)
+
         self.client.force_authenticate(self.fake_deputy_educational)
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -141,6 +144,7 @@ class TestAssistantGradeCorrection(TestCase):
             college=self.fake_collage,
             study_field=self.fake_study_field,
             military_status=True,
+            user_type='student',
         )
 
         self.fake_professor = Professor.objects.create(
@@ -148,14 +152,16 @@ class TestAssistantGradeCorrection(TestCase):
             password="didichishod123",
             college=self.fake_collage,
             study_field=self.fake_study_field,
-            expertise=datetime.now(),
-            rank="OstatTamam",
+            expertise='dummy',
+            rank="2",
+            user_type='professor',
         )
         self.fake_course = Course.objects.create(
             name="Math", course_type="G", college=self.fake_collage
         )
         self.fake_term = Term.objects.create(
             name="Mehr",
+            pre_GPA_term=15,
             start_course_selection=date(year=2023, month=6, day=1),
             end_course_selection=date(year=2023, month=6, day=15),
             start_classes=date(year=2023, month=6, day=16),
@@ -185,6 +191,7 @@ class TestAssistantGradeCorrection(TestCase):
             password="sinasina123",
             college=self.fake_collage,
             study_field=self.fake_study_field,
+            user_type='deputy_educational'
         )
 
     def test_assistant_grade_correction_list_status_200(self):
@@ -197,6 +204,7 @@ class TestAssistantGradeCorrection(TestCase):
         )
         self.client.force_authenticate(user=self.fake_deputy_educational)
         response = self.client.get(url)
+        print('ZERNAZAN', response.context)
         self.assertEqual(response.status_code, 200)
 
     def test_assistant_grade_correction_list_status_forbidden_403(self):
