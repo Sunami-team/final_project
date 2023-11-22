@@ -62,7 +62,7 @@ class ChangePasswordToken(models.Model):
 
 
 class Student(User):
-    entry_year = models.PositiveIntegerField()
+    entry_year = models.PositiveIntegerField(null=True, blank=True)
     entry_term = models.CharField(max_length=20)
     average = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     college = models.ForeignKey(
@@ -81,10 +81,6 @@ class Student(User):
     )
     military_status = models.BooleanField(null=True, blank=True)
     seniority = models.PositiveIntegerField(null=True, blank=True)
-    study_field = models.ForeignKey(
-        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='students_field')
-    military_status = models.BooleanField()
-    seniority = models.PositiveIntegerField()
 
 
     class Meta:
@@ -130,8 +126,6 @@ class Professor(User):
         null=True,
         blank=True,
     )
-    study_field = models.ForeignKey(
-        'courses.StudyField', on_delete=models.DO_NOTHING, related_name='professor_study')
     expertise = models.TextField()
     rank = models.CharField(max_length=1, choices=RANK_CHOICES, default="1")
 
