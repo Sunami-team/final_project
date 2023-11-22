@@ -9,7 +9,7 @@ from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsS
 from rest_framework import generics, status, serializers, viewsets, permissions
 from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, \
     CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, \
-    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
+    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, MilitaryServiceRequestApprovalSerializer
 from .serializers import TermDropSerializer, SelectionRequestSerializer, \
     SelectionShowSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
@@ -828,7 +828,7 @@ class GradeReconsiderationRequestView(generics.GenericAPIView):
 
 class StudentRequestList(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsDeputyEducational]
-    serializer_class = MilitaryServiceRequestSerializer
+    serializer_class = MilitaryServiceRequestApprovalSerializer
 
     def get_queryset(self):
         user_id = self.kwargs.get('pk_or_me')
@@ -851,7 +851,7 @@ class StudentRequestList(generics.ListAPIView):
 
 class StudentRequestDetail(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated, IsDeputyEducational]
-    serializer_class = MilitaryServiceRequestSerializer
+    serializer_class = MilitaryServiceRequestApprovalSerializer
 
     def get_object(self):
         deputy_id = self.kwargs.get('pk_or_me')
@@ -874,7 +874,6 @@ class StudentRequestDetail(generics.RetrieveAPIView):
         except NotFound:
             # If no request found for this student, raise a NotFound exception
             raise NotFound("request for the specified student not found.")
-
         return request
 
 
@@ -891,6 +890,39 @@ class StudentSelectionForm(generics.GenericAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CourseRegistrationRequest.DoesNotExist:
             return Response({_('errors'): _('courses selected does not exist')}, status=status.HTTP_404_NOT_FOUND)
+
+
+class MilitaryServiceRequestApproval(generics.UpdateAPIView):
+    serializer_class = MilitaryServiceRequestApprovalSerializer
+    permission_classes = [IsDeputyEducational]
+    queryset = MilitaryServiceRequest.objects.all()
+
+    def get_queryset(self):
+        deputy_id = self.kwargs.get('d_pk')
+        student_id = self.kwargs.get('pk')
+        student = Student.objects.get(id=student_id)
+        queryset = super().get_queryset()
+        return queryset.filter(student=student)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        new_status = serializer.validated_data.get('status')
+        email = instance.student.email
+        text = ""
+
+        if new_status == True:  # Assuming True indicates approval and False indicates rejection
+            text = f"Dear {instance.student.full_name}, Your request was approved."
+        else:
+            text = f"Dear {instance.student.full_name}, Your request was rejected."
+        create_and_send_pdf.delay(email, text)
+
+        return Response(serializer.data)
 
 
 class StudentSelectionFormDetailAndApproveRejection(generics.GenericAPIView):

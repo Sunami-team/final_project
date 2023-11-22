@@ -134,6 +134,7 @@ class CourseSelectionStudentRequest(models.Model):
 
 class MilitaryServiceRequest(models.Model):
     student = models.ForeignKey("users.Student", on_delete=models.CASCADE)
+    # deputy_educational = models.ForeignKey("users.DeputyEducational", on_delete=models.CASCADE)
     term = models.ForeignKey("courses.Term", on_delete=models.CASCADE)
     proof_document = models.FileField(upload_to="military_docs/")
     issuance_place = models.CharField(max_length=100)
