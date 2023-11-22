@@ -563,7 +563,8 @@ class MilitaryServiceRequestViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, IsStudent]
 
     def perform_create(self, serializer):
-        serializer.save(student=self.request.user)
+        student_instance = Student.objects.get(pk=self.request.user.id)
+        serializer.save(student=student_instance)
 
     lookup_field = 'student_id'
 

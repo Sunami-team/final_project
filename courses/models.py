@@ -53,7 +53,7 @@ class Term(models.Model):
     end_term = models.DateField()
 
     def __str__(self):
-        return f"{self.name} --> {self.start_classes.year}"
+        return f"{self.id} --> {self.name} --> {self.start_classes.year}"
 
 
 class CourseTerm(models.Model):

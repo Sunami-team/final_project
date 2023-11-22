@@ -194,13 +194,13 @@ class CorrectionShowSerializer(serializers.ModelSerializer):
     
 
 class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MilitaryServiceRequest
+        fields = ["student", "term", "proof_document", "issuance_place"]
+
     def __init__(self, *args, **kwargs):
         self.student_id = kwargs.pop("student_id", None)
         super().__init__(*args, **kwargs)
-
-    class Meta:
-        model = MilitaryServiceRequest
-        fields = ["term", "proof_document", "issuance_place"]
 
     def create(self, validated_data):
         proof_document = self.context["request"].data.get("proof_document")
@@ -301,8 +301,9 @@ class StudentGradeReconsiderationRequestSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("response_text",)
 
-
+"""
 class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
     class meta:
         model = MilitaryServiceRequest
         fields = "__all__"
+"""
