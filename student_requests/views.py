@@ -9,7 +9,8 @@ from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsS
 from rest_framework import generics, status, serializers, viewsets, permissions
 from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, \
     CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, \
-    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, MilitaryServiceRequestApprovalSerializer
+    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, CourseCorrectionRequestSerializer, \
+    MilitaryServiceRequestApprovalSerializer
 from .serializers import TermDropSerializer, SelectionRequestSerializer, \
     SelectionShowSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
@@ -958,3 +959,18 @@ class StudentSelectionFormDetailAndApproveRejection(generics.GenericAPIView):
             send_email.delay(student.email, f'{student.first_name} {student.last_name} ,Registration Not Approved!')
             return Response({_('details'): _('Request Failed')}, status=status.HTTP_200_OK)
         return Response({_('details'): _('Request Accepted')}, status=status.HTTP_200_OK)
+
+
+class CourseCorrectionRequestView(ModelViewSet):
+    queryset = CourseCorrectionRequest.objects.all()
+    serializer_class = CourseCorrectionRequestSerializer
+
+    def list(self, request, pk=None):
+        course_correction_requests = CourseCorrectionRequest.objects.filter(student__professor=pk)
+        serializer = self.get_serializer(course_correction_requests, many=True)
+        return Response(serializer.data)
+ 
+    def retrieve(self, request, pk=None, s_pk=None):
+        course_correction_form = get_object_or_404(CourseCorrectionStudentSendToAssistant, student__professor=pk, pk=s_pk)
+        serializer = self.get_serializer(course_correction_form)
+        return Response(serializer.data)
