@@ -417,8 +417,7 @@ class ProfessorInfoViewSet(viewsets.ModelViewSet):
         return Professor.objects.filter(id=professor.id)
 
       
- class TermViewSet(ModelViewSet):
+class TermViewSet(ModelViewSet):
     serializer_class = TermSerializer
-    queryset = Term.objects.all().prefetch_related(
-        'termstudentprofessor_set__students', 'termstudentprofessor_set__professors')
+    queryset = Term.objects.all().prefetch_related('termstudentprofessor_set__students', 'termstudentprofessor_set__professors')
     permission_classes = [IsItManager]

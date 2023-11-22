@@ -821,5 +821,58 @@ class GradeReconsiderationRequestView(generics.GenericAPIView):
             return Response(_("Removed Successfully"), status=status.HTTP_200_OK)
          except GradeReconsiderationRequest.DoesNotExist:
              return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
+
+
+class StudentRequestList(generics.ListAPIView):
+    permission_classes = [IsAuthenticated, IsDeputyEducational]
+    serializer_class = MilitaryServiceRequestSerializer
+
+    def get_queryset(self):
+        user_id = self.kwargs.get('pk')
+        User = get_user_model()
+
+        if user_id == 'me':
+            user_id = self.request.user.id
+
+        # Check if the user ID corresponds to a DeputyEducational
+        try:
+            # Try to get a DeputyEducational with the provided ID
+            deputy_educational = get_object_or_404(DeputyEducational, pk=user_id)
+        except NotFound:
+            # If no DeputyEducational found, return an empty queryset
+            return MilitaryServiceRequest.objects.none()
+
+        # If valid DeputyEducational, return all emergency drop requests
+        return MilitaryServiceRequest.objects.all()
+
+
+class StudentRequestDetail(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated, IsDeputyEducational]
+    serializer_class = MilitaryServiceRequestSerializer
+
+    def get_object(self):
+        deputy_id = self.kwargs.get('pk')
+        student_id = self.kwargs.get('s_pk')
+
+        # If 'me' is specified, use the current user's ID
+        if deputy_id == 'me':
+            deputy_id = self.request.user.id
+
+        # Check if the DeputyEducational exists
+        try:
+            get_object_or_404(DeputyEducational, pk=deputy_id)
+        except NotFound:
+            # If no DeputyEducational found, raise a NotFound exception
+            raise NotFound("DeputyEducational not found.")
+
+        # Filter emergency drop requests based on the student ID
+        try:
+            request = get_object_or_404(MilitaryServiceRequest, student_id=student_id)
+        except NotFound:
+            # If no request found for this student, raise a NotFound exception
+            raise NotFound("request for the specified student not found.")
+
+        return request
+
  
 

@@ -6,6 +6,7 @@ class CourseRegistrationRequest(models.Model):
     requested_courses = models.ManyToManyField(
         "courses.CourseTerm", related_name="course_registration_request"
     )
+    # requested_courses = models.ManyToManyField('courses.CourseTerm') #### get from StudentCourse ####
     approval_status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -20,6 +21,8 @@ class CourseCorrectionRequest(models.Model):
     courses_to_add = models.ManyToManyField(
         "courses.CourseTerm", related_name="add_requests_course_correction"
     )
+    # courses_to_drop = models.ManyToManyField('courses.CourseTerm', related_name='drop_requests') #### get from StudentCourse ####
+    # courses_to_add = models.ManyToManyField('courses.CourseTerm', related_name='add_requests') #### get from StudentCourse ####
     approval_status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -31,7 +34,6 @@ class GradeReconsiderationRequest(models.Model):
     course = models.ForeignKey("courses.CourseTerm", on_delete=models.CASCADE)
     reconsideration_text = models.TextField()
     response_text = models.TextField(blank=True)
-    approve = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Grade Reconsideration for {self.course} by {self.student}"
@@ -46,6 +48,9 @@ class EmergencyDropRequest(models.Model):
     student = models.ForeignKey("users.Student", on_delete=models.CASCADE)
     course = models.ForeignKey("courses.CourseTerm", on_delete=models.CASCADE)
     result = models.CharField(default="pending", max_length=100, choices=CHOICES)
+    # course = models.ForeignKey(
+    #     'courses.StudentCourse', on_delete=models.DO_NOTHING)
+    result = models.BooleanField(default=False)
     student_comment = models.TextField()
     deputy_educational_comment = models.TextField(blank=True)
 

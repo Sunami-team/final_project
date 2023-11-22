@@ -84,7 +84,6 @@ class TermDropSerializer(serializers.ModelSerializer):
     student_id = serializers.CharField(source="student.id", read_only=True)
     term_name = serializers.CharField(source="term.name", read_only=True)
     accept = serializers.BooleanField(default=False, write_only=True)
-
     class Meta:
         model = TermDropRequest
         fields = (
@@ -134,7 +133,6 @@ class AssistantGradeReconsiderationRequestSerializer(serializers.ModelSerializer
         source="course.professor.last_name", read_only=True
     )
     approve = serializers.BooleanField(write_only=True)
-
     class Meta:
         model = GradeReconsiderationRequest
         fields = (
@@ -159,7 +157,6 @@ class CorrectionRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseCorrectionStudentRequest
         exclude = ["student", "approval_status"]
-
 
 class CourseTermSerializerForCorrection(serializers.ModelSerializer):
     course_id = serializers.CharField(source="course.id")
@@ -194,7 +191,7 @@ class CorrectionShowSerializer(serializers.ModelSerializer):
         ).data
 
         return rep
-
+    
 
 class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
@@ -225,7 +222,6 @@ class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
 class MilitaryServiceRequestRetriveSerializer(serializers.ModelSerializer):
     student = serializers.CharField()
     term = serializers.CharField()
-
     class Meta:
         model = MilitaryServiceRequest
         fields = ["student", "term", "proof_document", "issuance_place"]
@@ -304,3 +300,9 @@ class StudentGradeReconsiderationRequestSerializer(serializers.ModelSerializer):
             "approve",
         )
         read_only_fields = ("response_text",)
+
+
+class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
+    class meta:
+        model = MilitaryServiceRequest
+        fields = "__all__"

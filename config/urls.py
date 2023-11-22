@@ -54,6 +54,7 @@ urlpatterns += i18n_patterns(
     path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
     prefix_default_language=False,
 )
+
 # to access file urls
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
