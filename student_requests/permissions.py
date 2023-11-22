@@ -2,6 +2,10 @@ from users.models import Student, DeputyEducational
 from rest_framework import permissions
 
 
+def has_user_type_permission(user, user_type):
+    return user.user_type == user_type
+
+
 class IsDeputyEducational(permissions.BasePermission):
     """
     Custom permission to only allow access to Deputy Educational users.
@@ -10,8 +14,8 @@ class IsDeputyEducational(permissions.BasePermission):
     def has_permission(self, request, view):
         # Check if the user is authenticated and is a Deputy Educational
         return (
-            request.user.is_authenticated
-            and request.user.user_type == "deputy_educational"
+                request.user.is_authenticated
+                and request.user.user_type == "deputy_educational"
         )
 
 

@@ -2,6 +2,10 @@ from rest_framework import permissions
 from .models import ITManager, DeputyEducational, Professor, Student, User
 
 
+def has_user_type_permission(user, user_type):
+    return user.user_type == user_type
+
+
 class IsItManager(permissions.BasePermission):
     def has_permission(self, request, view):
         return isinstance(request.user, ITManager)
@@ -41,19 +45,19 @@ class IsStudentOrDeputyEducational(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if (
-            (
-                view.request.method == "PUT"
-                or view.request.method == "PATCH"
-                or view.request.method == "GET"
-            )
-            and isinstance(request.user, User)
-            and request.user.is_student
+                (
+                        view.request.method == "PUT"
+                        or view.request.method == "PATCH"
+                        or view.request.method == "GET"
+                )
+                and isinstance(request.user, User)
+                and request.user.is_student
         ):
             return True
         elif (
-            view.request.method == "GET"
-            and isinstance(request.user, User)
-            and request.user.is_deputy_educational
+                view.request.method == "GET"
+                and isinstance(request.user, User)
+                and request.user.is_deputy_educational
         ):
             return True
         return False
@@ -71,19 +75,19 @@ class IsProfessorOrDeputyEducational(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if (
-            (
-                view.request.method == "PUT"
-                or view.request.method == "PATCH"
-                or view.request.method == "GET"
-            )
-            and isinstance(request.user, User)
-            and request.user.is_professor
+                (
+                        view.request.method == "PUT"
+                        or view.request.method == "PATCH"
+                        or view.request.method == "GET"
+                )
+                and isinstance(request.user, User)
+                and request.user.is_professor
         ):
             return True
         elif (
-            view.request.method == "GET"
-            and isinstance(request.user, User)
-            and request.user.is_deputy_educational
+                view.request.method == "GET"
+                and isinstance(request.user, User)
+                and request.user.is_deputy_educational
         ):
             return True
         return False
