@@ -26,7 +26,7 @@ class StudentAdmin(ImportExportModelAdmin):
     resource_class = StudentResource
     list_display = ('username', 'first_name', 'last_name', 'entry_year', 'study_field', 'average')
     search_fields = ('username', 'first_name', 'last_name', 'study_field__name')
-    list_filter = ('entry_year', 'study_field')
+    list_filter = ['study_field']
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -64,9 +64,9 @@ class ProfessorResource(resources.ModelResource):
 # Professor Admin
 class ProfessorAdmin(ImportExportModelAdmin):
     resource_class = ProfessorResource
-    list_display = ('username', 'first_name', 'last_name', 'faculty', 'study_field', 'rank')
+    list_display = ('username', 'first_name', 'last_name', 'study_field', 'rank')
     search_fields = ('username', 'first_name', 'last_name', 'faculty__name', 'study_field__name')
-    list_filter = ('faculty', 'study_field')
+    list_filter = ['study_field']
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -93,9 +93,9 @@ admin.site.register(ITManager, ITManagerAdmin)
 
 
 class DeputyEducationalAdmin(admin.ModelAdmin):
-    list_display = ('username', 'first_name', 'last_name', 'faculty', 'study_field')
+    list_display = ('username', 'first_name', 'last_name',  'study_field')
     search_fields = ('username', 'first_name', 'last_name', 'faculty__name', 'study_field__name')
-    list_filter = ('faculty', 'study_field')
+    list_filter = ['study_field']
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
