@@ -13,6 +13,39 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    
+    "formatters": {
+        "CLF": {
+            "format": " {remote_addr} - {remote_user} [{asctime}] '{request_method} {path_info} {server_protocol}' {status_code} {content_length}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+            "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "Golestan.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True,
+            "formatter": "CLF"
+        },
+    },
+}
+
+
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
