@@ -136,6 +136,7 @@ class MilitaryServiceRequest(models.Model):
     term = models.ForeignKey("courses.Term", on_delete=models.CASCADE)
     proof_document = models.FileField(upload_to="military_docs/")
     issuance_place = models.CharField(max_length=100)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Military Service Request for {self.term} by {self.student} - Issuance Place: {self.issuance_place}"
