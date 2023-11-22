@@ -62,18 +62,6 @@ class ExamScheduleSerializer(serializers.ModelSerializer):
     def get_exam_location(self, obj):
         return obj.real_course_term.exam_location
 
-"""
-class CourseTermSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CourseTerm
-        fields = [
-            "course",
-            "course_day",
-            "course_time" "class_location",
-            "exam_date_time",
-            "exam_location",
-        ]
-"""
 
 class TermDropSerializer(serializers.ModelSerializer):
     student_first_name = serializers.CharField(
@@ -159,6 +147,7 @@ class CorrectionRequestSerializer(serializers.ModelSerializer):
         model = CourseCorrectionStudentRequest
         exclude = ["student", "approval_status"]
 
+
 class CourseTermSerializerForCorrection(serializers.ModelSerializer):
     course_id = serializers.CharField(source="course.id")
     course_name = serializers.CharField(source="course.name")
@@ -197,8 +186,8 @@ class CorrectionShowSerializer(serializers.ModelSerializer):
 class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = MilitaryServiceRequest
-        fields = ["student", "term", "proof_document", "issuance_place"]
-
+        fields = ["student", "term", "proof_document", "issuance_place", "status"]
+    
     def __init__(self, *args, **kwargs):
         self.student_id = kwargs.pop("student_id", None)
         super().__init__(*args, **kwargs)
@@ -302,12 +291,11 @@ class StudentGradeReconsiderationRequestSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("response_text",)
 
-"""
-class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
-    class meta:
+
+class MilitaryServiceRequestApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
         model = MilitaryServiceRequest
         fields = "__all__"
-"""
 
 
 class StudentSelectionFormSerializer(serializers.ModelSerializer):
