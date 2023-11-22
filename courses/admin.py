@@ -16,7 +16,7 @@ from .permissions import has_user_type_permission
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'course_unit', 'course_type')
     search_fields = ('name', 'faculty__name')
-    filter_horizontal = ('faculty', 'pre_requisites', 'co_requisites')
+    #filter_horizontal = ('faculty', 'pre_requisites', 'co_requisites')
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:
@@ -48,9 +48,9 @@ admin.site.register(CourseTerm, CourseTermAdmin)
 
 
 class StudentCourseAdmin(admin.ModelAdmin):
-    list_display = ('student', 'course_term', 'status', 'grade')
+    list_display = ('student', 'course_term', 'grade')
     search_fields = ('student__first_name', 'student__last_name', 'course_term__course__name')
-    list_filter = ('status', 'term')
+    list_filter = ['term']
 
     def has_change_permission(self, request, obj=None):
         if request.user.is_superuser:

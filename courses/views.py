@@ -1,5 +1,7 @@
 from rest_framework import viewsets
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.permissions import IsAuthenticated, OR
+
 from .models import Term
 from .serializers import *
 from rest_framework import generics
@@ -24,20 +26,20 @@ from rest_framework import viewsets, generics
 import pandas as pd
 from rest_framework.parsers import FileUploadParser
 from rest_framework.views import APIView
-from users.permissions import IsProfessor
+from users.permissions import IsProfessor, IsStudent
 from rest_framework.viewsets import ModelViewSet
 from users.permissions import (
     IsItManager,
     IsDeputyEducational,
     IsItManagerOrDeputyEducational,
 )
-from .permissions import IsItManager
+from .permissions import IsItManager, IsAdminOrEducationalDeputyOrAdvisor
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from users.pagination import CustomPageNumberPagination
 from datetime import datetime
-from users.models import DeputyEducational
+from users.models import DeputyEducational, Student
 from django.shortcuts import get_object_or_404
 
 
@@ -367,3 +369,74 @@ class CourseTermDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CourseTermSerializer
     permission_classes = permission_classes = [IsItManager, IsDeputyEducational]
     pagination_class = CustomPageNumberPagination
+
+def get_current_term():
+    today = timezone.now().date()
+    try:
+        # Finding a term where the current date falls between the start and end dates
+        current_term = Term.objects.get(start_classes__lte=today, end_classes__gte=today)
+        return current_term
+    except Term.DoesNotExist:
+        return None
+
+
+class AvailableCoursesList(ListAPIView):
+    serializer_class = CourseTermSerializer
+    permission_classes = [IsAuthenticated, IsStudent]
+    pagination_class = CustomPageNumberPagination
+
+    def get_queryset(self):
+        student_id = self.kwargs['pk']
+        if student_id == 'me':
+            student_id = self.request.user.pk
+        student = Student.objects.get(pk=student_id)
+
+        current_term = get_current_term()
+
+        course_ids_for_term = CourseTerm.objects.filter(term=current_term).values_list('course', flat=True)
+
+        return Course.objects.filter(id__in=course_ids_for_term).exclude(id__in=student.passed_courses.all()).exclude(
+            id__in=student.current_courses.all())
+
+
+class PassedCoursesReport(APIView):
+    permission_classes = [IsAuthenticated, OR(IsAdminOrEducationalDeputyOrAdvisor, IsStudent)]
+
+    def get(self, request, pk):
+        try:
+            student = Student.objects.get(pk=pk)
+            passed_courses = student.passed_courses.all()
+            serializer = CourseSerializer(passed_courses, many=True)
+            return Response(serializer.data)
+        except Student.DoesNotExist:
+            return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CurrentCoursesList(APIView):
+    permission_classes = [IsAuthenticated, OR(IsAdminOrEducationalDeputyOrAdvisor, IsStudent)]
+
+    def get(self, request, pk):
+        try:
+            student = Student.objects.get(pk=pk)
+            current_courses = student.current_courses.all()
+            serializer = CourseSerializer(current_courses, many=True)
+            return Response(serializer.data)
+        except Student.DoesNotExist:
+            return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RemainingYearsOfStudy(APIView):
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def get(self, request, pk=None):
+        if pk == 'me':
+            pk = request.user.pk
+
+        student = Student.objects.get(pk=pk)
+        current_year = datetime.now().year
+        remaining_years = 4 - (current_year - student.entry_year)
+        return Response({'remaining_years': remaining_years})
