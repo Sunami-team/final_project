@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
 from .models import User, Student, ChangePasswordToken, DeputyEducational, Professor
-from courses.models import Faculty
+from courses.models import Faculty, Term
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import get_user_model
+from django.db.models import F
 
 
 User = get_user_model()
@@ -212,3 +213,24 @@ class ProfessorInfoSerializer(serializers.ModelSerializer):
             "rank",
         ]
         read_only_fields = ["personal_number"]
+
+        
+class TermSerializer(serializers.ModelSerializer):
+    students = serializers.SerializerMethodField()
+    professors = serializers.SerializerMethodField()
+
+    def get_students(self, obj):
+        students = obj.termstudentprofessor_set.all().values(
+            first_name = F('students__first_name'), last_name = F('students__last_name'))
+        return students
+
+    def get_professors(self, obj):
+        professors = obj.termstudentprofessor_set.all().values(
+            first_name = F('professors__first_name'), last_name = F('professors__last_name'))
+        return professors
+
+class Meta:
+        model = Term
+        fields = ['name', 'start_course_selection', 'end_course_selection', 'start_classes', 'end_classes', 'start_course_correction',
+                  'end_course_correction', 'end_emergency_drop', 'start_exams', 'end_term', 'students', 'professors']
+    
