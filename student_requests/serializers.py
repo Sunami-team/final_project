@@ -307,3 +307,15 @@ class MilitaryServiceRequestSerializer(serializers.ModelSerializer):
         model = MilitaryServiceRequest
         fields = "__all__"
 """
+
+
+class StudentSelectionFormSerializer(serializers.ModelSerializer):
+        approve = serializers.BooleanField(write_only=True)
+        class Meta:
+            model = CourseRegistrationRequest
+            fields = ("student", "requested_courses", "approval_status","adviser_professor", "approve")
+            read_only_fields = ["student", "requested_courses", "adviser_professor", "approval_status"]
+
+
+
+
