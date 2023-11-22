@@ -82,13 +82,6 @@ class Student(User):
     military_status = models.BooleanField(null=True, blank=True)
     seniority = models.PositiveIntegerField(null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.id}"
-    
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
-
-
     class Meta:
         verbose_name = "Student"
         verbose_name_plural = "Students"

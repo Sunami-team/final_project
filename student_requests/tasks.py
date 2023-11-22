@@ -38,7 +38,7 @@ def create_and_send_pdf(recipient_email, text):
 
     # Create an EmailMessage with the PDF as attachment
     email = EmailMessage(
-        'Subject: Your PDF',
+        'Subject: Military Service Request Approval',
         'Body: Please find the attached PDF file.',
         'dev.fahima@gmail.com',  # Replace with your sender email
         [recipient_email],

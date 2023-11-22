@@ -872,7 +872,7 @@ class StudentRequestDetail(generics.RetrieveAPIView):
 
 class MilitaryServiceRequestApproval(generics.UpdateAPIView):
     serializer_class = MilitaryServiceRequestApprovalSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsDeputyEducational]
     queryset = MilitaryServiceRequest.objects.all()
 
     def get_queryset(self):
@@ -902,3 +902,12 @@ class MilitaryServiceRequestApproval(generics.UpdateAPIView):
         create_and_send_pdf.delay(email, text)
 
         return Response(serializer.data)
+
+
+class MilitaryServiceRequestUpdate(generics.APIView):
+    serializer_class = MilitaryServiceRequestApprovalSerializer
+    permission_classes = [IsDeputyEducational]
+    queryset = MilitaryServiceRequest.objects.all()
+
+    def get(self, request, d_pk, pk):
+        pass
