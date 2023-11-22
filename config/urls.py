@@ -36,7 +36,7 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-urlpatterns = [path("admin/", admin.site.urls)]
+urlpatterns = [path('my-admin/', admin.site.urls)]
 urlpatterns += i18n_patterns(
     path("v1/users/", include("users.urls")),
     path("v1/courses/", include("courses.urls")),

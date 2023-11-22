@@ -1,9 +1,15 @@
 from users.models import User, Student, Professor, DeputyEducational
 from courses.models import Course, CourseTerm, Term, StudentCourse
-from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, StudentGradeReconsiderationRequestSerializer, ClassScheduleSerializer, ExamScheduleSerializer, StudentSelectionFormSerializer
+from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, \
+    CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, \
+    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer, TermRemovalRequestSerializer, \
+    StudentGradeReconsiderationRequestSerializer, ClassScheduleSerializer, ExamScheduleSerializer, \
+    StudentSelectionFormSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsProfessor, IsStudent, IsItManagerOrDeputyEducational
 from rest_framework import generics, status, serializers, viewsets, permissions
-from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
+from .serializers import TermDropSerializer, AssistantGradeReconsiderationRequestSerializer, \
+    CorrectionRequestSerializer, CorrectionShowSerializer, EmergencyDropRequestSerializer, \
+    MilitaryServiceRequestSerializer, MilitaryServiceRequestRetriveSerializer
 from .serializers import TermDropSerializer, SelectionRequestSerializer, \
     SelectionShowSerializer
 from users.permissions import IsItManager, IsDeputyEducational, IsStudent
@@ -363,7 +369,7 @@ class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView)
     def get(self, request, professor_id, course_id, student_id):
         try:
             request_detail = GradeReconsiderationRequest.objects.get(course=course_id, course__professor=professor_id,
-                                                                    student=student_id)
+                                                                     student=student_id)
             serializer = AssistantGradeReconsiderationRequestSerializer(request_detail)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except GradeReconsiderationRequest.DoesNotExist:
@@ -371,7 +377,7 @@ class AssistantGradeReconsiderationRequestStudentDetail(generics.GenericAPIView)
 
     def put(self, request, professor_id, course_id, student_id):
         request_detail = GradeReconsiderationRequest.objects.get(course=course_id, course__professor=professor_id,
-                                                                student=student_id)
+                                                                 student=student_id)
         serializer = AssistantGradeReconsiderationRequestSerializer(instance=request_detail, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -551,7 +557,7 @@ class CorrectionSendForm(APIView):
             return Response(_('Corses Corrections is Empty'), status=status.HTTP_400_BAD_REQUEST)
         return Response(_('Corses Corrections DONE'), status=status.HTTP_200_OK)
 
-    
+
 class MilitaryServiceRequestViewSet(ModelViewSet):
 
     def get_serializer_class(self):
@@ -576,11 +582,11 @@ class MilitaryServiceRequestViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['student_id'] = self.kwargs['student_id']
         return context
-    
+
 
 class GradeReconsiderationRequestViewSet(ModelViewSet):
     queryset = GradeReconsiderationRequest.objects.all()
-     
+
     permission_classes = [IsAuthenticated, IsProfessor]
 
     def get_serializer_class(self):
@@ -636,7 +642,6 @@ class CreateSelectionRequestByStudent(generics.GenericAPIView):
         return Response({'detail': 'Pre Request Created'}, status=status.HTTP_201_CREATED)
 
 
-
 class DetailSelectionRequestByStudent(APIView):
     permission_classes = [IsStudent]
     pagination_class = CustomPageNumberPagination
@@ -647,7 +652,6 @@ class DetailSelectionRequestByStudent(APIView):
         studnet = Student.objects.get(pk=pk)
         return Response({'student': f'{studnet.first_name} {studnet.last_name}', 'details': serializer.data},
                         status=status.HTTP_200_OK)
-
 
 
 class SelectionShowErrors(APIView):
@@ -784,12 +788,11 @@ class GradeReconsiderationRequestView(generics.GenericAPIView):
         except GradeReconsiderationRequest.DoesNotExist:
             return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
 
-
     def post(self, request, course_id, student_id):
         data = GradeReconsiderationRequest.objects.filter(course__course=course_id, student=student_id).exists()
         if not data:
             try:
-                student_course = StudentCourse.objects.get(student=student_id,course_term=course_id)
+                student_course = StudentCourse.objects.get(student=student_id, course_term=course_id)
             except StudentCourse.DoesNotExist:
                 return Response(_("Object Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
             grade = student_course.grade
@@ -801,27 +804,26 @@ class GradeReconsiderationRequestView(generics.GenericAPIView):
             else:
                 return Response(_("Grade Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
         else:
-             return Response(_("Your request is filled!!"), status=status.HTTP_400_BAD_REQUEST)
-    
+            return Response(_("Your request is filled!!"), status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, course_id, student_id):
-         try:
+        try:
             data = GradeReconsiderationRequest.objects.get(course__course=course_id, student=student_id)
             serializer = self.serializer_class(instance=data, data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({_("details"): _("request modified successfully")}, status=status.HTTP_200_OK)
-         except GradeReconsiderationRequest.DoesNotExist:
-             return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
+        except GradeReconsiderationRequest.DoesNotExist:
+            return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, course_id, student_id):
-         
-         try:
+
+        try:
             data = GradeReconsiderationRequest.objects.get(course__course=course_id, student=student_id)
             data.delete()
             return Response(_("Removed Successfully"), status=status.HTTP_200_OK)
-         except GradeReconsiderationRequest.DoesNotExist:
-             return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
+        except GradeReconsiderationRequest.DoesNotExist:
+            return Response(_("Request Does Not Exists!"), status=status.HTTP_404_NOT_FOUND)
 
 
 class StudentRequestList(generics.ListAPIView):
@@ -875,7 +877,7 @@ class StudentRequestDetail(generics.RetrieveAPIView):
 
         return request
 
- 
+
 class StudentSelectionForm(generics.GenericAPIView):
     queryset = CourseRegistrationRequest.objects.all()
     permission_classes = [IsProfessor]
@@ -899,14 +901,14 @@ class StudentSelectionFormDetailAndApproveRejection(generics.GenericAPIView):
 
     def get(self, request, professor_id, student_id, term_id):
         try:
-            request_detail = CourseRegistrationRequest.objects.get(adviser_professor=professor_id,student=student_id)
+            request_detail = CourseRegistrationRequest.objects.get(adviser_professor=professor_id, student=student_id)
             serializer = self.serializer_class(request_detail)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CourseRegistrationRequest.DoesNotExist:
             return Response({_('errors'): _('Student and supervisor Do Not Match')}, status=status.HTTP_404_NOT_FOUND)
 
-    def put(self, request, professor_id, term_id, student_id,):
-        request_detail = CourseRegistrationRequest.objects.get(adviser_professor=professor_id,student=student_id)
+    def put(self, request, professor_id, term_id, student_id, ):
+        request_detail = CourseRegistrationRequest.objects.get(adviser_professor=professor_id, student=student_id)
         serializer = self.serializer_class(instance=request_detail, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -918,7 +920,8 @@ class StudentSelectionFormDetailAndApproveRejection(generics.GenericAPIView):
             send_email.delay(student.email, f'{student.first_name} {student.last_name} ,Registration Approved!')
             term = Term.objects.get(id=term_id)
             for courseterm in courses_selected:
-                StudentCourse.objects.create(student=student, course_term=courseterm.course, real_course_term=courseterm, term=term) 
+                StudentCourse.objects.create(student=student, course_term=courseterm.course,
+                                             real_course_term=courseterm, term=term)
         else:
             send_email.delay(student.email, f'{student.first_name} {student.last_name} ,Registration Not Approved!')
             return Response({_('details'): _('Request Failed')}, status=status.HTTP_200_OK)
