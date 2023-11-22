@@ -667,9 +667,12 @@ class SelectionShowErrors(APIView):
             sum_of_unit_add += selection.course.course_unit
         for selection in selection_student.courses_to_drop.all():
             sum_of_unit_add -= selection.course.course_unit
-
-        if sum_of_unit_add > 20:
-            add_errors['total'] = ['added courses most be less than 20']
+        if current_term.pre_GPA_term >= 17:
+            if sum_of_unit_add > 24:
+                add_errors['total'] = ['added courses most be less than 24']
+        else:
+            if sum_of_unit_add > 20:
+                add_errors['total'] = ['added courses most be less than 20']
 
         if sum_of_unit_add < 12:
             add_errors['total'] = ['added courses most be upper than 12']
