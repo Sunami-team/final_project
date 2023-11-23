@@ -930,3 +930,5 @@ Traceback (most recent call last):
   File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\users\permissions.py", line 104, in has_permission
     return user.user_type == "it_manager" or user.user_type == "deputy_educational"
 AttributeError: 'AnonymousUser' object has no attribute 'user_type'
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
