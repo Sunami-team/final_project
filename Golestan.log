@@ -781,3 +781,58 @@ Watching for file changes with StatReloader
 Watching for file changes with StatReloader
 Not Found: /my-admin/static
 "GET /my-admin/static HTTP/1.1" 404 7291
+Watching for file changes with StatReloader
+"GET /my-admin/ HTTP/1.1" 200 18291
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /my-admin/ HTTP/1.1" 200 18291
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 3417
+"POST /v1/users/login/ HTTP/1.1" 200 69
+"GET /my-admin/authtoken/tokenproxy/ HTTP/1.1" 200 15703
+"GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+"GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+"GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+"GET /static/admin/js/core.js HTTP/1.1" 200 5682
+"GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+"GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+"GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+"GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+"GET /static/admin/js/filters.js HTTP/1.1" 200 978
+"GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+"GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+"GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+"GET /my-admin/courses/course/add/ HTTP/1.1" 200 17904
+"GET /static/admin/css/forms.css HTTP/1.1" 200 9047
+"GET /my-admin/jsi18n/ HTTP/1.1" 200 7633
+"GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+"GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+"GET /static/admin/css/widgets.css HTTP/1.1" 200 11900
+"GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\config\urls.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /my-admin/courses/course/add/
+"GET /my-admin/courses/course/add/ HTTP/1.1" 404 2390
+"GET /admin HTTP/1.1" 301 0
+"GET /admin/ HTTP/1.1" 200 17062
+"POST /v1/users/login/ HTTP/1.1" 200 69
+Watching for file changes with StatReloader
+"POST /v1/users/login/ HTTP/1.1" 200 69
+C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\config\urls.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /admin/
+"GET /admin/ HTTP/1.1" 404 3253
+"GET /django/admin/ HTTP/1.1" 200 17545
+C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\config\urls.py changed, reloading.
+Watching for file changes with StatReloader
+"GET /django-admin/ HTTP/1.1" 200 17545
+Watching for file changes with StatReloader
+"GET /django-admin/ HTTP/1.1" 200 17545
+"POST /django-admin/logout/ HTTP/1.1" 200 3597
+"GET /django-admin/ HTTP/1.1" 302 0
+"GET /django-admin/login/?next=/django-admin/ HTTP/1.1" 200 4209
+"GET /static/admin/css/login.css HTTP/1.1" 200 958
+"POST /django-admin/login/?next=/django-admin/ HTTP/1.1" 302 0
+"GET /django-admin/ HTTP/1.1" 200 17545
+Watching for file changes with StatReloader
+"GET /django-admin/ HTTP/1.1" 200 17545
