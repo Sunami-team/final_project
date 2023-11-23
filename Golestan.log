@@ -844,3 +844,89 @@ Watching for file changes with StatReloader
 "PATCH /v1/student_requests/assistant/5/studying-evidence-update/2/ HTTP/1.1" 200 149
 Watching for file changes with StatReloader
 "PATCH /v1/student_requests/assistant/5/studying-evidence-update/2/ HTTP/1.1" 200 149
+Watching for file changes with StatReloader
+"GET /django-admin/ HTTP/1.1" 200 17545
+"GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+"GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 3268
+"GET /django-admin/authtoken/tokenproxy/ HTTP/1.1" 200 15183
+"GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+"GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+"GET /static/admin/js/core.js HTTP/1.1" 200 5682
+"GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+"GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+"GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+"GET /static/admin/js/filters.js HTTP/1.1" 200 978
+"GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+"GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+"GET /django-admin/users/itmanager/ HTTP/1.1" 200 15330
+"GET /django-admin/jsi18n/ HTTP/1.1" 200 3343
+"GET /static/admin/img/search.svg HTTP/1.1" 200 458
+"GET /django-admin/users/itmanager/add/ HTTP/1.1" 200 39461
+"GET /django-admin/jsi18n/ HTTP/1.1" 200 3343
+"GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+"GET /static/admin/js/calendar.js HTTP/1.1" 200 8466
+"GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+"GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+"POST /django-admin/users/itmanager/add/ HTTP/1.1" 302 0
+"GET /django-admin/users/itmanager/ HTTP/1.1" 200 15828
+"GET /django-admin/jsi18n/ HTTP/1.1" 200 3343
+"GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+"GET /django-admin/authtoken/tokenproxy/ HTTP/1.1" 200 15183
+"GET /django-admin/authtoken/tokenproxy/add/ HTTP/1.1" 200 15456
+"GET /django-admin/jsi18n/ HTTP/1.1" 200 3343
+"POST /django-admin/authtoken/tokenproxy/add/ HTTP/1.1" 302 0
+"GET /django-admin/authtoken/tokenproxy/ HTTP/1.1" 200 15682
+"POST /v1/users/register/ HTTP/1.1" 201 89
+"GET /django-admin/authtoken/tokenproxy/ HTTP/1.1" 200 15684
+Internal Server Error: /v1/courses/subjects/
+Traceback (most recent call last):
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 415, in initial
+    self.check_permissions(request)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 332, in check_permissions
+    if not permission.has_permission(request, self):
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\users\permissions.py", line 104, in has_permission
+    return user.user_type == "it_manager" or user.user_type == "deputy_educational"
+AttributeError: 'AnonymousUser' object has no attribute 'user_type'
+Internal Server Error: /v1/courses/subjects/
+Traceback (most recent call last):
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 415, in initial
+    self.check_permissions(request)
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\venv\lib\site-packages\rest_framework\views.py", line 332, in check_permissions
+    if not permission.has_permission(request, self):
+  File "C:\Users\ASUS\Desktop\quera\Django Bootcamp\final_project\users\permissions.py", line 104, in has_permission
+    return user.user_type == "it_manager" or user.user_type == "deputy_educational"
+AttributeError: 'AnonymousUser' object has no attribute 'user_type'
