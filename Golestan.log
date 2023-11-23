@@ -932,3 +932,7 @@ Traceback (most recent call last):
 AttributeError: 'AnonymousUser' object has no attribute 'user_type'
 Watching for file changes with StatReloader
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /django-admin/ HTTP/1.1" 200 17628
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 3268
