@@ -836,3 +836,11 @@ Watching for file changes with StatReloader
 "GET /django-admin/ HTTP/1.1" 200 17545
 Watching for file changes with StatReloader
 "GET /django-admin/ HTTP/1.1" 200 17545
+Watching for file changes with StatReloader
+Method Not Allowed: /v1/student_requests/assistant/5/studying-evidence/2/
+"PATCH /v1/student_requests/assistant/5/studying-evidence/2/ HTTP/1.1" 405 42
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"PATCH /v1/student_requests/assistant/5/studying-evidence-update/2/ HTTP/1.1" 200 149
+Watching for file changes with StatReloader
+"PATCH /v1/student_requests/assistant/5/studying-evidence-update/2/ HTTP/1.1" 200 149

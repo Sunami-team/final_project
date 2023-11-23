@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from .models import *
 from .permissions import IsDeputyEducational, IsStudent
 from rest_framework.exceptions import NotFound
-from .tasks import *
+from .tasks import send_approval_email, send_rejection_email, create_and_send_pdf
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from rest_framework.views import APIView
